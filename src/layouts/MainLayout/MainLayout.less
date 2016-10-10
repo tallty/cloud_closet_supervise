@@ -1,0 +1,74 @@
+
+.normal {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #E7E6EB;
+}
+
+.head {
+  margin-bottom: 20px;
+  height: 80px;
+  padding: 8px;
+  background-color: #fff;
+  // color: #fff;
+  -moz-box-shadow: 0px 2px 16px rgba(0, 0, 0, 0.1); /* 老的 Firefox */
+  box-shadow: 0px 2px 16px rgba(0, 0, 0, 0.1);
+}
+  
+.content {
+  flex: 1;
+  display: flex;
+  margin: 6px 22px 20px 22px;
+  -moz-box-shadow: -2px 2px 16px rgba(0, 0, 0, 0.1); /* 老的 Firefox */
+  box-shadow: -2px 2px 16px rgba(0, 0, 0, 0.1);
+}
+
+.side {
+  width: 20%;
+  min-width: 120px;
+  background: #FBF2EC;
+  // margin-right: 20px;
+  a {
+    color: #919191;
+    font-family: ".PingFang SC";
+    div {
+      height: 8vh;
+      line-height: 8vh;
+      margin: 2px 0;
+    }
+  }
+  a:first-child {
+    div {
+      margin: 0;
+    } 
+  }
+  a:hover {
+    div {
+      background-color: #FFA35E;
+      color: #fff;
+    }
+  }
+  .img_content {
+    display: table-cell;/*图片容器以表格的单元格形式显示*/
+    text-align: center; /* 实现水平居中 */
+    vertical-align: middle; /*实现垂直居中*/
+    .ul_icon {
+      width: 35px;
+      height: 35px;
+      vertical-align: middle; /*实现垂直居中*/  
+    }
+  }
+}
+
+.main {
+  padding: 8px;
+  flex: 1 0 auto;
+  background-color: #fff;
+}
+
+.foot {
+  margin-top: 20px;
+  background: greenyellow;
+  padding: 8px;
+}
