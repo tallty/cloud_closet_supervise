@@ -1,0 +1,48 @@
+.normal {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #E7E6EB;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  // -moz-box-shadow: -2px 2px 16px rgba(0, 0, 0, 0.1); /* 老的 Firefox */
+  // box-shadow: -2px 2px 16px rgba(0, 0, 0, 0.1);
+}
+
+.side {
+  width: 10%;
+  min-width: 100px;
+  background: #EFF0F1;
+  text-align: center;
+  // margin-right: 20px;
+  a {
+    color: #ADADAD;
+    font-family: ".PingFang SC";
+    div {
+      height: 7vh;
+      line-height: 7vh;
+      background-color: rgba(255, 255, 255, 0.6);
+      margin: 2px 0;
+    }
+  }
+  a:first-child {
+    div {
+      margin: 0;
+    } 
+  }
+  a:hover {
+    div {
+      background-color: #fff;
+      color: #FFA35E;
+    }
+  }
+}
+
+.main {
+  flex: 1 0 auto;
+  background-color: #fff;
+}
+

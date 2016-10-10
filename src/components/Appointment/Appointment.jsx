@@ -1,24 +1,42 @@
 {/* 预约订单管理组件 */}
+
 import React, { Component, PropTypes } from 'react';
-import { DatePicker } from 'antd';
+import { Row, Col } from 'antd';
+import Header from '../Header/Header';
+import ActiveLinkC from '../../layouts/ActiveLinkC/ActiveLinkC';
 import MainLayout from '../../layouts/MainLayout/MainLayout';
 import styles from './Appointment.less';
 
-class Appointment extends Component {
+const Appointment = ({ children }) => {
+  return (
+    <MainLayout>
+      <div className={styles.normal}>
+        <div className={styles.content}>
+          <div className={styles.side}>
+            <Row>
+              <ActiveLinkC to="/distribution" onlyActiveOnIndex={true}>
+                <Col span={24}>
+                  配送订单
+                </Col>
+              </ActiveLinkC>
+              <ActiveLinkC to="/appoint">
+                <Col span={24}>              
+                  预约订单
+                </Col>
+              </ActiveLinkC>
+            </Row>
+          </div>
+          <div className={styles.main}>
+            {children}
+          </div>
+        </div>
+      </div>
+    </MainLayout>
+  );
+};
 
-  onChange(date, dateString) {
-    console.log(date, dateString);
-  }
-  render() {
-    return (
-      <MainLayout>
-        <h1>预约订单管理组件</h1>
-        <DatePicker onChange={this.onChange} />
-      </MainLayout>
-    );
-  }
-}
-
-Appointment.propTypes = {};
+Appointment.propTypes = {
+  children: PropTypes.element.isRequired,
+};
 
 export default Appointment;

@@ -1,10 +1,12 @@
 import React, { PropTypes } from 'react';
-import { Router, Route, IndexRoute, Link } from 'react-router';
+import { Router, Route, IndexRoute, Link, hashHistory } from 'react-router';
 import App from '../components/App';
 
 import Customer from '../components/Customer/Customer';
 import Advertisement from '../components/Advertisement/Advertisement';
 import Appointment from '../components/Appointment/Appointment';
+    import Distribution from '../components/Appointment/Distribution/Distribution';
+    import Appoint from '../components/Appointment/Appoint/Appoint';
 import Service from '../components/Service/Service';
 import Stock from '../components/Stock/Stock';
 import Statistics from '../components/Statistics/Statistics';
@@ -22,6 +24,10 @@ const Routes = ({ history }) =>
     <Route path="/advertisement" component={Advertisement} />
     {/* 配置订单管理路由 */}
     <Route path="/appointment" component={Appointment} />
+        {/* 配置订单配送管理路由 */}
+        <Route path="/distribution" component={Distribution}/>
+        {/* 配置订单预约管理路由 */}
+        <Route path="/appoint" component={Appoint}/>
     {/* 配置客服管理路由 */}
     <Route path="/service" component={Service} />
     {/* 配置库存管理路由 */}
