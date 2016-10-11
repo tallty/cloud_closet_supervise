@@ -1,0 +1,59 @@
+.container {
+  padding: 20px;
+  width: 74vw;
+  .search {
+    margin-bottom: 20px;
+  }
+  .table_head {
+    text-align: center;
+  } 
+  .table {
+    text-align: center;
+
+    table {
+      th {
+        text-align: center;
+        color: #FFA35E;
+      }
+    }
+    .appoint_title {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      padding-bottom: 5px;
+      .user_tab {
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        border-radius: 20px;
+      }
+      .img_content {
+        display: table-cell;/*图片容器以表格的单元格形式显示*/
+        // text-align: center; /* 实现水平居中 */
+        vertical-align: middle; /*实现垂直居中*/
+        .ul_icon {
+          vertical-align: middle; /*实现垂直居中*/ 
+          height: 31px; 
+          line-height: 31px;
+        }
+      }
+    }
+    .type_clo {
+      .ul_icon {
+        height: 25px;
+      }
+      .number {
+        line-height: 25px;
+      }
+    }
+    tr {
+      text-align: center;
+      td {
+        border: none;
+        padding: 10px 8px;
+      }
+    }
+    tr:hover {
+      background-color: rgba(0, 0, 0, 0);
+      tr {
+        background-color: rgba(0, 0, 0, 0);
+      }
+    }
+  }
+}

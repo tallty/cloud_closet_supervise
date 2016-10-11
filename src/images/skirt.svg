@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="68px" height="93px" viewBox="0 0 68 93" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 40.2 (33826) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 3</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M25.0000468,1.82333489e-12 L20.5536082,1.82443764e-12 C19.4459525,1.82471235e-12 18.1715102,0.812168902 17.7033686,1.81403002 L10.7230987,16.7523762 C10.2538099,17.7566925 10.2549571,19.3727654 10.7230987,20.3674598 L17.7033684,35.1989464 C18.1670415,36.1841465 18.2627014,37.8485586 17.9070502,38.8953086 L0.168021858,91.1046914 C-0.184687399,92.1427828 0.420175006,93 1.52559083,93 L66.2623741,93 C67.3696399,93 67.9503913,92.1586387 67.5636508,91.1207668 L48.0969718,38.8792332 C47.7078914,37.8350817 47.7330989,36.1708838 48.148048,35.1481171 L54.1241216,20.4182891 C54.5395787,19.3942704 54.5045596,17.7542373 54.0470388,16.7523762 L47.2251317,1.81403002 C46.7719779,0.821731622 45.5001251,1.81825073e-12 44.3941228,1.81852502e-12 L40.2848871,1.81954414e-12 C40.2849183,0.0118236232 40.2849339,0.0236520634 40.2849339,0.0354852872 C40.2849339,5.57793077 36.8632849,10.0709706 32.6424669,10.0709706 C28.421649,10.0709706 25,5.57793077 25,0.0354852872 C25,0.0236520634 25.0000156,0.0118236232 25.0000468,1.81802837e-12 Z" id="path-1"></path>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="67.6158587" height="93" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <rect id="path-3" x="18" y="33" width="30" height="7"></rect>
+        <mask id="mask-4" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="30" height="7" fill="white">
+            <use xlink:href="#path-3"></use>
+        </mask>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="预约入库" transform="translate(-269.000000, -409.000000)" stroke-width="4" stroke="#FFA35E">
+            <g id="Group-6" transform="translate(26.000000, 380.000000)">
+                <g id="Group-3" transform="translate(243.000000, 29.000000)">
+                    <g id="Group-2">
+                        <use id="Combined-Shape" mask="url(#mask-2)" xlink:href="#path-1"></use>
+                    </g>
+                    <use id="Rectangle-624" mask="url(#mask-4)" xlink:href="#path-3"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

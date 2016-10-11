@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="69px" height="93px" viewBox="0 0 69 93" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 40.2 (33826) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 5</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M39,23.9918842 C39,22.8917969 39.8900584,22 41.0001062,22 L53.9998938,22 C55.104522,22 56,22.8933973 56,23.9918842 L56,35.0081158 C56,36.1082031 55.2003407,37.3885293 54.1973687,37.8758419 L47.5000003,41.1298828 L40.8026314,37.8758419 C39.8070656,37.3921278 39,36.1066027 39,35.0081158 L39,23.9918842 Z" id="path-1"></path>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="17" height="19.1298828" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <path d="M0.734644209,1.98546218 C0.633228015,0.888921696 1.44710877,-4.46050453e-14 2.55563054,-4.46050453e-14 L54.8708361,-4.46050453e-14 C55.9779553,-4.46050453e-14 56.8754527,0.904386272 56.8754526,1.99727157 L56.8754521,37.7292909 C56.8754521,38.8323536 56.6857942,40.6067751 56.4533044,41.685773 L45.818863,91.0407895 C45.5857172,92.1228316 44.500782,93 43.3964333,93 L11.1526254,93 C10.0479002,93 9.06997131,92.1093694 8.96871317,91.0145378 L0.734644209,1.98546218 Z" id="path-3"></path>
+        <mask id="mask-4" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="56.1493449" height="93" fill="white">
+            <use xlink:href="#path-3"></use>
+        </mask>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="预约入库" transform="translate(-477.000000, -409.000000)" stroke="#FFA35E">
+            <g id="Group-6" transform="translate(26.000000, 380.000000)">
+                <g id="Group-5" transform="translate(451.000000, 29.000000)">
+                    <path d="M3.01171875,6.8 L55.984903,6.8" id="Path-1383" stroke-width="1.6"></path>
+                    <path d="M8,1.8 L8,7.5" id="Path-1383" stroke-width="1.6"></path>
+                    <path d="M28,1.8 L28,7.5" id="Path-1383" stroke-width="1.6"></path>
+                    <path d="M48,1.8 L48,7.5" id="Path-1383" stroke-width="1.6"></path>
+                    <path d="M56,30.8 L66.5,33.5" id="Path-1383" stroke-width="1.6"></path>
+                    <use id="Rectangle-626" mask="url(#mask-2)" stroke-width="3.2" xlink:href="#path-1"></use>
+                    <path d="M8.96875,18.4179688 L19.4765625,33.6230469" id="Path-1384" stroke-width="1.6" stroke-linecap="round"></path>
+                    <g id="Group-3">
+                        <g id="Group-2">
+                            <use id="Combined-Shape" mask="url(#mask-4)" stroke-width="4" xlink:href="#path-3"></use>
+                            <path d="M56.3046875,26.4804688 L66.0198034,28.9296029 C67.0897048,29.1993199 67.6369537,30.2528891 67.2380941,31.2933121 L44.3652344,90.9570312" id="Path-1382" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
