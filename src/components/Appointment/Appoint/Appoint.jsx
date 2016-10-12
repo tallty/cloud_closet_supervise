@@ -1,5 +1,6 @@
 {/* 预约订单管理组件 */}
 import React, { Component, PropTypes } from 'react';
+import ActiveLink from '../../../layouts/ActiveLink/ActiveLink'
 import { Tabs, Icon, Row, Col, Input, Button, Table } from 'antd';
 import Appointment from '../Appointment';
 import styles from './Appoint.less';
@@ -15,26 +16,33 @@ number.push(
       <Col span={4} >
         <img src="src/images/t_shirt.svg" alt="" className={styles.ul_icon}/>
       </Col>
-      <Col span={10}>
+      <Col span={14}>
         <label className={styles.number}><label>上衣</label><label>10/件</label></label>
       </Col>
     </Col>
   </Row>
 )
 
+const action = []
+action.push(
+  <div className={styles.link_btn}>
+    <ActiveLink to="">详情</ActiveLink> | <ActiveLink to="">删除</ActiveLink>
+  </div>
+)
+
 const data1 = [];
-for (let i = 0; i < 4; i++) {
+for (let i = 23; i < 27; i++) {
   data1.push({
     key: i,
     type: `预约衣橱`,
     s_price: number,
     number: `${i}件`,
-    price: `20${i}`,
+    price: `2${i}`,
     store_time: `${i}个月`,
-    all_price: `100${i}`,
+    all_price: `10${i}`,
     time: `2016-10-${i}`,
     state: `待付款`,
-    action: `详情|删除`
+    action: action
   });
 }
 
@@ -50,6 +58,10 @@ const renderContent = function (value, row, index) {
 }
 
 const columns = [{
+  title: '',
+  dataIndex: 's21_price',
+  render: renderContent,
+},{
   title: '类型',
   dataIndex: 'type',
   render(value, row, index) {
@@ -64,47 +76,55 @@ const columns = [{
   },
 },{
   title: '',
-  dataIndex: 's_price',
+  dataIndex: 's1_price',
   render: renderContent,
 },{
   title: '',
-  dataIndex: 's_price',
+  dataIndex: 's2_price',
   render: renderContent,
 },{
   title: '',
-  dataIndex: 's_price',
+  dataIndex: 's3_price',
   render: renderContent,
 },{
   title: '',
-  dataIndex: 's_price',
+  dataIndex: 's4_price',
   render: renderContent,
 },{
   title: '',
-  dataIndex: 's_price',
+  dataIndex: 's5_price',
   render: renderContent,
 },{
   title: '',
-  dataIndex: 's_price',
+  dataIndex: 's6_price',
   render: renderContent,
 },{
   title: '',
-  dataIndex: 's_price',
+  dataIndex: 's7_price',
+  render: renderContent,
+},{
+  title: '',
+  dataIndex: 's8_price',
   render: renderContent,
 },{
   title: '单价(￥)',
-  dataIndex: 's_price',
+  dataIndex: 's0_price',
   render: renderContent,
 },{
   title: '',
-  dataIndex: 's_price',
+  dataIndex: 's9_price',
   render: renderContent,
 },{
   title: '',
-  dataIndex: 's_price',
+  dataIndex: 's10_price',
   render: renderContent,
 },{
   title: '',
-  dataIndex: 's_price',
+  dataIndex: 's11_price',
+  render: renderContent,
+},{
+  title: '',
+  dataIndex: 's24_price',
   render: renderContent,
 },{
   title: '数量',
@@ -119,12 +139,20 @@ const columns = [{
   dataIndex: 'store_time',
   render: renderContent,
 },{
+  title: '',
+  dataIndex: 's22_price',
+  render: renderContent,
+},{
   title: '总价',
   dataIndex: 'all_price',
   render: renderContent,
 },{
   title: '',
-  dataIndex: 's_price',
+  dataIndex: 's12_price',
+  render: renderContent,
+},{
+  title: '',
+  dataIndex: 's20_price',
   render: renderContent,
 },{
   title: '下单时间',
@@ -132,11 +160,11 @@ const columns = [{
   render: renderContent,
 },{
   title: '',
-  dataIndex: 's_price',
+  dataIndex: 's13_price',
   render: renderContent,
 },{
   title: '',
-  dataIndex: 's_price',
+  dataIndex: 's14_price',
   render: renderContent,
 },{
   title: '状态',
@@ -144,11 +172,15 @@ const columns = [{
   render: renderContent,
 },{
   title: '',
-  dataIndex: 's_price',
+  dataIndex: 's23_price',
   render: renderContent,
 },{
   title: '',
-  dataIndex: 's_price',
+  dataIndex: 's15_price',
+  render: renderContent,
+},{
+  title: '',
+  dataIndex: 's16_price',
   render: renderContent,
 },{
   title: '操作',
@@ -156,11 +188,15 @@ const columns = [{
   render: renderContent,
 },{
   title: '',
-  dataIndex: 's_price',
+  dataIndex: 's17_price',
   render: renderContent,
 },{
   title: '',
-  dataIndex: 's_price',
+  dataIndex: 's18_price',
+  render: renderContent,
+},{
+  title: '',
+  dataIndex: 's19_price',
   render: renderContent,
 }]
 
@@ -223,6 +259,19 @@ const columns1 = [{
 }, {
   title: '下单时间',
   dataIndex: 'time',
+  render(value, row, index) {
+    const obj = {
+      children: value,
+      props: {},
+    };
+    if (index === 0) {
+      obj.props.rowSpan = data1.length;
+    }
+    if (index > 0) {
+      obj.props.rowSpan = 0;
+    }
+    return obj;
+  },
 }, {
   title: '状态',
   dataIndex: 'state',
@@ -264,7 +313,6 @@ const columns1 = [{
 const dateH = []
 dateH.push(
   <Row>
-    {console.log(columns1)}
     <Col span={24} className={styles.appoint_title}>
       <Col span={4} className={styles.img_content}>
         <label className={styles.ul_icon}>订单号：201610118835</label>
@@ -285,7 +333,7 @@ dateH.push(
 )
 
 const data = [];
-for (let i = 0; i < 22; i++) {
+for (let i = 0; i < 11; i++) {
   data.push({
     key: i,
     type: dateH,
@@ -316,7 +364,7 @@ class Appoint extends Component {
           <div className={styles.container}>
             <div >
               <Row className={styles.search}>
-                <Col span={14}>
+                <Col span={13}>
                   <Input placeholder="关键字" />
                 </Col>
                 <Col span={4}>
