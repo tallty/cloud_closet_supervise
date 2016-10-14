@@ -7,6 +7,7 @@ import Advertisement from '../components/Advertisement/Advertisement';
 import Appointment from '../components/Appointment/Appointment';
     import Distribution from '../components/Appointment/Distribution/Distribution';
     import Appoint from '../components/Appointment/Appoint/Appoint';
+    import AppointShow from '../components/Appointment/Appoint/AppointShow';
 import Service from '../components/Service/Service';
 import Stock from '../components/Stock/Stock';
 import Statistics from '../components/Statistics/Statistics';
@@ -28,6 +29,8 @@ const Routes = ({ history }) =>
         <Route path="/distribution" component={Distribution}/>
         {/* 配置订单预约管理路由 */}
         <Route path="/appoint" component={Appoint}/>
+        {/* 配置订单预约详情管理路由 */}
+        <Route path="/appoint_show" component={AppointShow}/>
     {/* 配置客服管理路由 */}
     <Route path="/service" component={Service} />
     {/* 配置库存管理路由 */}

@@ -25,18 +25,18 @@
         text-align: center;
         color: #FFA35E;
       }
-      .link_btn {
-        a {
-          color: #EC1C1C;
-        }
-      }
     }
     .appoint_title {
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       padding-bottom: 5px;
+      .appoint_id {
+        border-bottom: 1px solid #FFA35E;
+        text-align: left;
+        padding-top: 24px;
+        padding-bottom: 10px;
+      }
       .user_tab {
-        border: 1px solid rgba(0, 0, 0, 0.3);
-        border-radius: 20px;
+        padding: 25px 0 20px 0;
       }
       .img_content {
         display: table-cell;/*图片容器以表格的单元格形式显示*/
@@ -46,6 +46,15 @@
           vertical-align: middle; /*实现垂直居中*/ 
           height: 30px; 
           line-height: 31px;
+        }
+        button {
+          padding-right: 5px !important;
+          background-color: #fff !important;
+          border: none;
+          color: #EC1C1C !important;
+          :hover {
+            color: #FFA35E;
+          }
         }
       }
     }
