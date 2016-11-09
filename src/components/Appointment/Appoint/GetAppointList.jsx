@@ -1,11 +1,13 @@
-{/* 库存管理组件 */}
-import React, { Component, PropTypes } from 'react';
+/**
+ * 保单处理情况滚动图
+ */
+import React, { Component, PropTypes } from 'react'
 import SuperAgent from 'superagent'
-import MainLayout from '../../layouts/MainLayout/MainLayout';
-import Appoint from '../Appointment/Appoint/Appoint'
-import styles from './Stock.less';
+import Appoint from './Appoint'
+import Appointment from '../Appointment';
 
-class Stock extends Component {
+const timer=0
+export class GetAppointList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,6 +17,14 @@ class Stock extends Component {
 
   componentWillMount() {
     this.getList()
+  }
+
+  componentDidMount() {
+    this.timer = setInterval(this.getList.bind(this), 18000000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(timer)
   }
 
   getList(){
@@ -28,7 +38,7 @@ class Stock extends Component {
       .set('Accept', 'application/json')
       .set('X-Admin-Token', token)
       .set('X-Admin-Email', email)
-      .field('query_state','stored')
+      .field('query_state','storing')
       .end( (err, res) => {
         if (!err || err === null) {
           let appointments = res.body.appointments
@@ -41,13 +51,17 @@ class Stock extends Component {
 
   render() {
     return (
-      <MainLayout>
-        {/*<Appoint {...this.state} />*/}
-      </MainLayout>
+      <div>
+        <Appointment>
+          <Appoint {...this.state} />
+        </Appointment>
+      </div>
     );
   }
 }
 
-Stock.propTypes = {};
+GetAppointList.defaultProps = {
+}
 
-export default Stock;
+GetAppointList.propTypes = {
+}

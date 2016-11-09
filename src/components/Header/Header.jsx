@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Row, Col } from 'antd';
+import { Link } from 'react-router'
 import styles from './Header.less';
 
 class Header extends Component {
@@ -17,7 +18,7 @@ class Header extends Component {
               </Col>
               <Col span={18} className={styles.login_btn}>
                 <div><label className={styles.tag}>公众号</label></div>
-                <div>乐存·Chest<sup>+1</sup> | 退出</div>
+                <div>乐存·Chest<sup>+1</sup> | <Link to="/">退出</Link></div>
               </Col>
             </Row>
           </Col>

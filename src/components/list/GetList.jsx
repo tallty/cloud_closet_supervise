@@ -1,11 +1,12 @@
-{/* 库存管理组件 */}
-import React, { Component, PropTypes } from 'react';
+/**
+ * 保单处理情况滚动图
+ */
+import React, { Component, PropTypes } from 'react'
 import SuperAgent from 'superagent'
-import MainLayout from '../../layouts/MainLayout/MainLayout';
-import Appoint from '../Appointment/Appoint/Appoint'
-import styles from './Stock.less';
+import List from './List'
 
-class Stock extends Component {
+const timer=0
+export class GetList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,22 +18,29 @@ class Stock extends Component {
     this.getList()
   }
 
+  componentDidMount() {
+    this.timer = setInterval(this.getList.bind(this), 18000000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(timer)
+  }
+
   getList(){
     // var token = 'wgRrN_1yUzQhe3SAbDkx'
     // var email = 'admin@tallty.com'
     var token = localStorage.token
     var email = localStorage.email
-    var url = "http://closet-api.tallty.com/admin/appointments?page=1&per_page=100000"
+    var url = "http://closet-api.tallty.com/admin/appointments"
     SuperAgent
       .get(url)
       .set('Accept', 'application/json')
       .set('X-Admin-Token', token)
       .set('X-Admin-Email', email)
-      .field('query_state','stored')
       .end( (err, res) => {
         if (!err || err === null) {
           let appointments = res.body.appointments
-          this.setState({ appointments: appointments })
+          this.setState({ appointments: appointments }) 
         } else {
           this.setState({ appointments: [] })
         }
@@ -41,13 +49,15 @@ class Stock extends Component {
 
   render() {
     return (
-      <MainLayout>
-        {/*<Appoint {...this.state} />*/}
-      </MainLayout>
+      <div>
+        <List {...this.state} />
+      </div>
     );
   }
 }
 
-Stock.propTypes = {};
+GetList.defaultProps = {
+}
 
-export default Stock;
+GetList.propTypes = {
+}

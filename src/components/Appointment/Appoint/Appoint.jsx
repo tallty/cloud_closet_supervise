@@ -44,7 +44,7 @@ const columns = [{
   render: renderContent,
 },{
   title: '电话',
-  dataIndex: 'number',
+  dataIndex: 'phone',
   render: renderContent,
 },{
   title: '订单地址',
@@ -52,15 +52,15 @@ const columns = [{
   render: renderContent,
 },{
   title: '',
-  dataIndex: 's21_price',
+  dataIndex: 's22_price',
   render: renderContent,
 },{
   title: '下单时间',
-  dataIndex: 'time',
+  dataIndex: 'date',
   render: renderContent,
 },{
   title: '',
-  dataIndex: 's21_price',
+  dataIndex: 's23_price',
   render: renderContent,
 },{
   title: '操作',
@@ -68,111 +68,106 @@ const columns = [{
   render: renderContent,
 },{
   title: '',
-  dataIndex: 's21_price',
+  dataIndex: 's24_price',
   render: renderContent,
 }]
 
-// 以及表格特殊项样式设置
-const dateH = []
-dateH.push(
-  <Row>
-    <Col span={24} className={styles.appoint_title}>
-      <Col span={24} className={styles.appoint_id}>
-        <label className={styles.ul_icon}>订单号：201610118835</label>
-      </Col>
-      <Col span={24} className={styles.user_tab}>
-        <Col span={3} className={styles.img_content}>
-          <label className={styles.ul_icon}><label>预约衣橱</label></label>
-        </Col>
-        <Col span={3} className={styles.img_content}>
-          <img src="src/images/user_ava.png" alt="" className={styles.ul_icon}/><label>S</label>
-        </Col>
-        <Col span={4} className={styles.img_content}>
-          <label className={styles.ul_icon}><label>18516590000</label></label>
-        </Col>
-        <Col span={4} className={styles.img_content}>
-          <label className={styles.ul_icon}><label>黄浦区济南路260弄翠湖天地隽荟12栋603号 </label></label>
-        </Col>
-        <Col span={6} className={styles.img_content}>
-          <label className={styles.ul_icon}><label>2015-6-28<br/>13:23:35</label></label>
-        </Col>
-        <Col span={4} className={styles.img_content}>
-          <div><Button type="primary" size="small" className={styles.d_btn}>删除</Button></div>
-          <div><ActiveLink to="/appoint_show"><Button type="primary" size="small" className={styles.d_btn}>查看详情</Button></ActiveLink></div>  
-        </Col>
-      </Col>
-    </Col>
-  </Row>
-)
-// 一级表格模拟数据
-const data = [];
-for (let i = 0; i < 11; i++) {
-  data.push({
-    key: i,
-    type: dateH,
-    number: `20${i}`,
-    price: `20${i}`,
-    store_time: `${i}个月`,
-    all_price: `100${i}`,
-    time: `2016-10-${i}`,
-    state: `待付款`,
-    action: `详情|删除`
-  });
-}
 
 class Appoint extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: false,
-      visible: false,
     };
   }
+
 
   callback(key) {
     console.log(key);
   }
 
-  showModal() {
-    this.setState({
-      visible: true,
-    });
-  }
-
-  handleOk() {
-    this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({ loading: false, visible: false });
-    }, 3000);
-  }
-
-  handleCancel() {
-    this.setState({ visible: false });
-  }
-
   render() {
+    const app = this.props.appointments
+    // const url = this.GetUrlRelativePath()
+    // 时间格式转换函数
+    function date2str(x,y) { 
+      var z ={y:x.getFullYear(),M:x.getMonth()+1,d:x.getDate(),h:x.getHours(),m:x.getMinutes(),s:x.getSeconds()}; 
+      return y.replace(/(y+|M+|d+|h+|m+|s+)/g,function(v) {return ((v.length>1?"0":"")+eval('z.'+v.slice(-1))).slice(-(v.length>2?v.length:2))}); 
+    }
+      // 以及表格特殊项样式设置
+    function dateH(i){
+      const url = `/appoint_show?id=${app[i].id}`
+      const address = app[i].address==""||null?'当前地址为空，请联系客户确认！':app[i].address
+      console.log(app[i].address);
+      const dateH = [];
+      dateH.push(
+        <Row key={i+"e"}>
+          <Col span={24} className={styles.appoint_title}>
+            <Col span={24} className={styles.appoint_id}>
+              <label className={styles.ul_icon}>订单号：{app[i].seq}</label>
+            </Col>
+            <Col span={24} className={styles.user_tab}>
+              <Col span={3} className={styles.img_content}>
+                <label className={styles.ul_icon}><label>预约衣橱</label></label>
+              </Col>
+              <Col span={3} className={styles.img_content}>
+                <img src="src/images/user_ava.png" alt="" className={styles.ul_icon}/><label>{app[i].name}</label>
+              </Col>
+              <Col span={4} className={styles.img_content}>
+                <label className={styles.ul_icon}><label>{app[i].phone}</label></label>
+              </Col>
+              <Col span={4} className={styles.img_content}>
+                <label className={styles.ul_icon}><label>{address}</label></label>
+              </Col>
+              <Col span={6} className={styles.img_content}>
+                <div><label>{date2str(new Date(app[i].created_at), "yyyy-MM-d")}</label></div>
+                <div><label>{date2str(new Date(app[i].created_at), "hh:mm:ss")}</label></div>
+              </Col>
+              <Col span={4} className={styles.img_content}>
+                <div><Button type="primary" size="small" className={styles.d_btn}>删除</Button></div>
+                <div><ActiveLink to={url}><Button type="primary" size="small" className={styles.d_btn}>查看详情</Button></ActiveLink></div>  
+              </Col>
+            </Col>
+          </Col>
+        </Row>
+      )
+      return dateH
+    }
+    // 一级表格模拟数据
+    const data = [];
+    const num = this.props.appointments.length
+    for (let i = 0; i < num; i++) {
+      data.push({
+        key: i,
+        type: dateH(i),
+        phone: `20${i}`,
+        address: `20${i}`,
+        date: `${i}个月`,
+        all_price: `100${i}`,
+        time: `2016-10-${i}`,
+        state: `待付款`,
+        action: `详情|删除`
+      });
+    }
     return (
-      <Appointment>
-          <div className={styles.container}>
-            <div >
-              <Row className={styles.search}>
-                <Col span={13}>
-                  <Input placeholder="关键字" />
-                </Col>
-                <Col span={4}>
-                  <Button type="ghost" shape="circle-outline" icon="search" />
-                </Col>
-              </Row>
-            </div>
-            <div className={styles.table}>
-              <Tabs defaultActiveKey="1" onChange={this.callback}>
-                <TabPane tab="全部订单" key="1">
-                  <Table {...this.props} columns={columns} dataSource={data} pagination={{ pageSize: 10 }} scroll={{ y: height }} />
-                </TabPane>
-              </Tabs>
-            </div>
-          </div>
-      </Appointment>
+      <div className={styles.container}>
+        <div >
+          <Row className={styles.search}>
+            <Col span={13}>
+              <Input placeholder="关键字" />
+            </Col>
+            <Col span={4}>
+              <Button type="ghost" shape="circle-outline" icon="search" />
+            </Col>
+          </Row>
+        </div>
+        <div className={styles.table}>
+          <Tabs defaultActiveKey="1" onChange={this.callback}>
+            <TabPane tab="全部订单" key="1">
+              <Table {...this.props} columns={columns} dataSource={data} pagination={{ pageSize: 10 }} scroll={{ y: height }} />
+            </TabPane>
+          </Tabs>
+        </div>
+      </div>
     );
   }
 }

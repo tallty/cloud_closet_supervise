@@ -8,6 +8,13 @@ export class ImageUploadList extends Component {
     this.state = {
       previewVisible: false,
       previewImage: '',
+      fileList: [{
+        uid: -1,
+        name: 'xxx.png',
+        status: 'done',
+        url: 'https://os.alipayobjects.com/rmsportal/NDbkJhpzmLxtPhB.png',
+        thumbUrl: 'https://os.alipayobjects.com/rmsportal/NDbkJhpzmLxtPhB.png',
+      }],
     };
   }
  
@@ -17,17 +24,29 @@ export class ImageUploadList extends Component {
     });
   }
 
+  handleChange(info) {
+    // console.log(info.file.originFileObj);
+    // const fileList = this.state.fileList
+    // fileList.push(
+    //   info.file.originFileObj
+    // )
+    // this.setState({fileList:fileList})
+    
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully`);
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  }
+
   render() {
     const props = {
-      action: '/upload.do',
+      // action: '/upload.do',
       listType: 'picture-card',
-      defaultFileList: [{
-        uid: -1,
-        name: 'xxx.png',
-        status: 'done',
-        url: 'https://os.alipayobjects.com/rmsportal/NDbkJhpzmLxtPhB.png',
-        thumbUrl: 'https://os.alipayobjects.com/rmsportal/NDbkJhpzmLxtPhB.png',
-      }],
+      onChange: this.handleChange.bind(this),
       onPreview: (file) => {
         this.setState({
           previewImage: file.url,
@@ -37,9 +56,8 @@ export class ImageUploadList extends Component {
     };
     return (
       <div className="clearfix">
-        <Upload {...props}>
-          <Icon type="plus" />
-          <div className="ant-upload-text">Upload</div>
+        <Upload {...props} fileList={this.state.fileList}>
+          <div className="ant-upload-text"><Icon type="plus" />添加</div>
         </Upload>
         <Modal visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel.bind(this)}>
           <img alt="example" src={this.state.previewImage} />
