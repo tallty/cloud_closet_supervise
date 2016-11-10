@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="49px" height="55px" viewBox="0 0 49 55" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 40.3 (33839) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 3</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="-3.39383573" y="3.39383573" width="54.8256116" height="48.0379402" rx="2"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="54.8256116" height="48.0379402" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <rect id="path-3" x="2.07912916" y="10.9208708" width="14.6478521" height="14.8061105"></rect>
+        <mask id="mask-4" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="14.6478521" height="14.8061105" fill="white">
+            <use xlink:href="#path-3"></use>
+        </mask>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="预约－订单详情" transform="translate(-138.000000, -601.000000)" stroke="#FFA35E">
+            <g id="Group-9" transform="translate(50.000000, 140.000000)">
+                <g id="Group-5" transform="translate(0.000000, 429.000000)">
+                    <g id="Group-3" transform="translate(88.000000, 32.000000)">
+                        <use id="Rectangle-802" mask="url(#mask-2)" stroke-width="2" transform="translate(24.018970, 27.412806) rotate(-270.000000) translate(-24.018970, -27.412806) " xlink:href="#path-1"></use>
+                        <use id="Rectangle-803" mask="url(#mask-4)" stroke-width="2" transform="translate(9.403055, 18.323926) rotate(-270.000000) translate(-9.403055, -18.323926) " xlink:href="#path-3"></use>
+                        <path d="M44.5608142,15.5652174 L22.4802041,15.5652174" id="Path-1705"></path>
+                        <path d="M44.1664585,24.9565217 L26.589036,24.9565217" id="Path-1705"></path>
+                        <path d="M44.1664585,38.5217391 L26.589036,38.5217391" id="Path-1705"></path>
+                        <path d="M44.1664585,32.2608696 L26.589036,32.2608696" id="Path-1705"></path>
+                        <path d="M44.5608142,13.4782609 L29.912962,13.4782609" id="Path-1705"></path>
+                        <path d="M20.7298951,26.8460635 L20.7298951,24.7591069" id="Path-1705"></path>
+                        <path d="M20.7298951,33.106933 L20.7298951,31.0199765" id="Path-1705"></path>
+                        <path d="M20.7298951,39.3678026 L20.7298951,37.2808461" id="Path-1705"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

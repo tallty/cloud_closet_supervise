@@ -6,7 +6,7 @@ import Appointment from '../Appointment';
 import styles from './Appoint.less';
 import MainLayout from '../../../layouts/MainLayout/MainLayout';
 
-const height = document.body.clientHeight*0.5
+const height = document.body.clientHeight*0.6
 const TabPane = Tabs.TabPane;
 
 // 表格合并列
@@ -81,7 +81,8 @@ class Appoint extends Component {
   }
 
 
-  callback(key) {
+  callbackChange(key) {
+    key == "1"?this.props.callback("storing"):this.props.callback("stored")
     console.log(key);
   }
 
@@ -123,7 +124,7 @@ class Appoint extends Component {
                 <div><label>{date2str(new Date(app[i].created_at), "hh:mm:ss")}</label></div>
               </Col>
               <Col span={4} className={styles.img_content}>
-                <div><Button type="primary" size="small" className={styles.d_btn}>删除</Button></div>
+                {/*<div><Button type="primary" size="small" className={styles.d_btn}>订单归档</Button></div>*/}
                 <div><ActiveLink to={url}><Button type="primary" size="small" className={styles.d_btn}>查看详情</Button></ActiveLink></div>  
               </Col>
             </Col>
@@ -161,8 +162,11 @@ class Appoint extends Component {
           </Row>
         </div>
         <div className={styles.table}>
-          <Tabs defaultActiveKey="1" onChange={this.callback}>
-            <TabPane tab="全部订单" key="1">
+          <Tabs defaultActiveKey="1" onChange={this.callbackChange.bind(this)}>
+            <TabPane tab="入库订单" key="1">
+              <Table {...this.props} columns={columns} dataSource={data} pagination={{ pageSize: 10 }} scroll={{ y: height }} />
+            </TabPane>
+            <TabPane tab="历史订单" key="2">
               <Table {...this.props} columns={columns} dataSource={data} pagination={{ pageSize: 10 }} scroll={{ y: height }} />
             </TabPane>
           </Tabs>

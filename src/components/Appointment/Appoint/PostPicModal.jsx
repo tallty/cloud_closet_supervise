@@ -34,6 +34,7 @@ class PostPicModal extends Component {
   }
 
   handleOk(e) {
+
     e.preventDefault();
 
     const value = this.props.form.getFieldsValue()
@@ -46,20 +47,24 @@ class PostPicModal extends Component {
     var visible = this.state.visible
     var id = this.props.garment.id
 
-    console.log(title, row, carbit, place, cover_image_attributes, visible, id);
+    console.log(title, row, carbit, place);
 
-    this.props.form.validateFields((errors, values) => {
-      if (errors) {
-        console.log('Errors in form!!!');
-        return;
-      }else{
-        this.pushAppoint(title, row, carbit, place, cover_image_attributes, id, visible)
-        setTimeout(() => {
-        var visible = this.state.visible
-          this.setState({visible}, ()=> this.props.onChange(visible));
-        }, 1500);
-      }
-    });
+    this.props.garment.cover_image||this.state.url
+      ?
+      this.props.form.validateFields((errors, values) => {
+        if (errors) {
+          console.log('Errors in form!!!');
+          return;
+        }else{
+          this.pushAppoint(title, row, carbit, place, cover_image_attributes, id, visible)
+          setTimeout(() => {
+          var visible = this.state.visible
+            this.setState({visible}, ()=> this.props.onChange(visible));
+          }, 1500);
+        }
+      })
+      :
+      console.log("请上传商品主图！");
   }
 
   handleCancel() {
@@ -67,42 +72,45 @@ class PostPicModal extends Component {
     this.setState({visible}, ()=> this.props.onChange(visible));
   }
 
-  // 预约
+  error_label(){
+    const pic_erro_info= []
+    this.props.garment.cover_image||this.state.url?"":pic_erro_info.push(<div key="err_image_info" className={styles.err_image_info}>请上传商品主图！</div>)
+    return pic_erro_info
+  }
+
+  // 提交订单修改
   pushAppoint(title, row, carbit, place, cover_image_attributes, id, visible){
     // this.setState({visible}, ()=> this.props.onChange(visible));
-    console.log("----------------");
-    console.log(row);
-    console.log(carbit);
-    console.log(place);
 
     var token = localStorage.token
     var email = localStorage.email
+    var appointment_id = this.props.appoint_id
+    var store_month = this.props.store_month
     var ur = "http://closet-api.tallty.com/admin/garments/"+id
-    SuperAgent.put(ur)
+
+    console.log(row, carbit, place);
+
+    SuperAgent.patch(ur)
               .set('Accept', 'application/json')
               .set('X-Admin-Token', token)
               .set('X-Admin-Email', email)
+              .field('appointment_id',appointment_id)
+              .field('store_month',store_month)
               .field('garment[title]',title)
               .field('garment[row]',row)
               .field('garment[carbit]',carbit)
               .field('garment[place]',place)
               .field('garment[cover_image_attributes][photo]',cover_image_attributes)
               .end( (err, res) => {
-                if (res.ok) {
-                  console.log(res.body);
-                  console.log('修改成功');
-
-                  var newState = !this.state.success;
-                  var new_url = this.state.url;
-                  this.setState({
-                    success: newState, url: new_url
-                  });
-                  // 这里要注意：setState 是一个异步方法，所以需要操作缓存的当前值
-                  this.props.callbackParent(newState, new_url);
-                  
-                }else{
-                  console.log('修改失败');
-                }
+                var newState = !this.state.success;
+                var new_url = this.state.url;
+                var row_carbit_place = `${row}-${carbit}-${place}`
+                this.setState({
+                  success: newState, url: new_url
+                });
+                console.log(row_carbit_place);
+                // 这里要注意：setState 是一个异步方法，所以需要操作缓存的当前值
+                this.props.callbackParent(newState, new_url, row_carbit_place);
               })       
   }
 
@@ -138,10 +146,24 @@ class PostPicModal extends Component {
     return pic_content
   }
 
-  chooseRCP(r,c,p){
+  chooseRCP1(r){
+    console.log("================");
+    console.log(r);
     this.setState({
       row: r,
+    });
+  }
+  chooseRCP2(c){
+    console.log("================");
+    console.log(c);
+    this.setState({
       carbit: c,
+    });
+  }
+  chooseRCP3(p){
+    console.log("================");
+    console.log(p);
+    this.setState({
       place: p,
     });
   }
@@ -176,10 +198,11 @@ class PostPicModal extends Component {
           <Row className={styles.modal_content}>
             <Form horizontal>
               <Col span={6} className={styles.left_pic_add}>
-                {this.get_pic_content()}
-                <br/>
                 <Upload {...props}>
+                  {this.get_pic_content()}
+                  <br/>
                   <label className={styles.main_pic}>商品主图</label>
+                  {this.error_label()}
                 </Upload>
               </Col>
               <Col span={18} className={styles.right_content}>
@@ -195,7 +218,7 @@ class PostPicModal extends Component {
                         <Row className={styles.c_type}>
                           <Col span={8}><label className={styles.col_title}>衣服仓储编号</label></Col>
                           <Col span={16}>
-                            <SelectC {...this.state} callbackRCP={this.chooseRCP.bind(this)}/>
+                            <SelectC {...this.state} callbackRCP1={this.chooseRCP1.bind(this)} callbackRCP2={this.chooseRCP2.bind(this)} callbackRCP3={this.chooseRCP3.bind(this)}/>
                           </Col>
                         </Row>
                       </div>

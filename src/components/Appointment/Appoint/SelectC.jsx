@@ -31,23 +31,52 @@ class SelectC extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      
+      row: null,
+      carbit: null,
+      place: null,
     };
   }
 
   handleChange(value) {
-    console.log("=================");
-    console.log(this.props.row);
-    this.props.callbackRCP(`${value}`,"","")
+    console.log(value);
+    this.props.callbackRCP1(value)
+    // this.setState({row: value,})
+    // if (this.state.place&&this.state.row&&this.state.carbit){
+    //   var row = value
+    //   var carbit = this.state.carbit
+    //   var place = this.state.place
+    //   this.backParent(row, carbit, place)
+    // }
   }
 
   handleChange1(value) {
-    this.props.callbackRCP("",`${value}`,"")
+    console.log(value);
+    this.props.callbackRCP2(value)
+    // this.setState({carbit: value,})
+    // if (this.state.place&&this.state.row&&this.state.carbit){
+    //   var row = this.state.row
+    //   var carbit = value
+    //   var place = this.state.place
+    //   this.backParent(row, carbit, place)
+    // }
   }
 
   handleChange2(value) {
-    this.props.callbackRCP("","",`${value}`)
+    console.log(value);
+    this.props.callbackRCP3(value)
+    // this.setState({place: value,})
+    // if (this.state.place&&this.state.row&&this.state.carbit){
+    //   var row = this.state.row
+    //   var carbit = this.state.carbit
+    //   var place = value
+    //   this.backParent(row, carbit, place)
+    // }
   }
+
+  // backParent(row, carbit, place){
+  //   console.log(row, carbit, place);
+  //   row&&carbit&&place?this.props.callbackRCP(row, carbit, place):''
+  // }
 
   render() {
     const selet1 = []

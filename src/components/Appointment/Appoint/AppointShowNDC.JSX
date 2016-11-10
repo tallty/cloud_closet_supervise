@@ -16,7 +16,9 @@ class AppointShowNDC extends Component {
       garment: this.props.garment,
       store_month: this.props.store_month,
       price: this.props.price,
-      url: this.props.url
+      p_url: this.props.p_url,
+      row_carbit_place: this.props.row_carbit_place,
+      appoint_id: this.props.appoint_id
     };
   }
 
@@ -35,11 +37,11 @@ class AppointShowNDC extends Component {
     });
   }
 
-  onChildChanged(newState, new_url) {
+  onChildChanged(newState, new_url, row_carbit_place) {
     console.log('1111111111');
     console.log(new_url);
     this.setState({
-      success: newState, pic_url: new_url
+      success: newState, pic_url: new_url, row_carbit_place: row_carbit_place
     });
   }
 
@@ -55,6 +57,16 @@ class AppointShowNDC extends Component {
       pic_content.push(<img key={"f"} src={this.props.garment.cover_image} alt="" className={styles.ul_icon}/>)
     }
     return pic_content
+  }
+
+  getRow(){
+    const row_carbit_place = []
+    if (this.state.row_carbit_place !== 'undefined-undefined-undefined') {
+      row_carbit_place.push(<span key="row_carbit_place">{this.state.row_carbit_place}</span>)
+    }else{
+      row_carbit_place.push(<span key="row_carbit_place">{this.props.garment.row_carbit_place}</span>)
+    }
+    return row_carbit_place
   }
 
   render() {
@@ -75,11 +87,11 @@ class AppointShowNDC extends Component {
               <label className={styles.ul_icon}><label>1</label></label>
             </Col>
             <Col span={4} offset={6} className={styles.img_content}>
-              <label className={styles.ul_icon}><label>{this.props.garment.row_carbit_place}</label></label>
+              <label className={styles.ul_icon}><label>{this.getRow()}</label></label>
             </Col>
             <Col span={3} className={styles.img_content}>
               <label className={styles.ul_icon}>
-              <ActiveLink onClick={this.showModal.bind(this)}>详情</ActiveLink> | <ActiveLink onClick={this.warning}>删除</ActiveLink>
+              <ActiveLink onClick={this.showModal.bind(this)}>详情</ActiveLink>{/* | <ActiveLink onClick={this.warning}>删除</ActiveLink> */}
               </label>
             </Col>
           </Col>

@@ -85,14 +85,22 @@ class AppointShowNDH extends Component {
     return y.replace(/(y+|M+|d+|h+|m+|s+)/g,function(v) {return ((v.length>1?"0":"")+eval('z.'+v.slice(-1))).slice(-(v.length>2?v.length:2))}); 
   }
 
-  data2(garments, i, store_month, price, url){
+  getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]);
+    return null;
+  }
+
+  data2(garments, i, store_month, price, pic_url, row_carbit_place){
+    const id = this.getQueryString("id");
     const num_2 = garments.length
     const data2 = []
     for (let a = 0; a < num_2; a++) {
       var garment = garments[a]
       data2.push({
         key: a,
-        type: <AppointShowNDC key={-a} store_month={store_month} price={price} url={url} garment={garment}/>,
+        type: <AppointShowNDC key={-a} appoint_id={id} store_month={store_month} price={price} p_url={pic_url} row_carbit_place={row_carbit_place} garment={garment}/>,
         name1: `${a}`,
         number1: `${a}`,
         address1: `${a}个月`,
@@ -113,7 +121,8 @@ class AppointShowNDH extends Component {
     var id = this.props.groups[i].id
     var store_month = this.props.groups[i].store_month
     var price = this.props.groups[i].price
-    var url = this.props.groups[i].url
+    var pic_url = this.props.groups[i].url
+    var row_carbit_place = `${this.props.groups[i].row}-${this.props.groups[i].carbit}-${this.props.groups[i].place}`
 
     var token = localStorage.token
     var email = localStorage.email
@@ -126,7 +135,7 @@ class AppointShowNDH extends Component {
       .end( (err, res) => {
         if (!err || err === null) {
           let garments = res.body.garments
-          this.data2(garments, i, store_month, price, url)
+          this.data2(garments, i, store_month, price, pic_url, row_carbit_place)
         }
       })
   }
