@@ -24,28 +24,37 @@ export class ImageUploadList extends Component {
     });
   }
 
+  getObjectURL(file) {
+    var url = null;
+    if (window.createObjectURL != undefined) { // basic
+      console.log('basic');
+      url = window.createObjectURL(file);
+    } else if (window.URL != undefined) { // mozilla(firefox)
+      console.log('mozilla');
+      url = window.URL.createObjectURL(file);
+      console.log(url);
+    } else if (window.webkitURL != undefined) { // webkit or chrome
+      console.log('webkit');
+      url = window.webkitURL.createObjectURL(file);
+    }
+    return url;
+  }
+
   handleChange(info) {
-    // console.log(info.file.originFileObj);
-    // const fileList = this.state.fileList
-    // fileList.push(
-    //   info.file.originFileObj
-    // )
-    // this.setState({fileList:fileList})
+    console.log(info);
+    const fileList = this.state.fileList
+    fileList.push(
+      info.file.originFileObj
+    )
+    this.getObjectURL(info.file.originFileObj)
     
-    if (info.file.status !== 'uploading') {
-      console.log(info.file, info.fileList);
-    }
-    if (info.file.status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully`);
-    } else if (info.file.status === 'error') {
-      message.error(`${info.file.name} file upload failed.`);
-    }
+    this.setState({fileList:fileList})
   }
 
   render() {
     const props = {
-      // action: '/upload.do',
       listType: 'picture-card',
+      multiple: true,
       onChange: this.handleChange.bind(this),
       onPreview: (file) => {
         this.setState({
@@ -56,7 +65,7 @@ export class ImageUploadList extends Component {
     };
     return (
       <div className="clearfix">
-        <Upload {...props} fileList={this.state.fileList}>
+        <Upload {...props} fileList={this.state.fileList} >
           <div className="ant-upload-text"><Icon type="plus" />添加</div>
         </Upload>
         <Modal visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel.bind(this)}>

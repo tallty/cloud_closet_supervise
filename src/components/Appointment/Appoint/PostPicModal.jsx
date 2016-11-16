@@ -1,7 +1,7 @@
 {/* 预约订单管理组件 */}
 import React, { Component, PropTypes } from 'react';
 import SuperAgent from 'superagent'
-import { Row, Col, Modal, Form, Button, Input, Select, Upload } from 'antd';
+import { Row, Col, Modal, Form, Button, Input, Select, Upload, Icon } from 'antd';
 import { ImageUploadList } from './ImageUploadList';
 import SelectC from './SelectC';
 import ActiveLink from '../../../layouts/ActiveLink/ActiveLink'
@@ -25,6 +25,8 @@ class PostPicModal extends Component {
       loading: false,
       visible: false,
       url: '',
+      for_url: [],
+      car_url: [],
       title: '默认信息',
       row: 1,
       carbit: 1,
@@ -67,6 +69,17 @@ class PostPicModal extends Component {
       console.log("请上传商品主图！");
   }
 
+  img_push(){
+    var lists = []
+    for (let item of this.state.car_url) {
+      var list_m = {photo: item}
+      lists.push(list_m)
+    }
+    console.log(this.state.cover_image_attributes);
+    console.log(lists);
+    return lists
+  }
+
   handleCancel() {
     var visible = this.state.visible
     this.setState({visible}, ()=> this.props.onChange(visible));
@@ -86,6 +99,7 @@ class PostPicModal extends Component {
     var email = localStorage.email
     var appointment_id = this.props.appoint_id
     var store_month = this.props.store_month
+    var lists = this.img_push()
     var ur = "http://closet-api.tallty.com/admin/garments/"+id
 
     console.log(row, carbit, place);
@@ -101,6 +115,7 @@ class PostPicModal extends Component {
               .field('garment[carbit]',carbit)
               .field('garment[place]',place)
               .field('garment[cover_image_attributes][photo]',cover_image_attributes)
+              .field('garment[detail_images_attributes]', lists)
               .end( (err, res) => {
                 var newState = !this.state.success;
                 var new_url = this.state.url;
@@ -126,9 +141,42 @@ class PostPicModal extends Component {
     return url;
   }
 
+  handleChangeMore(info) {
+    console.log("================");
+    const fileList = this.state.for_url
+    const fileList_d = this.state.car_url
+
+    const file_url = this.getObjectURL(info.target.files[0])
+    fileList.push(
+      file_url
+    )
+    fileList_d.push(
+      info.target.files[0]
+    )
+    console.log(fileList);
+    this.setState({for_url: fileList, car_url: fileList_d })
+  }
+
+  delete_detail_pic(i){
+    let fileList = this.state.for_url;
+    fileList.splice(i,1);//splice返回的是删掉的部分
+    this.setState({for_url: fileList });
+  }
+
+  get_pic_content_more(){
+    const urls = this.state.for_url
+    const pic_content = []
+    for (let i=0; i < urls.length; i++) {
+      pic_content.push(<li key={-i} className={styles.img_ul_icon}><img src={`${urls[i]}`} alt="" className={styles.ul_icon}/><Icon onClick={this.delete_detail_pic.bind(this, i)} type="close-circle-o" className={styles.delete_icon} /></li>)
+    }
+    return pic_content
+  }
+
   handleChange(info){
     var image = info.file.originFileObj
     var url = this.getObjectURL(info.file.originFileObj)
+    console.log('in modal show');
+    console.log(url);
     this.setState({url: url, cover_image_attributes: image })
   }
 
@@ -178,9 +226,10 @@ class PostPicModal extends Component {
     const props = {
       onChange: this.handleChange.bind(this)
     }
+    console.log("+++++++++++++++++++++++=");
+    console.log(this.props.garment.detail_images);
     return (
       <div className={styles.link_btn}>
-        
         <Modal
           width="60vw"
           style={{ top: 40 }}
@@ -198,12 +247,14 @@ class PostPicModal extends Component {
           <Row className={styles.modal_content}>
             <Form horizontal>
               <Col span={6} className={styles.left_pic_add}>
+
                 <Upload {...props}>
                   {this.get_pic_content()}
                   <br/>
                   <label className={styles.main_pic}>商品主图</label>
                   {this.error_label()}
                 </Upload>
+
               </Col>
               <Col span={18} className={styles.right_content}>
                 <Row className={styles.c_detail}>
@@ -229,7 +280,14 @@ class PostPicModal extends Component {
                 <Row className={styles.c_detail}>
                   <Col span={24} className={styles.col_title}>细节描述图片</Col>
                   <Col span={24}>
-                    <ImageUploadList />
+                    <div className="clearfix">
+                      {this.get_pic_content_more()}
+                      <span className={styles.inputContainer}>
+                        <input onChange={this.handleChangeMore.bind(this)} multiple={true} type="file" />
+                        <div className={styles.btn_add}><Icon type="plus" />添加</div>
+                      </span>
+                    </div>
+
                   </Col>
                 </Row>
                 <Row className={styles.d_detail}>
