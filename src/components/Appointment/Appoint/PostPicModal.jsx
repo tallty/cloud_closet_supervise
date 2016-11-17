@@ -75,7 +75,7 @@ class PostPicModal extends Component {
       var list_m = {photo: item}
       lists.push(list_m)
     }
-    console.log(this.state.cover_image_attributes);
+    console.log("我是细节图组");
     console.log(lists);
     return lists
   }
@@ -100,9 +100,13 @@ class PostPicModal extends Component {
     var appointment_id = this.props.appoint_id
     var store_month = this.props.store_month
     var lists = this.img_push()
+    console.log("====-----======-----======");
+    console.log(lists);
     var ur = "http://closet-api.tallty.com/admin/garments/"+id
 
     console.log(row, carbit, place);
+    console.log("我是主图");
+    console.log(cover_image_attributes);
 
     SuperAgent.patch(ur)
               .set('Accept', 'application/json')
@@ -115,7 +119,7 @@ class PostPicModal extends Component {
               .field('garment[carbit]',carbit)
               .field('garment[place]',place)
               .field('garment[cover_image_attributes][photo]',cover_image_attributes)
-              .field('garment[detail_images_attributes]', lists)
+              .field('garment[detail_images_attributes][]', lists)
               .end( (err, res) => {
                 var newState = !this.state.success;
                 var new_url = this.state.url;
@@ -227,7 +231,7 @@ class PostPicModal extends Component {
       onChange: this.handleChange.bind(this)
     }
     console.log("+++++++++++++++++++++++=");
-    console.log(this.props.garment.detail_images);
+    console.log(this.props.garment);
     return (
       <div className={styles.link_btn}>
         <Modal
