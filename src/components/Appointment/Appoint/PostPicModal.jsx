@@ -70,13 +70,14 @@ class PostPicModal extends Component {
   }
 
   img_push(){
-    var lists = []
-    for (let item of this.state.car_url) {
-      var list_m = {photo: item}
-      lists.push(list_m)
+    var lists = {}
+    for (let item=0;item < this.state.car_url.length; item++) {
+      var list_m = this.state.car_url[item]
+      lists[`garment[detail_images_attributes][detail${item}][photo]`] = list_m
     }
     console.log("我是细节图组");
     console.log(lists);
+    
     return lists
   }
 
@@ -119,7 +120,7 @@ class PostPicModal extends Component {
               .field('garment[carbit]',carbit)
               .field('garment[place]',place)
               .field('garment[cover_image_attributes][photo]',cover_image_attributes)
-              .field('garment[detail_images_attributes][]', lists)
+              .field(lists)
               .end( (err, res) => {
                 var newState = !this.state.success;
                 var new_url = this.state.url;
