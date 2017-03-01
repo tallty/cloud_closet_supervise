@@ -72,14 +72,12 @@ const columns = [{
   render: renderContent,
 }]
 
-
 class Appoint extends Component {
   constructor(props) {
     super(props);
     this.state = {
     };
   }
-
 
   callbackChange(key) {
     key == "1"?this.props.callback("storing"):this.props.callback("stored")
