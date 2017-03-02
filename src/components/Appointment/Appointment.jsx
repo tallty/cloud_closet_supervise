@@ -1,4 +1,3 @@
-{/* 预约订单管理组件 */}
 import React, { Component, PropTypes } from 'react';
 import { Row, Col } from 'antd';
 import Header from '../Header/Header';
@@ -7,18 +6,18 @@ import MainLayout from '../../layouts/MainLayout/MainLayout';
 import styles from './Appointment.less';
 
 // 获取链接中的子域名
-function GetUrlRelativePath(){
-  var url = document.location.toString();
-  var arrUrl = url.split("//");
-  var start = arrUrl[1].indexOf("/");
+function getUrlRelativePath() {
+  const url = document.location.toString();
+  const arrUrl = url.split('//');
+  const start = arrUrl[1].indexOf('/');
   var relUrl = arrUrl[1].substring(start);//stop省略，截取从start开始到结尾的所有字符
-  if(relUrl.indexOf("?") != -1){
-    relUrl = relUrl.split("?")[0];
+  if (relUrl.indexOf('?') !== -1) {
+    relUrl = relUrl.split('?')[0];
   }
   return relUrl;
 }
 
-const url = GetUrlRelativePath()
+const url = getUrlRelativePath()
 const Appointment = ({ children }) => {
   return (
     <MainLayout>
@@ -26,13 +25,13 @@ const Appointment = ({ children }) => {
         <div className={styles.content}>
           <div className={styles.side}>
             <Row>
-              <ActiveLinkC to="/distribution" onlyActiveOnIndex={true}>
+              <ActiveLinkC to="/distribution" onlyActiveOnIndex="true">
                 <Col span={24}>
                   配送订单
                 </Col>
               </ActiveLinkC>
               <ActiveLinkC to="/appoint">
-                <Col span={24}>              
+                <Col span={24}>
                   预约订单
                 </Col>
               </ActiveLinkC>
