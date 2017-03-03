@@ -1,13 +1,15 @@
 {/* 预约订单管理组件 */}
 import React, { Component, PropTypes } from 'react';
 import ActiveLink from '../../../layouts/ActiveLink/ActiveLink'
-import { Tabs, Icon, Row, Col, Input, Button, Table } from 'antd';
+import { Tabs, Icon, Row, Col, Input, Button, Table, Modal, message } from 'antd';
 import Appointment from '../Appointment';
+import SuperAgent from 'superagent'
 import styles from './Appoint.less';
 import MainLayout from '../../../layouts/MainLayout/MainLayout';
 
 const height = document.body.clientHeight - 350
 const TabPane = Tabs.TabPane;
+const confirm = Modal.confirm;
 
 // 表格合并列
 const renderContent = function (value, row, index) {
@@ -39,16 +41,24 @@ const columns = [{
     return obj;
   },
 }, {
-  title: '用户名',
-  dataIndex: 'name',
-  render: renderContent,
-}, {
-  title: '电话',
+  title: '租金',
   dataIndex: 'phone',
   render: renderContent,
 }, {
-  title: '订单地址',
-  dataIndex: 'address',
+  title: '总价',
+  dataIndex: 'phwwone',
+  render: renderContent,
+}, {
+  title: '服务费',
+  dataIndex: 'nasdsfme',
+  render: renderContent,
+}, {
+  title: '护理费',
+  dataIndex: 'ph232one',
+  render: renderContent,
+}, {
+  title: '预约日期',
+  dataIndex: 'addffffress',
   render: renderContent,
 }, {
   title: '',
@@ -84,8 +94,39 @@ class Appoint extends Component {
     console.log(key);
   }
 
+  showConfirm(id) {
+    const that = this
+    confirm({
+      title: '订单上架确认提醒?',
+      content: '点击确认，订单上架成功，订单状态将显示发布衣柜及衣物信息。。。',
+      onOk() {
+        that.pushAppoin(that, id)
+      },
+      onCancel() {},
+    });
+  }
+
+  pushAppoin(id) {
+    const token = localStorage.token
+    const email = localStorage.email
+    const url = `http://closet-api.tallty.com/admin/appointments/${id}/stored`
+    SuperAgent
+      .post(url)
+      .set('Accept', 'application/json')
+      .set('X-Admin-Token', token)
+      .set('X-Admin-Email', email)
+      .end( (err, res) => {
+        if (!err || err === null) {
+          message.success('订单上架成功！');
+        } else {
+          message.error('订单上架失败！');
+        }
+      })
+  }
+
   render() {
     const app = this.props.appointments
+    const that = this
     // const url = this.GetUrlRelativePath()
     // 时间格式转换函数
     function date2str(x, y) {
@@ -104,29 +145,44 @@ class Appoint extends Component {
         <Row key={`${i}e`}>
           <Col span={24} className={styles.appoint_title}>
             <Col span={24} className={styles.appoint_id}>
-              <label className={styles.ul_icon}>订单号：{app[i].seq}</label>
+              <Col span={8}><label className={styles.ul_icon}>订单号：{app[i].seq}</label></Col>
+              <Col span={3} className={styles.img_content}>
+                <img src="src/images/user_ava.png" alt="" className={styles.ul_icon} />
+                <label>{app[i].name}</label>
+              </Col>
+              <Col span={5} className={styles.img_content}>
+                <label className={styles.ul_icon}><label>{app[i].phone}</label></label>
+              </Col>
+              <Col span={8} className={styles.img_content}>
+                <label className={styles.ul_icon}><label>{address}</label></label>
+              </Col>
             </Col>
             <Col span={24} className={styles.user_tab}>
               <Col span={3} className={styles.img_content}>
                 <label className={styles.ul_icon}><label>预约衣橱</label></label>
               </Col>
+              <Col span={2} className={styles.img_content}>
+                <label className={styles.ul_icon}><label>￥{app[i].rent_charge}</label></label>
+              </Col>
+              <Col span={2} className={styles.img_content}>
+                <label className={styles.ul_icon}><label>￥{app[i].price}</label></label>
+              </Col>
               <Col span={3} className={styles.img_content}>
-                <img src="src/images/user_ava.png" alt="" className={styles.ul_icon} />
-                <label>{app[i].name}</label>
+                <label className={styles.ul_icon}><label>￥{app[i].service_cost}</label></label>
+              </Col>
+              <Col span={3} className={styles.img_content}>
+                <label className={styles.ul_icon}><label>￥{app[i].care_cost}</label></label>
               </Col>
               <Col span={4} className={styles.img_content}>
-                <label className={styles.ul_icon}><label>{app[i].phone}</label></label>
+                <label className={styles.ul_icon}><label>{app[i].date}</label></label>
               </Col>
               <Col span={4} className={styles.img_content}>
-                <label className={styles.ul_icon}><label>{address}</label></label>
-              </Col>
-              <Col span={6} className={styles.img_content}>
                 <div><label>{date2str(new Date(app[i].created_at), 'yyyy-MM-d')}</label></div>
                 <div><label>{date2str(new Date(app[i].created_at), 'hh:mm:ss')}</label></div>
               </Col>
-              <Col span={4} className={styles.img_content}>
+              <Col span={3} className={styles.img_content}>
                 <div>
-                  <Button type="primary" size="small" className={styles.d_btn}>订单上架</Button>
+                  <Button onClick={that.showConfirm.bind(that, app[i].id)} type="primary" size="small" className={styles.d_btn}>订单上架</Button>
                   <ActiveLink to={url}>
                     <Button type="primary" size="small" className={styles.d_btn}>查看详情</Button>
                   </ActiveLink>

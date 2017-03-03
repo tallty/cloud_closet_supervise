@@ -86,25 +86,19 @@ class AppointShowNDH extends Component {
               <img src="src/images/skirt.svg" alt="" className={styles.ul_icon} />
               <label>{group.title}</label>
             </Col>
-            <Col span={3} className={styles.img_content}>
-              <label className={styles.ul_icon}><label>单价</label></label>
-            </Col>
-            <Col span={3} className={styles.img_content}>
-              <label className={styles.ul_icon}><label>服务费</label></label>
-            </Col>
-            <Col span={2} className={styles.img_content}>
+            <Col span={4} className={styles.img_content}>
               <label className={styles.ul_icon}><label>{group.remain_space_count}</label></label>
             </Col>
-            <Col span={2} className={styles.img_content}>
-              <label className={styles.ul_icon}><label>{group.store_month}个月</label></label>
-            </Col>
             <Col span={4} className={styles.img_content}>
+              <label className={styles.ul_icon}><label>{group.max_count}</label></label>
+            </Col>
+            <Col span={6} className={styles.img_content}>
               <label className={styles.ul_icon}>
                 <label>{this.date2str(new Date(group.updated_at), 'yyyy-MM-dd hh:mm:ss')}</label>
               </label>
             </Col>
             <Col span={3} className={styles.img_content}>
-              <label className={styles.ul_icon}><label>总价</label></label>
+              <label className={styles.ul_icon}><label>{group.state}</label></label>
             </Col>
             <Col span={3} className={styles.img_content}>
               <ActiveLink to={`/appoint_show_detail?ap_id=${this.props.ap_id}&&id=${group.id}`}>

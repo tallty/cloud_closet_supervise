@@ -127,12 +127,10 @@ class AppointShowN extends Component {
           <div className={styles.table}>
             <Row className={styles.table_head}>
               <Col span={4}>类别</Col>
-              <Col span={3}>单价（￥）</Col>
-              <Col span={3}>服务费</Col>
-              <Col span={2}>数量（件）</Col>
-              <Col span={2}>仓储时长</Col>
-              <Col span={4}>创建时间</Col>
-              <Col span={3}>总价</Col>
+              <Col span={4}>余量（件）</Col>
+              <Col span={4}>总容量（件）</Col>
+              <Col span={6}>创建时间</Col>
+              <Col span={3}>状态</Col>
               <Col span={3}>操作</Col>
             </Row>
             <Table columns={columns} dataSource={data} pagination={{ pageSize: 10 }} scroll={{ y: height }} showHeader={false} />

@@ -29,18 +29,27 @@ class PostPicModal extends Component {
       for_url: this.props.garmentOne.detail_image,
       car_url: [],
       title: '默认信息',
-      row: 1,
-      carbit: 1,
-      place: 1,
+      row: 0,
+      carbit: 0,
+      place: 0,
       cover_image_attributes: [],
     };
+  }
+
+  componentDidMount() {
+    
   }
 
   handleOk(e) {
     e.preventDefault();
     const value = this.props.form.getFieldsValue()
     const { row, carbit, place, cover_image_attributes, url } = this.state
-    const title = value.title
+    const rowO = row === 0 && this.props.garmentOne !== undefined ? this.props.garmentOne.row_carbit_place.split('-')[0] : row
+    const carbitO = carbit === 0 && this.props.garmentOne !== undefined ? this.props.garmentOne.row_carbit_place.split('-')[1] : carbit
+    const placeO = place === 0 && this.props.garmentOne !== undefined ? this.props.garmentOne.row_carbit_place.split('-')[2] : place
+    const titleO = value.title ? value.title : this.props.garmentOne.title
+    const cover_image_attributesO = cover_image_attributes ?  cover_image_attributes : this.props.garmentOne.cover_image
+    const idO = this.props.garmentOne.id ? this.props.garmentOne.id : null
     const description = value.description
     const id = 0
 
@@ -51,7 +60,11 @@ class PostPicModal extends Component {
         if (errors) {
           console.log('Errors in form!!!');
         } else {
-          this.pushAppoint(title, row, carbit, place, cover_image_attributes, id)
+          console.log(this.props.garmentOne);
+          this.props.garmentOne !== undefined && idO !== null ?
+          this.pushOneAppoint(titleO, rowO, carbitO, placeO, cover_image_attributesO, idO)
+          :
+          this.pushAppoint(titleO, rowO, carbitO, placeO, cover_image_attributesO, idO)
           setTimeout(() => {
             const visibleN = this.state.visible
             this.setState({ visibleN }, () => this.props.onChange(visibleN));
@@ -114,7 +127,43 @@ class PostPicModal extends Component {
                 const rowCarbitPlace = `${row}-${carbit}-${place}`
                 this.pushDetailPics(res.body.id)
                 this.setState({
-                  success: newState, url: newUrl,
+                  success: newState, url: '',
+                });
+                // 这里要注意：setState 是一个异步方法，所以需要操作缓存的当前值
+                this.props.callbackParent();
+              })
+  }
+
+  // 提交订单修改
+  pushOneAppoint(title, row, carbit, place, coverImageAttributes, id) {
+    // this.setState({visible}, ()=> this.props.onChange(visible));
+    const ur = `http://closet-api.tallty.com/admin/exhibition_chests/${this.props.id}/garments/${id}`
+    const token = localStorage.token
+    const email = localStorage.email
+    const appointmentId = this.props.ap_id
+    console.log('====-----======-----======');
+    console.log(row, carbit, place);
+    console.log('我是主图');
+    console.log(coverImageAttributes);
+    SuperAgent.put(ur)
+              .set('Accept', 'application/json')
+              .set('X-Admin-Token', token)
+              .set('X-Admin-Email', email)
+              .field('appointment_id', appointmentId)
+              .field('garment[title]', title)
+              .field('garment[row]', row)
+              .field('garment[carbit]', carbit)
+              .field('garment[place]', place)
+              .field('garment[cover_image_attributes][photo]', coverImageAttributes)
+              .end((err, res) => {
+                console.log('我在处理修改的提交请求');
+                console.log(res)
+                const newState = !this.state.success;
+                const newUrl = this.state.url;
+                const rowCarbitPlace = `${row}-${carbit}-${place}`
+                this.pushDetailPics(res.body.id)
+                this.setState({
+                  success: newState, url: '',
                 });
                 // 这里要注意：setState 是一个异步方法，所以需要操作缓存的当前值
                 this.props.callbackParent();
@@ -197,12 +246,12 @@ class PostPicModal extends Component {
 
   get_pic_content() {
     const pic_content = []
-    if (this.props.garmentOne.cover_image !== '' && this.props.garmentOne.cover_image !== undefined) {
+    if (this.state.url === '' && this.props.garmentOne.cover_image !== undefined) {
       console.log(this.props.garmentOne.cover_image)
       console.log("nnnnnnnnnnnnnnnnnnnn")
       pic_content.push(<img key={'g'} src={this.props.garmentOne.cover_image} alt="" className={styles.ul_icon} />)
     } else {
-      if (this.state.url !==''){
+      if (this.state.url !== '') {
         pic_content.push(<img key={'g'} src={this.state.url} alt="" className={styles.ul_icon} />)
       } else {
         pic_content.push(<img key={'g'} src="src/images/add_pic.svg" alt="" className={styles.ul_icon} />)
@@ -253,7 +302,7 @@ class PostPicModal extends Component {
     title.push(
       <div key={'h'} className={styles.modal_title}>编辑入库信息</div>
     )
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator, setFieldsValue } = this.props.form;
     const { tags } = this.state;
     const props = {
       onChange: this.handleChange.bind(this)
@@ -267,7 +316,7 @@ class PostPicModal extends Component {
       </Menu>
     );
     console.log('+++++++++++++++++++++++=');
-    console.log('');
+    console.log('2-3-5'.split('-'));
     return (
       <div className={styles.link_btn}>
         <Modal

@@ -177,7 +177,7 @@ class AppointShowNDC extends Component {
           </Row>
         </div>
         <Row>
-          <PostPicModal {...this.state} ap_id={this.getQueryString('ap_id')} id={this.getQueryString('id')} onChange={val => this.setState({ visible: val })} callbackParent={this.onChildChanged.bind(this)} />
+          <PostPicModal {...this.state} ap_id={this.getQueryString('ap_id')} id={this.getQueryString('id')} onChange={val => this.setState({ visible: val, garmentOne: {} })} callbackParent={this.onChildChanged.bind(this)} />
         </Row>
       </Appointment>
     )
