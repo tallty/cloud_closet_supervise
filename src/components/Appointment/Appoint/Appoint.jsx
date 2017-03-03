@@ -6,7 +6,7 @@ import Appointment from '../Appointment';
 import styles from './Appoint.less';
 import MainLayout from '../../../layouts/MainLayout/MainLayout';
 
-const height = document.body.clientHeight * 0.6
+const height = document.body.clientHeight - 350
 const TabPane = Tabs.TabPane;
 
 // 表格合并列
@@ -126,6 +126,7 @@ class Appoint extends Component {
               </Col>
               <Col span={4} className={styles.img_content}>
                 <div>
+                  <Button type="primary" size="small" className={styles.d_btn}>订单上架</Button>
                   <ActiveLink to={url}>
                     <Button type="primary" size="small" className={styles.d_btn}>查看详情</Button>
                   </ActiveLink>

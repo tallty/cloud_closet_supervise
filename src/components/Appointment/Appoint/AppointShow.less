@@ -159,6 +159,7 @@
 .ndc_card_container {
   margin-top: 10px;
   padding-top: 15px;
+  overflow: scroll;
   border-top: 1px solid #F8F8F8;
 }
 .ndc_add_card {
@@ -167,6 +168,7 @@
 }
 .ndc_card {
   padding: 0 8px;
+  margin-bottom: 16px;
   text-align: center;
   .card_img_content {
     padding: 8px;
@@ -182,13 +184,22 @@
       color: #FFA35E;
       background-color: #fff;
       border: 1px solid #FFA35E;
-      border-radius: 22px;
+      border-radius: 18px;
+      padding: 0px 10px;
+      height: 18px;
+      line-height: 15px;
+      margin: 10px 0 5px 0;
+    }
+    label {
+      display: block;
+      font-size: 15px;
+      color: gray;
     }
     p {
       color: #C6C6C6;
     }
     button {
-      margin: 0 4px;
+      margin: 5px 4px;
       background-color: #fff;
       padding: 2px 10px;
       font-size: 12px;

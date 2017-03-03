@@ -1,11 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { Breadcrumb, Table, Row, Col } from 'antd';
+import SuperAgent from 'superagent'
 import Appointment from '../Appointment';
 import AppointShowNDH from './AppointShowNDH';
 import ActiveLink from '../../../layouts/ActiveLink/ActiveLink';
 import styles from './AppointShow.less';
 
-const height = document.body.clientHeight * 0.56;
+const height = document.body.clientHeight - 290;
 // 表格合并列
 const renderContent = function (value, row, index) {
   const obj = {
@@ -65,19 +66,48 @@ class AppointShowN extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      groups: [],
     };
+  }
+
+  componentWillMount() {
+    const token = localStorage.token
+    const email = localStorage.email
+    console.log(this.props)
+    const id = this.getQueryString('id')
+    const url = `http://closet-api.tallty.com/admin/appointments/${id}/its_chests`
+    SuperAgent
+      .get(url)
+      .set('Accept', 'application/json')
+      .set('X-Admin-Token', token)
+      .set('X-Admin-Email', email)
+      .end( (err, res) => {
+        if (!err || err === null) {
+          const groupsG = res.body.admin_exhibition_chests
+          this.setState({ groups: groupsG })
+        } else {
+          this.setState({ groups: [] })
+        }
+      })
+  }
+
+  getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]);
+    return null;
   }
 
   render() {
     // 一级表格模拟数据
     const data = [];
-    const num = this.props.groups.length
-    for (let i = 0; i < num; i++) {
+    const groups = this.state.groups
+    groups.forEach((group, i, obj) => {
       data.push({
         key: i,
-        type: <AppointShowNDH key={`${i}a`} m={i} groups={this.props.groups} />,
+        type: <AppointShowNDH key={`${i}a`} ap_id={this.getQueryString('id')} m={i} group={group} />,
       });
-    }
+    })
     return (
       <Appointment>
         <div className={styles.container}>
@@ -96,7 +126,7 @@ class AppointShowN extends Component {
           </Row>
           <div className={styles.table}>
             <Row className={styles.table_head}>
-              <Col span={4}>类1别</Col>
+              <Col span={4}>类别</Col>
               <Col span={3}>单价（￥）</Col>
               <Col span={3}>服务费</Col>
               <Col span={2}>数量（件）</Col>
@@ -113,6 +143,10 @@ class AppointShowN extends Component {
   }
 }
 
-AppointShowN.propTypes = {};
+AppointShowN.propTypes = {
+};
+
+AppointShowN.defaultProps = {
+};
 
 export default AppointShowN;

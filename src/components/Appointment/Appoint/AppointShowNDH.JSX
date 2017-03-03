@@ -76,16 +76,15 @@ class AppointShowNDH extends Component {
   }
 
   Panel_H() {
-    const i = this.props.m
-    const groups = this.props.groups
+    const group = this.props.group
     const Panel_H = []
     Panel_H.push(
-      <Row key={i}>
+      <Row key={this.props.m}>
         <Col span={24} className={styles.appoint_title}>
           <Col span={24} className={styles.user_tab}>
             <Col span={4} className={styles.img_content}>
               <img src="src/images/skirt.svg" alt="" className={styles.ul_icon} />
-              <label>上衣{groups[i].price}/件</label>
+              <label>{group.title}</label>
             </Col>
             <Col span={3} className={styles.img_content}>
               <label className={styles.ul_icon}><label>单价</label></label>
@@ -94,21 +93,21 @@ class AppointShowNDH extends Component {
               <label className={styles.ul_icon}><label>服务费</label></label>
             </Col>
             <Col span={2} className={styles.img_content}>
-              <label className={styles.ul_icon}><label>{groups[i].count}</label></label>
+              <label className={styles.ul_icon}><label>{group.remain_space_count}</label></label>
             </Col>
             <Col span={2} className={styles.img_content}>
-              <label className={styles.ul_icon}><label>{groups[i].store_month}个月</label></label>
+              <label className={styles.ul_icon}><label>{group.store_month}个月</label></label>
             </Col>
             <Col span={4} className={styles.img_content}>
               <label className={styles.ul_icon}>
-                <label>{this.date2str(new Date(groups[i].updated_at), 'yyyy-MM-dd hh:mm:ss')}</label>
+                <label>{this.date2str(new Date(group.updated_at), 'yyyy-MM-dd hh:mm:ss')}</label>
               </label>
             </Col>
             <Col span={3} className={styles.img_content}>
               <label className={styles.ul_icon}><label>总价</label></label>
             </Col>
             <Col span={3} className={styles.img_content}>
-              <ActiveLink to="/appoint_show_detail">
+              <ActiveLink to={`/appoint_show_detail?ap_id=${this.props.ap_id}&&id=${group.id}`}>
                 <label className={styles.ul_icon}><label>入库</label></label>
               </ActiveLink>
             </Col>
@@ -121,7 +120,7 @@ class AppointShowNDH extends Component {
 
   render() {
     const data = [];
-    // const num = this.props.groups.length
+    // const num = this.props.groupngth
     const that = this
     // for (let i = 0; i < num; i++) {
       data.push({
@@ -138,5 +137,8 @@ class AppointShowNDH extends Component {
 }
 
 AppointShowNDH.propTypes = {};
+
+AppointShowNDH.defaultProps = {
+};
 
 export default AppointShowNDH;

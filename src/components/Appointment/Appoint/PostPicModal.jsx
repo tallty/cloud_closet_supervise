@@ -26,7 +26,7 @@ class PostPicModal extends Component {
       loading: false,
       visible: false,
       url: '',
-      for_url: [],
+      for_url: this.props.garmentOne.detail_image,
       car_url: [],
       title: '默认信息',
       row: 1,
@@ -39,19 +39,14 @@ class PostPicModal extends Component {
   handleOk(e) {
     e.preventDefault();
     const value = this.props.form.getFieldsValue()
-
-    var title = value.title
-    var description = value.description
-    var row = this.state.row
-    var carbit = this.state.carbit
-    var place = this.state.place
-    var cover_image_attributes = this.state.cover_image_attributes
-    var id = 0
+    const { row, carbit, place, cover_image_attributes, url } = this.state
+    const title = value.title
+    const description = value.description
+    const id = 0
 
     console.log(title, row, carbit, place);
 
-    this.state.url
-      ?
+    url ?
       this.props.form.validateFields((errors, values) => {
         if (errors) {
           console.log('Errors in form!!!');
@@ -68,10 +63,10 @@ class PostPicModal extends Component {
   }
 
   img_push() {
-    const lists = {}
+    const lists = []
     for (let item = 0; item < this.state.car_url.length; item++) {
-      const listM = this.state.car_url[item]
-      lists[`garment[detail_images_attributes][detail${item}][photo]`] = listM
+      lists.push(`garment[detail_images_${item}_attributes][photo]`)
+      // lists[`garment[detail_images_${item}_attributes][photo]`] = listM
     }
     console.log('我是细节图组');
     console.log(lists);
@@ -93,42 +88,57 @@ class PostPicModal extends Component {
   // 提交订单修改
   pushAppoint(title, row, carbit, place, coverImageAttributes, id) {
     // this.setState({visible}, ()=> this.props.onChange(visible));
-    const ur = 'http://closet-api.tallty.com/admin/garments/' + id
+    const ur = `http://closet-api.tallty.com/admin/exhibition_chests/${this.props.id}/garments`
     const token = localStorage.token
     const email = localStorage.email
-    const appointmentId = this.props.appoint_id
-    const storeMonth = this.props.store_month
-    const lists = this.img_push()
+    const appointmentId = this.props.ap_id
     console.log('====-----======-----======');
-    console.log(lists);
     console.log(row, carbit, place);
     console.log('我是主图');
     console.log(coverImageAttributes);
-
-    SuperAgent.patch(ur)
+    SuperAgent.post(ur)
               .set('Accept', 'application/json')
               .set('X-Admin-Token', token)
               .set('X-Admin-Email', email)
               .field('appointment_id', appointmentId)
-              .field('store_month', storeMonth)
               .field('garment[title]', title)
               .field('garment[row]', row)
               .field('garment[carbit]', carbit)
               .field('garment[place]', place)
               .field('garment[cover_image_attributes][photo]', coverImageAttributes)
-              .field(lists)
               .end((err, res) => {
                 console.log('我在处理提交请求');
                 console.log(res)
                 const newState = !this.state.success;
                 const newUrl = this.state.url;
                 const rowCarbitPlace = `${row}-${carbit}-${place}`
+                this.pushDetailPics(res.body.id)
                 this.setState({
                   success: newState, url: newUrl,
                 });
                 // 这里要注意：setState 是一个异步方法，所以需要操作缓存的当前值
-                this.props.callbackParent(newState, newUrl, rowCarbitPlace);
+                this.props.callbackParent();
               })
+  }
+
+  pushDetailPics(id) {
+    const lists = this.img_push()
+    console.log(lists)
+    const token = localStorage.token
+    const email = localStorage.email
+    const appointmentId = this.props.ap_id
+    const ur = `http://closet-api.tallty.com/admin/exhibition_chests/${this.props.id}/garments/${id}`
+    lists.forEach((list, i, obj) => {
+      SuperAgent.post(ur)
+                .set('Accept', 'application/json')
+                .set('X-Admin-Token', token)
+                .set('X-Admin-Email', email)
+                .field('appointment_id', appointmentId)
+                .field(list, this.state.car_url[i])
+                .end((err, res) => {
+                  console.log(res);
+                })
+    })
   }
 
   getObjectURL(file) {
@@ -145,7 +155,7 @@ class PostPicModal extends Component {
 
   handleChangeMore(info) {
     console.log('================');
-    const fileList = this.state.for_url
+    const fileList = this.state.for_url === undefined ? [] : this.state.for_url
     const fileListD = this.state.car_url
 
     const fileUrl = this.getObjectURL(info.target.files[0])
@@ -160,13 +170,13 @@ class PostPicModal extends Component {
   }
 
   delete_detail_pic(i) {
-    const fileList = this.state.for_url;
+    const fileList = this.state.for_url === undefined ? [] : this.state.for_url
     fileList.splice(i, 1);//splice返回的是删掉的部分
     this.setState({ for_url: fileList });
   }
 
   get_pic_content_more() {
-    const urls = this.state.for_url
+    const urls = this.state.for_url === undefined ? [] : this.state.for_url
     const picContent = []
     for (let i = 0; i < urls.length; i++) {
       picContent.push(<li key={-i} className={styles.img_ul_icon}>
@@ -187,8 +197,10 @@ class PostPicModal extends Component {
 
   get_pic_content() {
     const pic_content = []
-    if (this.state.url === '') {
-      pic_content.push(<img key={'g'} src="" alt="" className={styles.ul_icon} />)
+    if (this.props.garmentOne.cover_image !== '' && this.props.garmentOne.cover_image !== undefined) {
+      console.log(this.props.garmentOne.cover_image)
+      console.log("nnnnnnnnnnnnnnnnnnnn")
+      pic_content.push(<img key={'g'} src={this.props.garmentOne.cover_image} alt="" className={styles.ul_icon} />)
     } else {
       if (this.state.url !==''){
         pic_content.push(<img key={'g'} src={this.state.url} alt="" className={styles.ul_icon} />)
@@ -296,7 +308,7 @@ class PostPicModal extends Component {
                           { required: true, message: '请输衣服名称！' },
                         ],
                       })(
-                        <Input id="title" name="title" />
+                        <Input id="title" name="title" placeholder={this.props.garmentOne.title ? this.props.garmentOne.title : ''} />
                       )}
                     </FormItem>
                   </Col>

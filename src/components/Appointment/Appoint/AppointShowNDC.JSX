@@ -1,11 +1,14 @@
 import React, { Component, PropTypes } from 'react';
-import { Modal, Breadcrumb, Row, Col, Button, Card, Tag, Icon } from 'antd';
+import { Modal, Breadcrumb, Row, Col, Button, Card, Tag, Icon, message } from 'antd';
 import ActiveLink from '../../../layouts/ActiveLink/ActiveLink'
 import PostPicModal from './PostPicModal';
+import SuperAgent from 'superagent'
 import Appointment from '../Appointment';
 import styles from './AppointShow.less';
 
 const { string, number, bool, arrayOf, shape } = PropTypes;
+const height = document.body.clientHeight - 230
+const confirm = Modal.confirm;
 
 class AppointShowNDC extends Component {
   constructor(props) {
@@ -13,10 +16,60 @@ class AppointShowNDC extends Component {
     this.state = {
       visible: false,
       success: false,
-      garments: this.props.garments,
+      garments: [],
+      garmentOne: {},
       pic_url: '',
       row_carbit_place: '',
     };
+  }
+
+  componentWillMount() {
+    this.getDataList()
+  }
+
+  getDataList() {
+    const token = localStorage.token
+    const email = localStorage.email
+    const idN = this.getQueryString('id')
+    const url = `http://closet-api.tallty.com/admin/exhibition_chests/${idN}/garments`
+    console.log(url);
+    SuperAgent
+      .get(url)
+      .set('Accept', 'application/json')
+      .set('X-Admin-Token', token)
+      .set('X-Admin-Email', email)
+      .end( (err, res) => {
+        if (!err || err === null) {
+          const garmentsN = res.body.garments
+          this.setState({ garments: garmentsN })
+        }
+      })
+  }
+
+  getOneData(id){
+    const token = localStorage.token
+    const email = localStorage.email
+    const idN = this.getQueryString('id')
+    const url = `http://closet-api.tallty.com/admin/exhibition_chests/${idN}/garments/${id}`
+    console.log(url);
+    SuperAgent
+      .get(url)
+      .set('Accept', 'application/json')
+      .set('X-Admin-Token', token)
+      .set('X-Admin-Email', email)
+      .end( (err, res) => {
+        if (!err || err === null) {
+          const garmentsN = res.body
+          this.setState({ garmentOne: garmentsN, visible: true })
+        }
+      })
+  }
+
+  getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]);
+    return null;
   }
 
   // 删除确认模态框
@@ -34,35 +87,69 @@ class AppointShowNDC extends Component {
     });
   }
 
-  onChildChanged(newState, new_url, row_carbit_place) {
-    console.log('1111111111');
-    console.log(new_url);
-    this.setState({
-      success: newState, pic_url: new_url, row_carbit_place: row_carbit_place
-    });
+  onChildChanged() {
+    this.getDataList()
+  }
+
+  editGarment(id) {
+    console.log(id)
+    this.getOneData(id)
   }
 
   getList() {
     const lists = []
     const { garments } = this.state
+    console.log(this.getQueryString('ap_id'))
+    console.log(this.getQueryString('id'))
     garments.forEach((garment, i, obj) => {
       lists.push(
-        <Col span="5" className={styles.ndc_card}>
+        <Col key={`gar${i}`} span="6" className={styles.ndc_card}>
           <Card bordered={true} style={{ border: '2px solid #FF9241' }} bodyStyle={{ padding: 0 }} >
             <div className={styles.card_img_content}>
               <img alt="example" src={`${garment.cover_image}`} />
             </div>
             <div className={styles.custom_card}>
-              <h3>{garment.title}</h3>
-              <Tag className={styles.custom_card_tag}>{garment.type[0]}</Tag>
-              <p>{garment.closet_number}</p>
-              <Button className={styles.edit_btn} >编辑</Button><Button className={styles.detele_btn}>删除</Button>
+              <label>{garment.title ? garment.title : '默认衣服标题' }</label>
+              <Tag className={styles.custom_card_tag}>tag1</Tag>
+              <p>{garment.row_carbit_place}</p>
+              <Button className={styles.edit_btn} onClick={this.editGarment.bind(this, garment.id)}>编辑</Button><Button className={styles.detele_btn}>删除</Button>
             </div>
           </Card>
         </Col>
       )
     })
     return lists
+  }
+
+  showConfirm() {
+    const that = this
+    confirm({
+      title: '衣柜发布确认提醒?',
+      content: '点击确认，衣柜发布成功，用户端将显示发布衣柜及衣物信息。。。',
+      onOk() {
+        that.pushChests(that)
+      },
+      onCancel() {},
+    });
+  }
+
+  pushChests() {
+    const token = localStorage.token
+    const email = localStorage.email
+    const idN = this.getQueryString('id')
+    const url = `http://closet-api.tallty.com/admin/exhibition_chests/${idN}/release`
+    SuperAgent
+      .post(url)
+      .set('Accept', 'application/json')
+      .set('X-Admin-Token', token)
+      .set('X-Admin-Email', email)
+      .end( (err, res) => {
+        if (!err || err === null) {
+          message.success('衣柜发布成功！');
+        } else {
+          message.error('衣柜发布失败！');
+        }
+      })
   }
 
   render() {
@@ -79,15 +166,18 @@ class AppointShowNDC extends Component {
             </Col>
             <Col span={16} offset={8} className={styles.head_right}>
               <label>订单号：20161011877834</label>
-              <Button className={styles.head_right_btn} onClick={this.showModal.bind(this)} type="dashed" icon="plus" ghost>添加衣服</Button>
+              <Button className={styles.head_right_btn} onClick={this.showModal.bind(this)} type="dashed" icon="plus" >添加衣服</Button>
+              <Button className={styles.head_right_btn} onClick={this.showConfirm.bind(this)} type="dashed" icon="export" >发布</Button>
             </Col>
           </Row>
-          <Row className={styles.ndc_card_container}>
-            {this.getList()}
+          <Row className={styles.ndc_card_container} style={{ height: height }}>
+            <Col span={22} offset={1}>
+              {this.getList()}
+            </Col>
           </Row>
         </div>
         <Row>
-          <PostPicModal {...this.state} onChange={val => this.setState({ visible: val })} callbackParent={this.onChildChanged.bind(this)} />
+          <PostPicModal {...this.state} ap_id={this.getQueryString('ap_id')} id={this.getQueryString('id')} onChange={val => this.setState({ visible: val })} callbackParent={this.onChildChanged.bind(this)} />
         </Row>
       </Appointment>
     )
@@ -95,21 +185,9 @@ class AppointShowNDC extends Component {
 }
 
 AppointShowNDC.defaultProps = {
-  garments: [{ id: 1, title: '连衣裙', cover_image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png', type: ['夏装'], closet_number: '12-2-34', describe: 'meilidongren', pics: ['https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png', 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'] }, { id: 1, title: '连衣裙', cover_image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png', type: ['下装', '夏装'], closet_number: '12-2-34', describe: 'meilidongren', pics: ['https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png', 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'] }, { id: 1, title: '连衣裙', cover_image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png', type: ['上装', '夏装'], closet_number: '12-2-34', describe: 'meilidongren', pics: ['https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png', 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'] }],
 }
 
 AppointShowNDC.propTypes = {
-  garments: arrayOf(
-    shape({
-      id: number,
-      title: string,
-      cover_image: string,
-      type: arrayOf,
-      closet_number: string,
-      describe: string,
-      pics: arrayOf,
-    })
-  ),
 };
 
 export default AppointShowNDC;

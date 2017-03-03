@@ -11,7 +11,6 @@ export class GetAppointShowList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      groups: [],
       id: '',
       address: '',
       name: '',
@@ -27,7 +26,7 @@ export class GetAppointShowList extends Component {
   }
 
   componentWillMount() {
-    const id = this.getQueryString("id");
+    const id = this.getQueryString('id');
     this.getList(id)
   }
 
@@ -39,12 +38,12 @@ export class GetAppointShowList extends Component {
     clearInterval(timer)
   }
 
-  getList(id){
+  getList(id) {
     // var token = 'wgRrN_1yUzQhe3SAbDkx'
     // var email = 'admin@tallty.com'
-    var token = localStorage.token
-    var email = localStorage.email
-    var url = `http://closet-api.tallty.com/admin/appointments/${id}/appointment_item_groups`
+    const token = localStorage.token
+    const email = localStorage.email
+    const url = `http://closet-api.tallty.com/admin/appointments/${id}`
     console.log(url);
     SuperAgent
       .get(url)
@@ -53,25 +52,11 @@ export class GetAppointShowList extends Component {
       .set('X-Admin-Email', email)
       .end( (err, res) => {
         if (!err || err === null) {
-          let groups = res.body.appointment_item_groups
-          this.setState({ groups: groups }) 
-        }
-      })
-
-    var url = `http://closet-api.tallty.com/admin/appointments/${id}`
-    console.log(url);
-    SuperAgent
-      .get(url)
-      .set('Accept', 'application/json')
-      .set('X-Admin-Token', token)
-      .set('X-Admin-Email', email)
-      .end( (err, res) => {
-        if (!err || err === null) {
-          let id = res.body.id
-          let address = res.body.address.length == 0 ? '当前地址为空，请联系客户确认！':res.body.address
-          let name = res.body.name == null ? '当前用户姓名为空，请联系客户确认！！':res.body.name
-          let phone = res.body.phone
-          this.setState({ id: id, address: address, name: name, phone: phone }) 
+          const apId = res.body.id
+          const apAddress = res.body.address == null ? '当前地址为空，请联系客户确认！' : res.body.address
+          const apName = res.body.name == null ? '当前用户姓名为空，请联系客户确认！！' : res.body.name
+          const apPhone = res.body.phone
+          this.setState({ id: apId, address: apAddress, name: apName, phone: apPhone })
         }
       })
   }

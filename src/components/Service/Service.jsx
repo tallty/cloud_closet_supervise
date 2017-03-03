@@ -13,8 +13,10 @@ class Service extends Component {
   render() {
     return (
       <MainLayout>
-        <h1>客服管理组件</h1>
-        <DatePicker onChange={this.onChange} />
+        <div style={{ textAlign: 'center', paddingTop: '20%' }}>
+          <h1 className="dep_one">客服管理组件</h1>
+          <p className="dep_two">当前模块正在开发中，敬请期待！</p>
+        </div>
       </MainLayout>
     );
   }

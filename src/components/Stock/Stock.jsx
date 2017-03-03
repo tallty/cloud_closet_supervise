@@ -42,7 +42,10 @@ class Stock extends Component {
   render() {
     return (
       <MainLayout>
-        {/*<Appoint {...this.state} />*/}
+        <div style={{ textAlign: 'center', paddingTop: '20%' }}>
+          <h1 className="dep_one">库存管理组件</h1>
+          <p className="dep_two">当前模块正在开发中，敬请期待！</p>
+        </div>
       </MainLayout>
     );
   }

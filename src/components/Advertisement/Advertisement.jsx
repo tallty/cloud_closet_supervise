@@ -14,7 +14,7 @@ class Advertisement extends Component {
     return (
       <MainLayout>
         <h1>广告管理组件</h1>
-        <DatePicker onChange={this.onChange} />
+        <p>当前模块正在开发中，敬请期待！</p>
       </MainLayout>
     );
   }

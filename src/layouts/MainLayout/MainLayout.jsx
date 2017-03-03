@@ -7,6 +7,7 @@ import styles from './MainLayout.less';
 /**
    * 活动状态图标
    */
+const height = document.body.clientHeight - 72
 function getIconWithUrl(iconName, url) {
   if (location.pathname === url) {
     return <img src={`/src/images/${iconName}_a.svg`} className={styles.ul_icon}/>
@@ -21,7 +22,7 @@ const MainLayout = ({ children }) => {
       <div className={styles.head}>
         <Header />
       </div>
-      <div className={styles.content}>
+      <div className={styles.content} style={{ height: height }}>
         <div className={styles.side}>
           <Row>
             <ActiveLink to="/basic" onlyActiveOnIndex={true}>
