@@ -25,7 +25,7 @@ const Appointment = ({ children }) => {
         <div className={styles.content}>
           <div className={styles.side}>
             <Row>
-              <ActiveLinkC to="/distribution" onlyActiveOnIndex="true">
+              <ActiveLinkC to="/distribution" onlyActiveOnIndex={true}>
                 <Col span={24}>
                   配送订单
                 </Col>

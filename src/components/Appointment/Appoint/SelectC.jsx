@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Row, Col, Select } from 'antd';
+import styles from './PostPicModal.less';
 
 const Option = Select.Option;
 
@@ -116,10 +117,13 @@ class SelectC extends Component {
           </Select>
     )
     return (
-      <Row>
-        <Col span={8}>排 {selet1}</Col>
-        <Col span={8}>柜 {selet2}</Col>
-        <Col span={8}>位 {selet3}</Col>
+      <Row className={styles.selectRow}>
+        <Col span={2}><label>排</label></Col>
+        <Col span={6} className={styles.selectCell}>{selet1}</Col>
+        <Col span={2}><label>柜</label></Col>
+        <Col span={6} className={styles.selectCell}>{selet2}</Col>
+        <Col span={2}><label>位</label></Col>
+        <Col span={6} className={styles.selectCell}>{selet3}</Col>
       </Row>
     );
   }

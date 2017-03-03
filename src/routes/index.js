@@ -4,9 +4,11 @@ import App from '../components/App';
 import Customer from '../components/Customer/Customer';
 import Advertisement from '../components/Advertisement/Advertisement';
 import Appointment from '../components/Appointment/Appointment';
-    import Distribution from '../components/Appointment/Distribution/Distribution';
-    import { GetAppointList } from '../components/Appointment/Appoint/GetAppointList';
-    import { GetAppointShowList } from '../components/Appointment/Appoint/GetAppointShowList';
+import Distribution from '../components/Appointment/Distribution/Distribution';
+import { GetAppointList } from '../components/Appointment/Appoint/GetAppointList';
+import AppointShowNDC from '../components/Appointment/Appoint/AppointShowNDC';
+import { GetAppointShowList } from '../components/Appointment/Appoint/GetAppointShowList';
+
 import Service from '../components/Service/Service';
 import Stock from '../components/Stock/Stock';
 import { GetList } from '../components/list/GetList';
@@ -36,12 +38,14 @@ export class Routes extends Component {
         <Route path="/advertisement" component={Advertisement} />
         {/* 配置订单管理路由 */}
         <Route path="/appointment" component={Appointment} />
-            {/* 配置订单配送管理路由 */}
-            <Route path="/distribution" component={Distribution} />
-            {/* 配置订单预约管理路由 */}
-            <Route path="/appoint" component={GetAppointList} />
-            {/* 配置订单预约详情管理路由 */}
-            <Route path="/appoint_show" component={GetAppointShowList} />
+        {/* 配置订单配送管理路由 */}
+        <Route path="/distribution" component={Distribution} />
+        {/* 配置订单预约管理路由 */}
+        <Route path="/appoint" component={GetAppointList} />
+        {/* 配置订单预约详情管理路由 */}
+        <Route path="/appoint_show" component={GetAppointShowList} />
+        {/* 配置订单上架管理路由 */}
+        <Route path="/appoint_show_detail" component={AppointShowNDC} />
         {/* 配置客服管理路由 */}
         <Route path="/service" component={Service} />
         {/* 配置库存管理路由 */}

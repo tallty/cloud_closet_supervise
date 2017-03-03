@@ -1,4 +1,3 @@
-{/* 预约订单管理组件 */}
 import React, { Component, PropTypes } from 'react';
 import { Breadcrumb, Table, Row, Col } from 'antd';
 import Appointment from '../Appointment';
@@ -6,7 +5,7 @@ import AppointShowNDH from './AppointShowNDH';
 import ActiveLink from '../../../layouts/ActiveLink/ActiveLink';
 import styles from './AppointShow.less';
 
-const height = document.body.clientHeight*0.56;
+const height = document.body.clientHeight * 0.56;
 // 表格合并列
 const renderContent = function (value, row, index) {
   const obj = {
@@ -20,7 +19,7 @@ const renderContent = function (value, row, index) {
 }
 // 一级表格定义列属性
 const columns = [{
-  title: '商品',
+  title: '类别',
   dataIndex: 'type',
   render(value, row, index) {
     const obj = {
@@ -32,31 +31,31 @@ const columns = [{
     }
     return obj;
   },
-},{
-  title: '名称',
+}, {
+  title: '单价（￥）',
   dataIndex: 'name1',
   render: renderContent,
-},{
-  title: '类别',
+}, {
+  title: '服务费',
   dataIndex: 'number1',
   render: renderContent,
-},{
+}, {
   title: '数量（件）',
   dataIndex: 'address1',
   render: renderContent,
-},{
+}, {
   title: '仓储时长',
   dataIndex: 'time1',
   render: renderContent,
-},{
+}, {
   title: '创建时间',
   dataIndex: 's11_price1',
   render: renderContent,
-},{
-  title: '仓储编号',
+}, {
+  title: '总价',
   dataIndex: 's12_price1',
   render: renderContent,
-},{
+}, {
   title: '操作',
   dataIndex: 'action1',
   render: renderContent,
@@ -76,14 +75,7 @@ class AppointShowN extends Component {
     for (let i = 0; i < num; i++) {
       data.push({
         key: i,
-        type: <AppointShowNDH key={i+"a"} m={i} groups={this.props.groups}/>,
-        number1: `20${i}`,
-        price1: `20${i}`,
-        store_time1: `${i}个月`,
-        all_price1: `100${i}`,
-        time1: `2016-10-${i}`,
-        state1: `待付款`,
-        action1: `详情|删除`
+        type: <AppointShowNDH key={`${i}a`} m={i} groups={this.props.groups} />,
       });
     }
     return (
@@ -104,13 +96,13 @@ class AppointShowN extends Component {
           </Row>
           <div className={styles.table}>
             <Row className={styles.table_head}>
-              <Col span={4}>商品</Col>
-              <Col span={3}>名称</Col>
-              <Col span={2}>类别</Col>
+              <Col span={4}>类1别</Col>
+              <Col span={3}>单价（￥）</Col>
+              <Col span={3}>服务费</Col>
               <Col span={2}>数量（件）</Col>
               <Col span={2}>仓储时长</Col>
               <Col span={4}>创建时间</Col>
-              <Col span={4}>仓储编号</Col>
+              <Col span={3}>总价</Col>
               <Col span={3}>操作</Col>
             </Row>
             <Table columns={columns} dataSource={data} pagination={{ pageSize: 10 }} scroll={{ y: height }} showHeader={false} />

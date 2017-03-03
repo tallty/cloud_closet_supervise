@@ -1,10 +1,11 @@
-{/* 预约订单管理组件 */}
 import React, { Component, PropTypes } from 'react';
-import { Modal, Breadcrumb, Table, Row, Col, Button, Collapse } from 'antd';
+import { Modal, Breadcrumb, Row, Col, Button, Card, Tag, Icon } from 'antd';
 import ActiveLink from '../../../layouts/ActiveLink/ActiveLink'
 import PostPicModal from './PostPicModal';
+import Appointment from '../Appointment';
 import styles from './AppointShow.less';
 
+const { string, number, bool, arrayOf, shape } = PropTypes;
 
 class AppointShowNDC extends Component {
   constructor(props) {
@@ -12,13 +13,9 @@ class AppointShowNDC extends Component {
     this.state = {
       visible: false,
       success: false,
+      garments: this.props.garments,
       pic_url: '',
-      garment: this.props.garment,
-      store_month: this.props.store_month,
-      price: this.props.price,
-      p_url: this.props.p_url,
-      row_carbit_place: this.props.row_carbit_place,
-      appoint_id: this.props.appoint_id
+      row_carbit_place: '',
     };
   }
 
@@ -45,63 +42,74 @@ class AppointShowNDC extends Component {
     });
   }
 
-  get_pic_content(){
-    const pic_content = []
-    if (this.state.pic_url !=='') {
-      console.log('22222222222');
-      console.log(this.state.pic_url);
-      pic_content.push(<img key={"f"} src={this.state.pic_url} alt="" className={styles.ul_icon}/>)
-    }else if (this.props.garment.cover_image==null){
-      pic_content.push(<img key={"f"} src="src/images/add_pic.svg" alt="" className={styles.ul_icon}/>)
-    }else{
-      pic_content.push(<img key={"f"} src={this.props.garment.cover_image} alt="" className={styles.ul_icon}/>)
-    }
-    return pic_content
-  }
-
-  getRow(){
-    const row_carbit_place = []
-    if (this.state.row_carbit_place !== 'undefined-undefined-undefined') {
-      row_carbit_place.push(<span key="row_carbit_place">{this.state.row_carbit_place}</span>)
-    }else{
-      row_carbit_place.push(<span key="row_carbit_place">{this.props.garment.row_carbit_place}</span>)
-    }
-    return row_carbit_place
+  getList() {
+    const lists = []
+    const { garments } = this.state
+    garments.forEach((garment, i, obj) => {
+      lists.push(
+        <Col span="5" className={styles.ndc_card}>
+          <Card bordered={true} style={{ border: '2px solid #FF9241' }} bodyStyle={{ padding: 0 }} >
+            <div className={styles.card_img_content}>
+              <img alt="example" src={`${garment.cover_image}`} />
+            </div>
+            <div className={styles.custom_card}>
+              <h3>{garment.title}</h3>
+              <Tag className={styles.custom_card_tag}>{garment.type[0]}</Tag>
+              <p>{garment.closet_number}</p>
+              <Button className={styles.edit_btn} >编辑</Button><Button className={styles.detele_btn}>删除</Button>
+            </div>
+          </Card>
+        </Col>
+      )
+    })
+    return lists
   }
 
   render() {
     return (
-      <Row>
-        <Col span={24} className={styles.appoint_title_c}>
-          <Col span={24} className={styles.user_tab}>
-            <Col span={4} className={styles.img_content}>
-              {this.get_pic_content()}
+      <Appointment>
+        <div className={styles.container}>
+          <Row className={styles.header}>
+            <Col span={24} className={styles.breadcrumb}>
+              <Breadcrumb>
+                <Breadcrumb.Item className={styles.bread}><ActiveLink to="/appoint">全部订单</ActiveLink></Breadcrumb.Item>
+                <Breadcrumb.Item className={styles.active}>订单详情</Breadcrumb.Item>
+                <Breadcrumb.Item className={styles.active}>入库</Breadcrumb.Item>
+              </Breadcrumb>
             </Col>
-            <Col span={3} className={styles.img_content}>
-              <label className={styles.ul_icon}><label>D20160813{this.props.garment.id}</label></label>
+            <Col span={16} offset={8} className={styles.head_right}>
+              <label>订单号：20161011877834</label>
+              <Button className={styles.head_right_btn} onClick={this.showModal.bind(this)} type="dashed" icon="plus" ghost>添加衣服</Button>
             </Col>
-            <Col span={2} className={styles.img_content}>
-              <label className={styles.ul_icon}><label>春夏</label></label>
-            </Col>
-            <Col span={2} className={styles.img_content}>
-              <label className={styles.ul_icon}><label>1</label></label>
-            </Col>
-            <Col span={4} offset={6} className={styles.img_content}>
-              <label className={styles.ul_icon}><label>{this.getRow()}</label></label>
-            </Col>
-            <Col span={3} className={styles.img_content}>
-              <label className={styles.ul_icon}>
-              <ActiveLink onClick={this.showModal.bind(this)}>详情</ActiveLink>{/* | <ActiveLink onClick={this.warning}>删除</ActiveLink> */}
-              </label>
-            </Col>
-          </Col>
-        </Col>
-        <PostPicModal {...this.state} onChange={val => this.setState({visible: val})} callbackParent={this.onChildChanged.bind(this)}/>
-      </Row>
+          </Row>
+          <Row className={styles.ndc_card_container}>
+            {this.getList()}
+          </Row>
+        </div>
+        <Row>
+          <PostPicModal {...this.state} onChange={val => this.setState({ visible: val })} callbackParent={this.onChildChanged.bind(this)} />
+        </Row>
+      </Appointment>
     )
   }
 }
 
-AppointShowNDC.propTypes = {};
+AppointShowNDC.defaultProps = {
+  garments: [{ id: 1, title: '连衣裙', cover_image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png', type: ['夏装'], closet_number: '12-2-34', describe: 'meilidongren', pics: ['https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png', 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'] }, { id: 1, title: '连衣裙', cover_image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png', type: ['下装', '夏装'], closet_number: '12-2-34', describe: 'meilidongren', pics: ['https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png', 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'] }, { id: 1, title: '连衣裙', cover_image: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png', type: ['上装', '夏装'], closet_number: '12-2-34', describe: 'meilidongren', pics: ['https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png', 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'] }],
+}
+
+AppointShowNDC.propTypes = {
+  garments: arrayOf(
+    shape({
+      id: number,
+      title: string,
+      cover_image: string,
+      type: arrayOf,
+      closet_number: string,
+      describe: string,
+      pics: arrayOf,
+    })
+  ),
+};
 
 export default AppointShowNDC;
