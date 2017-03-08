@@ -1,7 +1,7 @@
 import './index.html';
 import './index.less';
 import './global.less';
-import ReactDOM from 'react-dom'; 
+import ReactDOM from 'react-dom';
 import React from 'react';
 import { browserHistory } from 'react-router';
 import App from '../components/App';

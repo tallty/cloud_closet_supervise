@@ -37,7 +37,7 @@ class PostPicModal extends Component {
   }
 
   componentDidMount() {
-    
+
   }
 
   handleOk(e) {
@@ -412,7 +412,7 @@ class PostPicModal extends Component {
                     <FormItem >
                       {getFieldDecorator('description', {
                         rules: [
-                          { required: true, message: '请输入描述信息！' },
+                          { required: false, message: '请输入描述信息！' },
                         ],
                       })(
                         <Input id="description" name="description" type="textarea" rows={3} />

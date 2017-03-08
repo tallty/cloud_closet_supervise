@@ -1,4 +1,4 @@
-{/*登录页*/}
+/*登录页*/
 import React, { Component, PropTypes } from 'react';
 import SuperAgent from 'superagent'
 import { Form, Button, Row, Col, Input } from 'antd'
@@ -9,43 +9,41 @@ import MainLayout from '../layouts/MainLayout/MainLayout';
 const FormItem = Form.Item;
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      password: '',
-    }
+  state = {
+    email: '',
+    password: '',
   }
 
   componentWillMount() {
     localStorage.email = ''
-    localStorage.password = ''     
+    localStorage.password = ''
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    const value = this.props.form.getFieldsValue()
-    var email = value.email
-    var password = value.password
-    this.pushAppoint(email, password )
+    const value = this.props.form.getFieldsValue();
+    const email = value.email;
+    const password = value.password;
+    this.pushAppoint(email, password)
   }
 
   // 预约
-  pushAppoint(email, password){
-    var url = "http://closet-api.tallty.com/admins/sign_in"
-    SuperAgent.post(url)
-              .set('Accept', 'application/json')
-              .send({'admin': {'email': email, 'password': password}})
-              .end( (err, res) => {
-                if (res.ok) {
-                  localStorage.email = email
-                  localStorage.token = res.body.authentication_token
-                  this.props.router.replace('/appoint')
-                }
-              })       
+  pushAppoint(email, password) {
+    SuperAgent
+      .post('http://closet-api.tallty.com/admins/sign_in')
+      .set('Accept', 'application/json')
+      .send({ admin: { email: email, password: password } })
+      .end((err, res) => {
+        if (res.ok) {
+          localStorage.email = email
+          localStorage.token = res.body.authentication_token
+          this.props.router.replace('/appoint')
+        }
+      });
   }
   render() {
     const { getFieldDecorator } = this.props.form;
+    console.log(getFieldDecorator);
     return (
       <div className={styles.container}>
         <div className={styles.login_content}>
@@ -55,7 +53,7 @@ class App extends Component {
               <Col span={24}>
                 <FormItem id="control-input1" >
                   {getFieldDecorator('email', { initialValue: '' })(
-                    <Input id="control-input1" placeholder="用户邮箱"/>
+                    <Input id="control-input1" placeholder="用户邮箱" />
                   )}
                 </FormItem>
               </Col>
@@ -80,8 +78,8 @@ class App extends Component {
       // </MainLayout>
     );
   }
-};
+}
 
-App = Form.create({})(App);
+const wrapApp = Form.create()(App);
 
-export default withRouter(App);
+export default withRouter(wrapApp);

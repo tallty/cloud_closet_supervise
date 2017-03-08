@@ -18,7 +18,8 @@ class Header extends Component {
               </Col>
               <Col span={18} className={styles.login_btn}>
                 <div><label className={styles.tag}>公众号</label></div>
-                <div>乐存·Chest<sup>+1</sup> | <Link to="/">退出</Link></div>
+                {/* <div>乐存·Chest<sup>+1</sup> | <Link to="/">退出</Link></div> */}
+                <div>乐存好衣 | <Link to="/">退出</Link></div>
               </Col>
             </Row>
           </Col>

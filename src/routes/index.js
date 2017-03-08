@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Router, Route, IndexRoute, Link, hashHistory, withRouter } from 'react-router';
-import App from '../components/App';
+import wrapApp from '../components/App';
 import Customer from '../components/Customer/Customer';
 import Advertisement from '../components/Advertisement/Advertisement';
 import Appointment from '../components/Appointment/Appointment';
@@ -19,17 +19,17 @@ import NotFound from '../components/NotFound';
 
 export class Routes extends Component {
   requireAuth() {
-    if(localStorage.authentication_token == undefined){
-      var url = location.host;
+    if (localStorage.authentication_token === undefined) {
+      const url = location.host;
       console.log(url);
-      window.location.href='http://closet-admin.tallty.com/';
+      window.location.href = 'http://closet-admin.tallty.com/';
     }
   }
   render() {
     return (
       <Router history={this.props.history}>
         {/* 配置基本状态路由 */}
-        <Route path="/" component={App} />
+        <Route path="/" component={wrapApp} />
         {/* 配置基本管理路由 */}
         <Route path="/basic" component={Customer} />
         {/* 配置客户管理路由 */}
@@ -57,7 +57,7 @@ export class Routes extends Component {
         {/* 配置员工权限路由 */}
         <Route path="/staff" component={Staff} />
         {/* 配置不存在路由跳转页面路由 */}
-        <Route path="*" component={NotFound}/>
+        <Route path="*" component={NotFound} />
       </Router>
     )
   }
