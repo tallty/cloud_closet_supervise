@@ -51,6 +51,7 @@ class AppointShowNDC extends Component {
     const email = localStorage.email
     const idN = this.getQueryString('id')
     const url = `http://closet-api.tallty.com/admin/exhibition_chests/${idN}/garments/${id}`
+    console.log(url)
     console.log(url);
     SuperAgent
       .get(url)
@@ -73,11 +74,35 @@ class AppointShowNDC extends Component {
   }
 
   // 删除确认模态框
-  warning() {
-    Modal.warning({
-      title: '确定删除该订单？',
-      content: '订单删除将无法恢复！请知晓。。。',
+  warning(id) {
+    const that = this
+    confirm({
+      title: '衣服删除确认提醒?',
+      content: '点击确认，衣服删除成功，用户端删除衣物信息，无法恢复。。。',
+      onOk() {
+        that.deleteClo(id)
+      },
+      onCancel() {},
     });
+  }
+
+  deleteClo(id){
+    const token = localStorage.token
+    const email = localStorage.email
+    const url = `http://closet-api.tallty.com/admin/garments/${id}`
+    SuperAgent
+      .delete(url)
+      .set('Accept', 'application/json')
+      .set('X-Admin-Token', token)
+      .set('X-Admin-Email', email)
+      .end( (err, res) => {
+        if (!err || err === null) {
+          message.success('衣服删除成功！');
+          this.getDataList()
+        } else {
+          message.error('衣服删除失败！');
+        }
+      })
   }
 
   showModal() {
@@ -110,10 +135,9 @@ class AppointShowNDC extends Component {
             </div>
             <div className={styles.custom_card}>
               <label>{garment.title ? garment.title : '默认衣服标题' }</label>
-              <Tag className={styles.custom_card_tag}>tag1</Tag>
+              <Tag className={styles.custom_card_tag}>{garment.garment_status}</Tag>
               <p>{garment.row_carbit_place}</p>
-              <Button className={styles.edit_btn} onClick={this.editGarment.bind(this, garment.id)}>编辑</Button>
-              <Button className={styles.detele_btn}>删除</Button>
+              <Button className={styles.edit_btn} onClick={this.editGarment.bind(this, garment.id)}>编辑</Button><Button className={styles.detele_btn} onClick={this.warning.bind(this, garment.id)}>删除</Button>
             </div>
           </Card>
         </Col>

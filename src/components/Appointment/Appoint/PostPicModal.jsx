@@ -309,10 +309,18 @@ class PostPicModal extends Component {
     }
     const menu = (
       <Menu onClick={this.handleMenuClick.bind(this)}>
-        <Menu.Item key="上装">上装</Menu.Item>
-        <Menu.Item key="夏装">夏装</Menu.Item>
-        <Menu.Item key="冬装">冬装</Menu.Item>
-        <Menu.Item key="下装">下装</Menu.Item>
+        <Menu.Item key="礼服">礼服</Menu.Item>
+        <Menu.Item key="连衣裙">连衣裙</Menu.Item>
+        <Menu.Item key="短裙">短裙</Menu.Item>
+        <Menu.Item key="套装">套装</Menu.Item>
+        <Menu.Item key="衬衫">衬衫</Menu.Item>
+        <Menu.Item key="T恤">T恤</Menu.Item>
+        <Menu.Item key="裤子">裤子</Menu.Item>
+        <Menu.Item key="西服">西服</Menu.Item>
+        <Menu.Item key="外套">外套</Menu.Item>
+        <Menu.Item key="羽绒服">羽绒服</Menu.Item>
+        <Menu.Item key="卫衣棉服">卫衣棉服</Menu.Item>
+        <Menu.Item key="针织衫毛衣">针织衫毛衣</Menu.Item>
       </Menu>
     );
     console.log('+++++++++++++++++++++++=');
@@ -412,7 +420,7 @@ class PostPicModal extends Component {
                     <FormItem >
                       {getFieldDecorator('description', {
                         rules: [
-                          { required: false, message: '请输入描述信息！' },
+                          { message: '请输入描述信息！' },
                         ],
                       })(
                         <Input id="description" name="description" type="textarea" rows={3} />

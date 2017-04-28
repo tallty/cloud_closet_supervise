@@ -139,7 +139,7 @@ class Appoint extends Component {
     function dateH(i) {
       const url = `/appoint_show?id=${app[i].id}`
       const address = app[i].address === '' || null ? '当前地址为空，请联系客户确认！' : app[i].address
-      console.log(app[i].address);
+      console.log(app[i]);
       const dateHa = [];
       dateHa.push(
         <Row key={`${i}e`}>
@@ -147,7 +147,7 @@ class Appoint extends Component {
             <Col span={24} className={styles.appoint_id}>
               <Col span={8}><label className={styles.ul_icon}>订单号：{app[i].seq}</label></Col>
               <Col span={3} className={styles.img_content}>
-                <img src="src/images/user_ava.png" alt="" className={styles.ul_icon} />
+                <img src={app[i].user_avatar} alt="" className={styles.ul_icon} />
                 <label>{app[i].name}</label>
               </Col>
               <Col span={5} className={styles.img_content}>
