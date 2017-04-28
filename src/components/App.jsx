@@ -43,7 +43,6 @@ class App extends Component {
   }
   render() {
     const { getFieldDecorator } = this.props.form;
-    console.log(getFieldDecorator);
     return (
       <div className={styles.container}>
         <div className={styles.login_content}>

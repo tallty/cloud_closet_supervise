@@ -7,7 +7,6 @@ import styles from './Customer.less';
 class Customer extends Component {
 
   onChange(date, dateString) {
-    console.log(date, dateString);
   }
 
   render() {

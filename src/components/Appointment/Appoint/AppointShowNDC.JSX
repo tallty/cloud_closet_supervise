@@ -32,7 +32,6 @@ class AppointShowNDC extends Component {
     const email = localStorage.email
     const idN = this.getQueryString('id')
     const url = `http://closet-api.tallty.com/admin/exhibition_chests/${idN}/garments`
-    console.log(url);
     SuperAgent
       .get(url)
       .set('Accept', 'application/json')
@@ -51,8 +50,6 @@ class AppointShowNDC extends Component {
     const email = localStorage.email
     const idN = this.getQueryString('id')
     const url = `http://closet-api.tallty.com/admin/exhibition_chests/${idN}/garments/${id}`
-    console.log(url)
-    console.log(url);
     SuperAgent
       .get(url)
       .set('Accept', 'application/json')
@@ -106,7 +103,6 @@ class AppointShowNDC extends Component {
   }
 
   showModal() {
-    console.log(this.state.visible);
     this.setState({
       visible: true,
     });
@@ -117,15 +113,12 @@ class AppointShowNDC extends Component {
   }
 
   editGarment(id) {
-    console.log(id)
     this.getOneData(id)
   }
 
   getList() {
     const lists = []
     const { garments } = this.state
-    console.log(this.getQueryString('ap_id'))
-    console.log(this.getQueryString('id'))
     garments.forEach((garment, i, obj) => {
       lists.push(
         <Col key={`gar${i}`} span="6" className={styles.ndc_card}>

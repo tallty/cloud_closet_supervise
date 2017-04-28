@@ -73,7 +73,6 @@ class AppointShowN extends Component {
   componentWillMount() {
     const token = localStorage.token
     const email = localStorage.email
-    console.log(this.props)
     const id = this.getQueryString('id')
     const url = `http://closet-api.tallty.com/admin/appointments/${id}/its_chests`
     SuperAgent

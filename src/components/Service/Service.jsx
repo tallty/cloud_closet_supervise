@@ -7,7 +7,6 @@ import styles from './Service.less';
 class Service extends Component {
 
   onChange(date, dateString) {
-    console.log(date, dateString);
   }
 
   render() {

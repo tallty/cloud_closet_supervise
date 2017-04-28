@@ -7,7 +7,6 @@ import styles from './Statistics.less';
 class Statistics extends Component {
 
   onChange(date, dateString) {
-    console.log(date, dateString);
   }
 
   render() {

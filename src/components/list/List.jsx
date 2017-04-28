@@ -36,14 +36,12 @@ class List extends Component {
       .end( (err, res) => {
         if (!err || err === null) {
           let data = res.body.price_systems
-          console.log(data);
           this.setState({ data: data })
         }
       })
   }
 
   deleteList(val){
-    console.log(val);
     this.setState({visible: val})
     this.getData()
   }
@@ -89,7 +87,6 @@ class List extends Component {
           .end( (err, res) => {
             if (!err || err === null) {
               this.getData()
-              // console.log(this);
             }
           })
     //   },
@@ -98,7 +95,6 @@ class List extends Component {
   }
 
   showModal(record) {
-    console.log('show modal');
     this.setState({
       visible: true,
       record: record

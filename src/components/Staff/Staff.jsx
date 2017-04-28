@@ -7,7 +7,6 @@ import styles from './Staff.less';
 class Staff extends Component {
 
   onChange(date, dateString) {
-    console.log(date, dateString);
   }
 
   render() {

@@ -44,7 +44,6 @@ export class GetAppointShowList extends Component {
     const token = localStorage.token
     const email = localStorage.email
     const url = `http://closet-api.tallty.com/admin/appointments/${id}`
-    console.log(url);
     SuperAgent
       .get(url)
       .set('Accept', 'application/json')

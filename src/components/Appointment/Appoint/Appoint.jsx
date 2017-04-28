@@ -91,7 +91,6 @@ class Appoint extends Component {
 
   callbackChange(key) {
     key === '1' ? this.props.callback('storing') : this.props.callback('stored')
-    console.log(key);
   }
 
   showConfirm(id) {
@@ -139,7 +138,6 @@ class Appoint extends Component {
     function dateH(i) {
       const url = `/appoint_show?id=${app[i].id}`
       const address = app[i].address === '' || null ? '当前地址为空，请联系客户确认！' : app[i].address
-      console.log(app[i]);
       const dateHa = [];
       dateHa.push(
         <Row key={`${i}e`}>

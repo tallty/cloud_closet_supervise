@@ -21,7 +21,6 @@ export class Routes extends Component {
   requireAuth() {
     if (localStorage.authentication_token === undefined) {
       const url = location.host;
-      console.log(url);
       window.location.href = 'http://closet-admin.tallty.com/';
     }
   }

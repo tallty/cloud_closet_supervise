@@ -27,27 +27,21 @@ export class ImageUploadList extends Component {
   getObjectURL(file) {
     var url = null;
     if (window.createObjectURL != undefined) { // basic
-      console.log('basic');
       url = window.createObjectURL(file);
     } else if (window.URL != undefined) { // mozilla(firefox)
-      console.log('mozilla');
       url = window.URL.createObjectURL(file);
-      console.log(url);
     } else if (window.webkitURL != undefined) { // webkit or chrome
-      console.log('webkit');
       url = window.webkitURL.createObjectURL(file);
     }
     return url;
   }
 
   handleChange(info) {
-    console.log(info);
     const fileList = this.state.fileList
     fileList.push(
       info.file.originFileObj
     )
     this.getObjectURL(info.file.originFileObj)
-    
     this.setState({fileList:fileList})
   }
 

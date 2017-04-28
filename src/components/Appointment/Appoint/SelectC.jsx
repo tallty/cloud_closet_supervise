@@ -39,7 +39,6 @@ class SelectC extends Component {
   }
 
   handleChange(value) {
-    console.log(value);
     this.props.callbackRCP1(value)
     // this.setState({row: value,})
     // if (this.state.place&&this.state.row&&this.state.carbit){
@@ -51,7 +50,6 @@ class SelectC extends Component {
   }
 
   handleChange1(value) {
-    console.log(value);
     this.props.callbackRCP2(value)
     // this.setState({carbit: value,})
     // if (this.state.place&&this.state.row&&this.state.carbit){
@@ -63,21 +61,8 @@ class SelectC extends Component {
   }
 
   handleChange2(value) {
-    console.log(value);
     this.props.callbackRCP3(value)
-    // this.setState({place: value,})
-    // if (this.state.place&&this.state.row&&this.state.carbit){
-    //   var row = this.state.row
-    //   var carbit = this.state.carbit
-    //   var place = value
-    //   this.backParent(row, carbit, place)
-    // }
   }
-
-  // backParent(row, carbit, place){
-  //   console.log(row, carbit, place);
-  //   row&&carbit&&place?this.props.callbackRCP(row, carbit, place):''
-  // }
 
   render() {
     const selet1 = []

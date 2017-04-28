@@ -40,7 +40,6 @@ class ListModal extends Component {
     var type2 = value.type[1]?`、${value.type[1]}`:''
     var type = `${value.type[0]}${type2}`
     var visible = this.state.visible
-    console.log(name, price, type);
     this.props.record.id?this.putAppoint(name, price, type, visible ):this.pushAppoint(name, price, type, visible )
 
     setTimeout(() => {
@@ -55,7 +54,6 @@ class ListModal extends Component {
 
   // 创建价格
   pushAppoint(name, price, type, visible){
-    console.log(visible);
     var token = localStorage.token
     var email = localStorage.email
     var url = "http://closet-api.tallty.com/admin/price_systems"
@@ -66,8 +64,6 @@ class ListModal extends Component {
               .send({'price_system': {'name': name, 'price': price , 'season': type}})
               .end( (err, res) => {
                 if (res.ok) {
-                  console.log(res.body);
-                  console.log('修改成功');
                   this.setState({visible}, ()=> this.props.onChange(visible));
                 }else{
                   console.log('修改失败');
@@ -77,7 +73,6 @@ class ListModal extends Component {
 
   //更新价格
   putAppoint(name, price, type, visible){
-    console.log(visible);
     var token = localStorage.token
     var email = localStorage.email
     var url = `http://closet-api.tallty.com/admin/price_systems/${this.props.record.id}`
@@ -88,8 +83,6 @@ class ListModal extends Component {
               .send({'price_system': {'name': name, 'price': price , 'season': type}})
               .end( (err, res) => {
                 if (res.ok) {
-                  console.log(res.body);
-                  console.log('修改成功');
                   this.setState({visible}, ()=> this.props.onChange(visible));
                 }else{
                   console.log('修改失败');
