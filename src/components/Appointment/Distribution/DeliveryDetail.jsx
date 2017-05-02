@@ -113,9 +113,12 @@ class DeliveryDetail extends Component {
           </Row>
           <div className={css.order_info}>
             <Row>
-              <Col span={24}>
-                <p><span>订单状态：</span>{order.state}</p>
+              <Col span={12}>
                 <p><span>订单号：</span>{order.seq}</p>
+                <p><span>订单状态：</span>{order.state}</p>
+                <p><span>订单费用：</span>￥ {order.service_cost} </p>
+              </Col>
+              <Col span={12}>
                 <p><span>联系人：</span>{order.name}</p>
                 <p><span>联系电话：</span>{order.phone}</p>
                 <p><span>订单地址：</span>{order.address} </p>

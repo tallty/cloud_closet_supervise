@@ -37,10 +37,6 @@ class Distribution extends Component {
     dataIndex: 'service_cost',
     key: 'service_cost',
   }, {
-    title: '配送费',
-    dataIndex: 'delivery_cost',
-    key: 'delivery_cost',
-  }, {
     title: '配送方式',
     dataIndex: 'delivery_method',
     key: 'delivery_method',
