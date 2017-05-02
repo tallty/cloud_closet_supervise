@@ -3,6 +3,6 @@ import { Link } from 'react-router'
 
 export default class ActiveLinkC extends Component {
   render() {
-    return <Link {...this.props} activeClassName="active_c"/>
+    return <Link {...this.props} activeClassName="active_c" />
   }
 }

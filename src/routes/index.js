@@ -5,6 +5,7 @@ import Customer from '../components/Customer/Customer';
 import Advertisement from '../components/Advertisement/Advertisement';
 import Appointment from '../components/Appointment/Appointment';
 import Distribution from '../components/Appointment/Distribution/Distribution';
+import DeliveryDetail from '../components/Appointment/Distribution/DeliveryDetail';
 import { GetAppointList } from '../components/Appointment/Appoint/GetAppointList';
 import AppointShowNDC from '../components/Appointment/Appoint/AppointShowNDC';
 import { GetAppointShowList } from '../components/Appointment/Appoint/GetAppointShowList';
@@ -39,6 +40,8 @@ export class Routes extends Component {
         <Route path="/appointment" component={Appointment} />
         {/* 配置订单配送管理路由 */}
         <Route path="/distribution" component={Distribution} />
+        {/* 配送订单详情 */}
+        <Route path="/delivery_detail" component={DeliveryDetail} />
         {/* 配置订单预约管理路由 */}
         <Route path="/appoint" component={GetAppointList} />
         {/* 配置订单预约详情管理路由 */}
