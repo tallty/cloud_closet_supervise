@@ -93,22 +93,24 @@ class Appoint extends Component {
     key === '1' ? this.props.callback('storing') : this.props.callback('stored')
   }
 
-  showConfirm(id) {
+  showConfirm(th, i) {
     const that = this
     confirm({
       title: '订单上架确认提醒?',
       content: '点击确认，订单上架成功，订单状态将显示发布衣柜及衣物信息。。。',
       onOk() {
-        that.pushAppoin(that, id)
+        that.pushAppoin(that, i)
       },
       onCancel() {},
     });
   }
 
-  pushAppoin(id) {
+  pushAppoin(that, i) {
+    console.log('ppppppppppppppppppppppppppppppppppppppp')
+    console.log(i)
     const token = localStorage.token
     const email = localStorage.email
-    const url = `http://closet-api.tallty.com/admin/appointments/${id}/stored`
+    const url = `http://closet-api.tallty.com/admin/appointments/${i}/stored`
     SuperAgent
       .post(url)
       .set('Accept', 'application/json')
@@ -180,6 +182,7 @@ class Appoint extends Component {
               </Col>
               <Col span={3} className={styles.img_content}>
                 <div>
+                  <label>{app[i].id}</label>
                   <Button onClick={that.showConfirm.bind(that, app[i].id)} type="primary" size="small" className={styles.d_btn}>订单上架</Button>
                   <ActiveLink to={url}>
                     <Button type="primary" size="small" className={styles.d_btn}>查看详情</Button>

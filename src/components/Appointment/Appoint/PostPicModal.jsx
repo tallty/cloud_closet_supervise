@@ -322,9 +322,7 @@ class PostPicModal extends Component {
         <Menu.Item key="卫衣棉服">卫衣棉服</Menu.Item>
         <Menu.Item key="针织衫毛衣">针织衫毛衣</Menu.Item>
       </Menu>
-    );
-    console.log('+++++++++++++++++++++++=');
-    console.log('2-3-5'.split('-'));
+    );    
     return (
       <div className={styles.link_btn}>
         <Modal

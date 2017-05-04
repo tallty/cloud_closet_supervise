@@ -170,6 +170,10 @@ class AppointShowNDC extends Component {
       })
   }
 
+  goBack() {
+    history.back()
+  }
+
   render() {
     return (
       <Appointment>
@@ -178,7 +182,7 @@ class AppointShowNDC extends Component {
             <Col span={24} className={styles.breadcrumb}>
               <Breadcrumb>
                 <Breadcrumb.Item className={styles.bread}><ActiveLink to="/appoint">全部订单</ActiveLink></Breadcrumb.Item>
-                <Breadcrumb.Item className={styles.active}>订单详情</Breadcrumb.Item>
+                <Breadcrumb.Item className={styles.active} onClick={this.goBack.bind(this)}>订单详情</Breadcrumb.Item>
                 <Breadcrumb.Item className={styles.active}>入库</Breadcrumb.Item>
               </Breadcrumb>
             </Col>
