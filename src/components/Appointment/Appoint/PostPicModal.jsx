@@ -25,7 +25,7 @@ class PostPicModal extends Component {
     super(props);
     this.state = {
       success: this.props.success,
-      tags: ['Tag 1', 'Tag 2'],
+      tags: [],
       loading: false,
       visible: false,
       url: '',
@@ -300,6 +300,17 @@ class PostPicModal extends Component {
     });
   }
 
+  getAllTagsMenu() {
+    const { supportTags } = this.props;
+    let values = [];
+    if (supportTags) {
+      values = supportTags.map(item => (
+        <Menu.Item key={item}>{item}</Menu.Item>
+      ))
+    }
+    return values;
+  }
+
   render() {
     const title = []
     title.push(
@@ -308,22 +319,11 @@ class PostPicModal extends Component {
     const { getFieldDecorator, setFieldsValue } = this.props.form;
     const { tags } = this.state;
     const props = {
-      onChange: this.handleChange.bind(this)
+      onChange: this.handleChange.bind(this),
     }
     const menu = (
       <Menu onClick={this.handleMenuClick.bind(this)}>
-        <Menu.Item key="礼服">礼服</Menu.Item>
-        <Menu.Item key="连衣裙">连衣裙</Menu.Item>
-        <Menu.Item key="短裙">短裙</Menu.Item>
-        <Menu.Item key="套装">套装</Menu.Item>
-        <Menu.Item key="衬衫">衬衫</Menu.Item>
-        <Menu.Item key="T恤">T恤</Menu.Item>
-        <Menu.Item key="裤子">裤子</Menu.Item>
-        <Menu.Item key="西服">西服</Menu.Item>
-        <Menu.Item key="外套">外套</Menu.Item>
-        <Menu.Item key="羽绒服">羽绒服</Menu.Item>
-        <Menu.Item key="卫衣棉服">卫衣棉服</Menu.Item>
-        <Menu.Item key="针织衫毛衣">针织衫毛衣</Menu.Item>
+        {this.getAllTagsMenu()}
       </Menu>
     );
     return (

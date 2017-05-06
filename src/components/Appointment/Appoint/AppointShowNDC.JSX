@@ -147,7 +147,8 @@ class AppointShowNDC extends Component {
               <label>{garment.title ? garment.title : '默认衣服标题'}</label>
               <Tag className={styles.custom_card_tag}>{garment.garment_status}</Tag>
               <p>{garment.row_carbit_place}</p>
-              <Button className={styles.edit_btn} onClick={this.editGarment.bind(this, garment.id)}>编辑</Button><Button className={styles.detele_btn} onClick={this.warning.bind(this, garment.id)}>删除</Button>
+              <Button className={styles.edit_btn} onClick={this.editGarment.bind(this, garment.id)}>编辑</Button>
+              <Button className={styles.detele_btn} onClick={this.warning.bind(this, garment.id)}>删除</Button>
             </div>
           </Card>
         </Col>
