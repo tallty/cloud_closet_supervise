@@ -67,39 +67,45 @@ class SelectC extends Component {
   render() {
     const selet1 = []
     selet1.push(
-      <Select key={"row"} showSearch
-            style={{ width: 35, height: 16, lineHeight: 16 }}
-            placeholder="1 "
-            optionFilterProp="children"
-            notFoundContent="Nothing found"
-            onChange={this.handleChange.bind(this)}
-          >
-            {option1}
-          </Select>
+      <Select
+        key="row"
+        showSearch
+        style={{ width: 60, height: 16, lineHeight: 16 }}
+        placeholder="1 "
+        optionFilterProp="children"
+        notFoundContent="Nothing found"
+        onChange={this.handleChange.bind(this)}
+      >
+        {option1}
+      </Select>
     )
     const selet2 = []
     selet2.push(
-      <Select key={"cabinet"} showSearch
-            style={{ width: 35, height: 16, lineHeight: 16 }}
-            placeholder={this.props.row}
-            optionFilterProp="children"
-            notFoundContent="Nothing found"
-            onChange={this.handleChange1.bind(this)}
-          >
-            {option2}
-          </Select>
+      <Select
+        key="cabinet"
+        showSearch
+        style={{ width: 60, height: 16, lineHeight: 16 }}
+        placeholder={this.props.row}
+        optionFilterProp="children"
+        notFoundContent="Nothing found"
+        onChange={this.handleChange1.bind(this)}
+      >
+        {option2}
+      </Select>
     )
     const selet3 = []
     selet3.push(
-      <Select key={"place"} showSearch
-            style={{ width: 35, height: 16, lineHeight: 16 }}
-            placeholder="1 "
-            optionFilterProp="children"
-            notFoundContent="Nothing found"
-            onChange={this.handleChange2.bind(this)}
-          >
-            {option3}
-          </Select>
+      <Select
+        key="place"
+        showSearch
+        style={{ width: 60, height: 16, lineHeight: 16 }}
+        placeholder="1 "
+        optionFilterProp="children"
+        notFoundContent="Nothing found"
+        onChange={this.handleChange2.bind(this)}
+      >
+        {option3}
+      </Select>
     )
     return (
       <Row className={styles.selectRow}>

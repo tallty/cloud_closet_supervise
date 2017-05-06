@@ -20,11 +20,13 @@ class AppointShowNDC extends Component {
       garmentOne: {},
       pic_url: '',
       row_carbit_place: '',
+      supportTags: [],
     };
   }
 
   componentWillMount() {
-    this.getDataList()
+    this.getDataList();
+    this.getTags();
   }
 
   getDataList() {
@@ -37,7 +39,7 @@ class AppointShowNDC extends Component {
       .set('Accept', 'application/json')
       .set('X-Admin-Token', token)
       .set('X-Admin-Email', email)
-      .end( (err, res) => {
+      .end((err, res) => {
         if (!err || err === null) {
           const garmentsN = res.body.garments
           this.setState({ garments: garmentsN })
@@ -45,7 +47,22 @@ class AppointShowNDC extends Component {
       })
   }
 
-  getOneData(id){
+  getTags() {
+    SuperAgent
+      .get('http://closet-api.tallty.com/constant_tags')
+      .set('Accept', 'application/json')
+      .end((err, res) => {
+        if (!err || err === null) {
+          const obj = res.body;
+          sessionStorage.setItem('supportTags', JSON.stringify(obj));
+          this.setState({ supportTags: obj.map(item => item.title) });
+        } else {
+          message.error('获取标签列表失败');
+        }
+      })
+  }
+
+  getOneData(id) {
     const token = localStorage.token
     const email = localStorage.email
     const idN = this.getQueryString('id')
@@ -55,7 +72,7 @@ class AppointShowNDC extends Component {
       .set('Accept', 'application/json')
       .set('X-Admin-Token', token)
       .set('X-Admin-Email', email)
-      .end( (err, res) => {
+      .end((err, res) => {
         if (!err || err === null) {
           const garmentsN = res.body
           this.setState({ garmentOne: garmentsN, visible: true })
@@ -79,11 +96,11 @@ class AppointShowNDC extends Component {
       onOk() {
         that.deleteClo(id)
       },
-      onCancel() {},
+      onCancel() { },
     });
   }
 
-  deleteClo(id){
+  deleteClo(id) {
     const token = localStorage.token
     const email = localStorage.email
     const url = `http://closet-api.tallty.com/admin/garments/${id}`
@@ -92,7 +109,7 @@ class AppointShowNDC extends Component {
       .set('Accept', 'application/json')
       .set('X-Admin-Token', token)
       .set('X-Admin-Email', email)
-      .end( (err, res) => {
+      .end((err, res) => {
         if (!err || err === null) {
           message.success('衣服删除成功！');
           this.getDataList()
@@ -127,7 +144,7 @@ class AppointShowNDC extends Component {
               <img alt="example" src={`${garment.cover_image}`} />
             </div>
             <div className={styles.custom_card}>
-              <label>{garment.title ? garment.title : '默认衣服标题' }</label>
+              <label>{garment.title ? garment.title : '默认衣服标题'}</label>
               <Tag className={styles.custom_card_tag}>{garment.garment_status}</Tag>
               <p>{garment.row_carbit_place}</p>
               <Button className={styles.edit_btn} onClick={this.editGarment.bind(this, garment.id)}>编辑</Button><Button className={styles.detele_btn} onClick={this.warning.bind(this, garment.id)}>删除</Button>
@@ -147,7 +164,7 @@ class AppointShowNDC extends Component {
       onOk() {
         that.pushChests(that)
       },
-      onCancel() {},
+      onCancel() { },
     });
   }
 
@@ -161,7 +178,7 @@ class AppointShowNDC extends Component {
       .set('Accept', 'application/json')
       .set('X-Admin-Token', token)
       .set('X-Admin-Email', email)
-      .end( (err, res) => {
+      .end((err, res) => {
         if (!err || err === null) {
           message.success('衣柜发布成功！');
         } else {
@@ -199,7 +216,13 @@ class AppointShowNDC extends Component {
           </Row>
         </div>
         <Row>
-          <PostPicModal {...this.state} ap_id={this.getQueryString('ap_id')} id={this.getQueryString('id')} onChange={val => this.setState({ visible: val, garmentOne: {} })} callbackParent={this.onChildChanged.bind(this)} />
+          <PostPicModal
+            {...this.state}
+            ap_id={this.getQueryString('ap_id')}
+            id={this.getQueryString('id')}
+            onChange={val => this.setState({ visible: val, garmentOne: {} })}
+            callbackParent={this.onChildChanged.bind(this)}
+          />
         </Row>
       </Appointment>
     )

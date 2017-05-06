@@ -58,9 +58,9 @@ class App extends Component {
               </Col>
               <Col span={24}>
                 <FormItem id="control-input2">
-                {getFieldDecorator('password', { initialValue: '' })(
-                  <Input type="password" id="control-input2" placeholder="密码" className={styles.email_input}/>
-                )}
+                  {getFieldDecorator('password', { initialValue: '' })(
+                    <Input type="password" id="control-input2" placeholder="密码" className={styles.email_input} />
+                  )}
                 </FormItem>
               </Col>
               <Col span={24}>
@@ -72,9 +72,6 @@ class App extends Component {
           </Row>
         </div>
       </div>
-      // <MainLayout>
-      //   <Todos location={location} />
-      // </MainLayout>
     );
   }
 }

@@ -1,7 +1,10 @@
-{/* 预约订单管理组件 */}
+/* 预约订单管理组件 */
 import React, { Component, PropTypes } from 'react';
 import SuperAgent from 'superagent'
-import { Row, Col, Modal, Form, Button, Input, Select, Upload, Icon, Tag, Menu, Dropdown } from 'antd';
+import {
+  Row, Col, Modal, Form, Button, Input, Select,
+  Upload, Icon, Tag, Menu, Dropdown, Tooltip,
+} from 'antd';
 import { ImageUploadList } from './ImageUploadList';
 import SelectC from './SelectC';
 import ActiveLink from '../../../layouts/ActiveLink/ActiveLink'
@@ -11,11 +14,11 @@ const FormItem = Form.Item;
 
 class PostPicModal extends Component {
   static defaultProps = {
-      onChange: new Function
+    onChange: Function,
   }
 
   static PropTypes = {
-      onChange: React.PropTypes.func
+    onChange: React.PropTypes.func,
   }
 
   constructor(props) {
@@ -48,7 +51,7 @@ class PostPicModal extends Component {
     const carbitO = carbit === 0 && this.props.garmentOne !== undefined ? this.props.garmentOne.row_carbit_place.split('-')[1] : carbit
     const placeO = place === 0 && this.props.garmentOne !== undefined ? this.props.garmentOne.row_carbit_place.split('-')[2] : place
     const titleO = value.title ? value.title : this.props.garmentOne.title
-    const cover_image_attributesO = cover_image_attributes ?  cover_image_attributes : this.props.garmentOne.cover_image
+    const cover_image_attributesO = cover_image_attributes ? cover_image_attributes : this.props.garmentOne.cover_image
     const idO = this.props.garmentOne.id ? this.props.garmentOne.id : null
     const description = value.description
     const id = 0
@@ -62,9 +65,9 @@ class PostPicModal extends Component {
         } else {
           console.log(this.props.garmentOne);
           this.props.garmentOne !== undefined && idO !== null ?
-          this.pushOneAppoint(titleO, rowO, carbitO, placeO, cover_image_attributesO, idO)
-          :
-          this.pushAppoint(titleO, rowO, carbitO, placeO, cover_image_attributesO, idO)
+            this.pushOneAppoint(titleO, rowO, carbitO, placeO, cover_image_attributesO, idO)
+            :
+            this.pushAppoint(titleO, rowO, carbitO, placeO, cover_image_attributesO, idO)
           setTimeout(() => {
             const visibleN = this.state.visible
             this.setState({ visibleN }, () => this.props.onChange(visibleN));
@@ -110,28 +113,28 @@ class PostPicModal extends Component {
     console.log('我是主图');
     console.log(coverImageAttributes);
     SuperAgent.post(ur)
-              .set('Accept', 'application/json')
-              .set('X-Admin-Token', token)
-              .set('X-Admin-Email', email)
-              .field('appointment_id', appointmentId)
-              .field('garment[title]', title)
-              .field('garment[row]', row)
-              .field('garment[carbit]', carbit)
-              .field('garment[place]', place)
-              .field('garment[cover_image_attributes][photo]', coverImageAttributes)
-              .end((err, res) => {
-                console.log('我在处理提交请求');
-                console.log(res)
-                const newState = !this.state.success;
-                const newUrl = this.state.url;
-                const rowCarbitPlace = `${row}-${carbit}-${place}`
-                this.pushDetailPics(res.body.id)
-                this.setState({
-                  success: newState, url: '',
-                });
-                // 这里要注意：setState 是一个异步方法，所以需要操作缓存的当前值
-                this.props.callbackParent();
-              })
+      .set('Accept', 'application/json')
+      .set('X-Admin-Token', token)
+      .set('X-Admin-Email', email)
+      .field('appointment_id', appointmentId)
+      .field('garment[title]', title)
+      .field('garment[row]', row)
+      .field('garment[carbit]', carbit)
+      .field('garment[place]', place)
+      .field('garment[cover_image_attributes][photo]', coverImageAttributes)
+      .end((err, res) => {
+        console.log('我在处理提交请求');
+        console.log(res)
+        const newState = !this.state.success;
+        const newUrl = this.state.url;
+        const rowCarbitPlace = `${row}-${carbit}-${place}`
+        this.pushDetailPics(res.body.id)
+        this.setState({
+          success: newState, url: '',
+        });
+        // 这里要注意：setState 是一个异步方法，所以需要操作缓存的当前值
+        this.props.callbackParent();
+      })
   }
 
   // 提交订单修改
@@ -146,28 +149,28 @@ class PostPicModal extends Component {
     console.log('我是主图');
     console.log(coverImageAttributes);
     SuperAgent.put(ur)
-              .set('Accept', 'application/json')
-              .set('X-Admin-Token', token)
-              .set('X-Admin-Email', email)
-              .field('appointment_id', appointmentId)
-              .field('garment[title]', title)
-              .field('garment[row]', row)
-              .field('garment[carbit]', carbit)
-              .field('garment[place]', place)
-              .field('garment[cover_image_attributes][photo]', coverImageAttributes)
-              .end((err, res) => {
-                console.log('我在处理修改的提交请求');
-                console.log(res)
-                const newState = !this.state.success;
-                const newUrl = this.state.url;
-                const rowCarbitPlace = `${row}-${carbit}-${place}`
-                this.pushDetailPics(res.body.id)
-                this.setState({
-                  success: newState, url: '',
-                });
-                // 这里要注意：setState 是一个异步方法，所以需要操作缓存的当前值
-                this.props.callbackParent();
-              })
+      .set('Accept', 'application/json')
+      .set('X-Admin-Token', token)
+      .set('X-Admin-Email', email)
+      .field('appointment_id', appointmentId)
+      .field('garment[title]', title)
+      .field('garment[row]', row)
+      .field('garment[carbit]', carbit)
+      .field('garment[place]', place)
+      .field('garment[cover_image_attributes][photo]', coverImageAttributes)
+      .end((err, res) => {
+        console.log('我在处理修改的提交请求');
+        console.log(res)
+        const newState = !this.state.success;
+        const newUrl = this.state.url;
+        const rowCarbitPlace = `${row}-${carbit}-${place}`
+        this.pushDetailPics(res.body.id)
+        this.setState({
+          success: newState, url: '',
+        });
+        // 这里要注意：setState 是一个异步方法，所以需要操作缓存的当前值
+        this.props.callbackParent();
+      })
   }
 
   pushDetailPics(id) {
@@ -179,14 +182,14 @@ class PostPicModal extends Component {
     const ur = `http://closet-api.tallty.com/admin/exhibition_chests/${this.props.id}/garments/${id}`
     lists.forEach((list, i, obj) => {
       SuperAgent.post(ur)
-                .set('Accept', 'application/json')
-                .set('X-Admin-Token', token)
-                .set('X-Admin-Email', email)
-                .field('appointment_id', appointmentId)
-                .field(list, this.state.car_url[i])
-                .end((err, res) => {
-                  console.log(res);
-                })
+        .set('Accept', 'application/json')
+        .set('X-Admin-Token', token)
+        .set('X-Admin-Email', email)
+        .field('appointment_id', appointmentId)
+        .field(list, this.state.car_url[i])
+        .end((err, res) => {
+          console.log(res);
+        })
     })
   }
 
@@ -236,7 +239,7 @@ class PostPicModal extends Component {
     return picContent
   }
 
-  handleChange(info){
+  handleChange(info) {
     var image = info.file.originFileObj
     var url = this.getObjectURL(info.file.originFileObj)
     console.log('in modal show');
@@ -322,7 +325,7 @@ class PostPicModal extends Component {
         <Menu.Item key="卫衣棉服">卫衣棉服</Menu.Item>
         <Menu.Item key="针织衫毛衣">针织衫毛衣</Menu.Item>
       </Menu>
-    );    
+    );
     return (
       <div className={styles.link_btn}>
         <Modal
@@ -364,7 +367,7 @@ class PostPicModal extends Component {
                         ],
                       })(
                         <Input id="title" name="title" placeholder={this.props.garmentOne.title ? this.props.garmentOne.title : ''} />
-                      )}
+                        )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
@@ -375,7 +378,7 @@ class PostPicModal extends Component {
                           {tags.map((tag, index) => {
                             const isLongTag = tag.length > 20;
                             const tagElem = (
-                              <Tag key={tag} className={styles.tag} closable={true} afterClose={() => this.handleClose(tag)}>
+                              <Tag key={tag} className={styles.tag} closable afterClose={() => this.handleClose(tag)}>
                                 {isLongTag ? `${tag.slice(0, 20)}...` : tag}
                               </Tag>
                             );
@@ -391,7 +394,7 @@ class PostPicModal extends Component {
                       <div>
                         <Row className={styles.c_type}>
                           <Col span={24}><label className={styles.col_title}>衣服仓储编号:</label></Col>
-                          <Col span={12} offset={4}>
+                          <Col span={18} offset={3}>
                             <SelectC {...this.state} callbackRCP1={this.chooseRCP1.bind(this)} callbackRCP2={this.chooseRCP2.bind(this)} callbackRCP3={this.chooseRCP3.bind(this)} />
                           </Col>
                         </Row>
@@ -422,7 +425,7 @@ class PostPicModal extends Component {
                         ],
                       })(
                         <Input id="description" name="description" type="textarea" rows={3} />
-                      )}
+                        )}
                     </FormItem>
                   </Col>
                 </Row>

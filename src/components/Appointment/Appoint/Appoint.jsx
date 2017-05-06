@@ -1,4 +1,4 @@
-{/* 预约订单管理组件 */}
+{/* 预约订单管理组件 */ }
 import React, { Component, PropTypes } from 'react';
 import ActiveLink from '../../../layouts/ActiveLink/ActiveLink'
 import { Tabs, Icon, Row, Col, Input, Button, Table, Modal, message } from 'antd';
@@ -101,13 +101,11 @@ class Appoint extends Component {
       onOk() {
         that.pushAppoin(that, i)
       },
-      onCancel() {},
+      onCancel() { },
     });
   }
 
   pushAppoin(that, i) {
-    console.log('ppppppppppppppppppppppppppppppppppppppp')
-    console.log(i)
     const token = localStorage.token
     const email = localStorage.email
     const url = `http://closet-api.tallty.com/admin/appointments/${i}/stored`
@@ -116,7 +114,7 @@ class Appoint extends Component {
       .set('Accept', 'application/json')
       .set('X-Admin-Token', token)
       .set('X-Admin-Email', email)
-      .end( (err, res) => {
+      .end((err, res) => {
         if (!err || err === null) {
           message.success('订单上架成功！');
         } else {
@@ -131,12 +129,14 @@ class Appoint extends Component {
     // const url = this.GetUrlRelativePath()
     // 时间格式转换函数
     function date2str(x, y) {
-      const z = { y: x.getFullYear(), M: x.getMonth() + 1, d: x.getDate(),
-        h: x.getHours(), m: x.getMinutes(), s: x.getSeconds() };
+      const z = {
+        y: x.getFullYear(), M: x.getMonth() + 1, d: x.getDate(),
+        h: x.getHours(), m: x.getMinutes(), s: x.getSeconds()
+      };
       return y.replace(/(y+|M+|d+|h+|m+|s+)/g,
-      function(v) { return ((v.length > 1 ? '0' : '') + eval('z.' + v.slice(-1))).slice(-(v.length > 2 ? v.length : 2)) });
+        function (v) { return ((v.length > 1 ? '0' : '') + eval('z.' + v.slice(-1))).slice(-(v.length > 2 ? v.length : 2)) });
     }
-      // 以及表格特殊项样式设置
+    // 以及表格特殊项样式设置
     function dateH(i) {
       const url = `/appoint_show?id=${app[i].id}`
       const address = app[i].address === '' || null ? '当前地址为空，请联系客户确认！' : app[i].address
@@ -182,7 +182,6 @@ class Appoint extends Component {
               </Col>
               <Col span={3} className={styles.img_content}>
                 <div>
-                  <label>{app[i].id}</label>
                   <Button onClick={that.showConfirm.bind(that, app[i].id)} type="primary" size="small" className={styles.d_btn}>订单上架</Button>
                   <ActiveLink to={url}>
                     <Button type="primary" size="small" className={styles.d_btn}>查看详情</Button>
@@ -219,10 +218,22 @@ class Appoint extends Component {
         <div className={styles.table}>
           <Tabs defaultActiveKey="1" onChange={this.callbackChange.bind(this)}>
             <TabPane tab="入库订单" key="1">
-              <Table {...this.props} columns={columns} dataSource={data} pagination={{ pageSize: 10 }} scroll={{ y: height }} />
+              <Table
+                rowKey={record => record.id}
+                columns={columns}
+                dataSource={data}
+                pagination={{ pageSize: 10 }}
+                scroll={{ y: height }}
+              />
             </TabPane>
             <TabPane tab="历史订单" key="2">
-              <Table {...this.props} columns={columns} dataSource={data} pagination={{ pageSize: 10 }} scroll={{ y: height }} />
+              <Table
+                rowKey={record => record.id}
+                columns={columns}
+                dataSource={data}
+                pagination={{ pageSize: 10 }}
+                scroll={{ y: height }}
+              />
             </TabPane>
           </Tabs>
         </div>
