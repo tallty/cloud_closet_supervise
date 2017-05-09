@@ -80,6 +80,7 @@ class PostPicModal extends Component {
       } else if (!(row && carbit && place)) {
         message.warning('请选择仓储编号');
       } else {
+        this.setState({ loading: true });
         if (this.props.garmentOne && idO) {
           this.updateGarment(titleO, rowO, carbitO, placeO, coverImageAttributeO, idO)
         } else {
@@ -139,8 +140,10 @@ class PostPicModal extends Component {
           // 这里要注意：setState 是一个异步方法，所以需要操作缓存的当前值
           this.props.onChange(this.state.visible);
           this.props.callbackParent();
+          this.setState({ loading: false });
         } else {
           message.error('提交衣服信息失败，请稍后重试！');
+          this.setState({ loading: false });
         }
       })
   }
@@ -177,8 +180,10 @@ class PostPicModal extends Component {
           // 这里要注意：setState 是一个异步方法，所以需要操作缓存的当前值
           this.props.onChange(this.state.visible);
           this.props.callbackParent();
+          this.setState({ loading: false });
         } else {
           message.error('更新衣服信息失败');
+          this.setState({ loading: false });
         }
       })
   }
