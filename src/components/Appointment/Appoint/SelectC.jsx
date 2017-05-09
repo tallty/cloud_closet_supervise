@@ -40,24 +40,10 @@ class SelectC extends Component {
 
   handleChange(value) {
     this.props.callbackRCP1(value)
-    // this.setState({row: value,})
-    // if (this.state.place&&this.state.row&&this.state.carbit){
-    //   var row = value
-    //   var carbit = this.state.carbit
-    //   var place = this.state.place
-    //   this.backParent(row, carbit, place)
-    // }
   }
 
   handleChange1(value) {
     this.props.callbackRCP2(value)
-    // this.setState({carbit: value,})
-    // if (this.state.place&&this.state.row&&this.state.carbit){
-    //   var row = this.state.row
-    //   var carbit = value
-    //   var place = this.state.place
-    //   this.backParent(row, carbit, place)
-    // }
   }
 
   handleChange2(value) {
@@ -70,8 +56,8 @@ class SelectC extends Component {
       <Select
         key="row"
         showSearch
+        value={this.props.row || ''}
         style={{ width: 60, height: 16, lineHeight: 16 }}
-        placeholder="1 "
         optionFilterProp="children"
         notFoundContent="Nothing found"
         onChange={this.handleChange.bind(this)}
@@ -85,7 +71,7 @@ class SelectC extends Component {
         key="cabinet"
         showSearch
         style={{ width: 60, height: 16, lineHeight: 16 }}
-        placeholder={this.props.row}
+        value={this.props.carbit || ''}
         optionFilterProp="children"
         notFoundContent="Nothing found"
         onChange={this.handleChange1.bind(this)}
@@ -98,23 +84,26 @@ class SelectC extends Component {
       <Select
         key="place"
         showSearch
+        value={this.props.place || ''}
         style={{ width: 60, height: 16, lineHeight: 16 }}
-        placeholder="1 "
         optionFilterProp="children"
         notFoundContent="Nothing found"
         onChange={this.handleChange2.bind(this)}
       >
         {option3}
-      </Select>
+      </Select >
     )
     return (
       <Row className={styles.selectRow}>
-        <Col span={2}><label>排</label></Col>
-        <Col span={6} className={styles.selectCell}>{selet1}</Col>
-        <Col span={2}><label>柜</label></Col>
-        <Col span={6} className={styles.selectCell}>{selet2}</Col>
-        <Col span={2}><label>位</label></Col>
-        <Col span={6} className={styles.selectCell}>{selet3}</Col>
+        <Col span={6} className={styles.selectCell}>
+          <label>排</label> {selet1}
+        </Col>
+        <Col span={6} className={styles.selectCell}>
+          <label>柜</label> {selet2}
+        </Col>
+        <Col span={6} className={styles.selectCell}>
+          <label>位</label> {selet3}
+        </Col>
       </Row>
     );
   }

@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import SuperAgent from 'superagent'
 import {
   Row, Col, Modal, Form, Button, Input, Select,
-  Upload, Icon, Tag, Menu, Dropdown, Tooltip,
+  Upload, Icon, Tag, Menu, Dropdown, Tooltip, message,
 } from 'antd';
 import { ImageUploadList } from './ImageUploadList';
 import SelectC from './SelectC';
@@ -30,62 +30,70 @@ class PostPicModal extends Component {
       visible: false,
       url: '',
       for_url: this.props.garmentOne.detail_image,
-      car_url: [],
+      detail_files: [],
       title: '默认信息',
       row: 0,
       carbit: 0,
       place: 0,
-      cover_image_attributes: [],
+      coverImageAttribute: null,
     };
   }
 
-  componentDidMount() {
-
+  componentWillReceiveProps(nextProps) {
+    const { garmentOne } = nextProps;
+    const { url, row, carbit, place, tags } = this.state;
+    const pos = garmentOne.row_carbit_place ? garmentOne.row_carbit_place.split('-') : [];
+    if (this.props.garmentOne.cover_image !== garmentOne.cover_image) {
+      this.setState({
+        tags: garmentOne.tag_list || [],
+        url: garmentOne.cover_image,
+        row: pos[0],
+        carbit: pos[1],
+        place: pos[2],
+        title: garmentOne.title,
+        for_url: garmentOne.detail_image,
+      });
+    }
   }
 
   handleOk(e) {
     e.preventDefault();
     const value = this.props.form.getFieldsValue()
-    const { row, carbit, place, cover_image_attributes, url } = this.state
-    const rowO = row === 0 && this.props.garmentOne !== undefined ? this.props.garmentOne.row_carbit_place.split('-')[0] : row
-    const carbitO = carbit === 0 && this.props.garmentOne !== undefined ? this.props.garmentOne.row_carbit_place.split('-')[1] : carbit
-    const placeO = place === 0 && this.props.garmentOne !== undefined ? this.props.garmentOne.row_carbit_place.split('-')[2] : place
-    const titleO = value.title ? value.title : this.props.garmentOne.title
-    const cover_image_attributesO = cover_image_attributes ? cover_image_attributes : this.props.garmentOne.cover_image
-    const idO = this.props.garmentOne.id ? this.props.garmentOne.id : null
+    const { row, carbit, place, coverImageAttribute, url } = this.state
+    const { garmentOne } = this.props;
+    const rowO = row === 0 && garmentOne.row_carbit_place ? garmentOne.row_carbit_place.split('-')[0] : row
+    const carbitO = carbit === 0 && garmentOne.row_carbit_place ? garmentOne.row_carbit_place.split('-')[1] : carbit
+    const placeO = place === 0 && garmentOne.row_carbit_place ? garmentOne.row_carbit_place.split('-')[2] : place
+    const titleO = value.title ? value.title : garmentOne.title
+    const coverImageAttributeO = coverImageAttribute || garmentOne.cover_image;
+    const idO = garmentOne.id ? garmentOne.id : null
     const description = value.description
     const id = 0
 
-    console.log(title, row, carbit, place);
-
-    url ?
-      this.props.form.validateFields((errors, values) => {
-        if (errors) {
-          console.log('Errors in form!!!');
+    if (!url) {
+      message.warning('请上传衣服封面图片');
+      return;
+    }
+    this.props.form.validateFields((errors, values) => {
+      if (errors) {
+        message.warning('表单信息填写错误');
+      } else if (!(row && carbit && place)) {
+        message.warning('请选择仓储编号');
+      } else {
+        if (this.props.garmentOne && idO) {
+          this.updateGarment(titleO, rowO, carbitO, placeO, coverImageAttributeO, idO)
         } else {
-          console.log(this.props.garmentOne);
-          this.props.garmentOne !== undefined && idO !== null ?
-            this.pushOneAppoint(titleO, rowO, carbitO, placeO, cover_image_attributesO, idO)
-            :
-            this.pushAppoint(titleO, rowO, carbitO, placeO, cover_image_attributesO, idO)
-          setTimeout(() => {
-            const visibleN = this.state.visible
-            this.setState({ visibleN }, () => this.props.onChange(visibleN));
-          }, 1500);
+          this.createGarment(titleO, rowO, carbitO, placeO, coverImageAttributeO, idO)
         }
-      })
-      :
-      console.log("请上传商品主图！");
+      }
+    })
   }
 
-  img_push() {
+  imgPush() {
     const lists = []
-    for (let item = 0; item < this.state.car_url.length; item++) {
+    for (let item = 0; item < this.state.detail_files.length; item++) {
       lists.push(`garment[detail_images_${item}_attributes][photo]`)
-      // lists[`garment[detail_images_${item}_attributes][photo]`] = listM
     }
-    console.log('我是细节图组');
-    console.log(lists);
     return lists
   }
 
@@ -94,107 +102,89 @@ class PostPicModal extends Component {
     this.setState({ visible }, () => this.props.onChange(visible));
   }
 
-  error_label() {
+  errorLabel() {
     const picErroInfo = []
-    const { url } = this.state
-    url ? '' : picErroInfo.push(<div key="err_image_info" className={styles.err_image_info}>请上传商品主图！</div>)
-    return picErroInfo
+    const { url } = this.state;
+    if (!url) {
+      picErroInfo.push(<div key="err_image_info" className={styles.err_image_info}>请上传商品主图！</div>)
+    }
+    return picErroInfo;
   }
 
-  // 提交订单修改
-  pushAppoint(title, row, carbit, place, coverImageAttributes, id) {
-    // this.setState({visible}, ()=> this.props.onChange(visible));
-    const ur = `http://closet-api.tallty.com/admin/exhibition_chests/${this.props.id}/garments`
-    const token = localStorage.token
-    const email = localStorage.email
-    const appointmentId = this.props.ap_id
-    console.log('====-----======-----======');
-    console.log(row, carbit, place);
-    console.log('我是主图');
-    console.log(coverImageAttributes);
-    SuperAgent.post(ur)
+  createGarment(title, row, carbit, place, coverImageAttribute, id) {
+    // 细节图
+    const images = {};
+    this.state.detail_files.forEach((file, index) => {
+      images[`garment[detail_image_${index + 1}_attributes][photo]`] = file;
+    });
+    // 主图
+    if (typeof (coverImageAttribute) !== 'string') {
+      images['garment[cover_image_attributes][photo]'] = coverImageAttribute;
+    }
+    SuperAgent
+      .post(`http://closet-api.tallty.com/admin/exhibition_chests/${this.props.id}/garments`)
       .set('Accept', 'application/json')
-      .set('X-Admin-Token', token)
-      .set('X-Admin-Email', email)
-      .field('appointment_id', appointmentId)
+      .set('X-Admin-Token', localStorage.token)
+      .set('X-Admin-Email', localStorage.email)
+      .field('appointment_id', this.props.ap_id)
       .field('garment[title]', title)
       .field('garment[row]', row)
+      .field('garment[add_tag_list]', this.state.tags)
       .field('garment[carbit]', carbit)
       .field('garment[place]', place)
-      .field('garment[cover_image_attributes][photo]', coverImageAttributes)
+      .field('garment[cover_image_attributes][photo]', coverImageAttribute)
+      .field(images)
       .end((err, res) => {
-        console.log('我在处理提交请求');
-        console.log(res)
-        const newState = !this.state.success;
-        const newUrl = this.state.url;
-        const rowCarbitPlace = `${row}-${carbit}-${place}`
-        this.pushDetailPics(res.body.id)
-        this.setState({
-          success: newState, url: '',
-        });
-        // 这里要注意：setState 是一个异步方法，所以需要操作缓存的当前值
-        this.props.callbackParent();
+        if (!err || err === null) {
+          // 这里要注意：setState 是一个异步方法，所以需要操作缓存的当前值
+          this.props.onChange(this.state.visible);
+          this.props.callbackParent();
+        } else {
+          message.error('提交衣服信息失败，请稍后重试！');
+        }
       })
   }
 
-  // 提交订单修改
-  pushOneAppoint(title, row, carbit, place, coverImageAttributes, id) {
-    // this.setState({visible}, ()=> this.props.onChange(visible));
-    const ur = `http://closet-api.tallty.com/admin/exhibition_chests/${this.props.id}/garments/${id}`
-    const token = localStorage.token
-    const email = localStorage.email
-    const appointmentId = this.props.ap_id
-    console.log('====-----======-----======');
-    console.log(row, carbit, place);
-    console.log('我是主图');
-    console.log(coverImageAttributes);
-    SuperAgent.put(ur)
+  updateGarment(title, row, carbit, place, coverImageAttribute, id) {
+    const { tags, detail_files } = this.state;
+    const { garmentOne } = this.props;
+    const addTags = tags.filter(tag => (!garmentOne.tag_list.includes(tag)));
+    const removeTags = garmentOne.tag_list.filter(tag => (!tags.includes(tag)));
+    // 细节图
+    const images = {};
+    detail_files.forEach((file, index) => {
+      images[`garment[detail_image_${index + 1}_attributes][photo]`] = file;
+    });
+    // 主图
+    if (typeof (coverImageAttribute) !== 'string') {
+      images['garment[cover_image_attributes][photo]'] = coverImageAttribute;
+    }
+    SuperAgent
+      .put(`http://closet-api.tallty.com/admin/exhibition_chests/${this.props.id}/garments/${id}`)
       .set('Accept', 'application/json')
-      .set('X-Admin-Token', token)
-      .set('X-Admin-Email', email)
-      .field('appointment_id', appointmentId)
+      .set('X-Admin-Token', localStorage.token)
+      .set('X-Admin-Email', localStorage.email)
+      .field('appointment_id', this.props.ap_id)
       .field('garment[title]', title)
+      .field('garment[add_tag_list]', addTags)
+      .field('garment[remove_tag_list]', removeTags)
       .field('garment[row]', row)
       .field('garment[carbit]', carbit)
       .field('garment[place]', place)
-      .field('garment[cover_image_attributes][photo]', coverImageAttributes)
+      .field(images)
       .end((err, res) => {
-        console.log('我在处理修改的提交请求');
-        console.log(res)
-        const newState = !this.state.success;
-        const newUrl = this.state.url;
-        const rowCarbitPlace = `${row}-${carbit}-${place}`
-        this.pushDetailPics(res.body.id)
-        this.setState({
-          success: newState, url: '',
-        });
-        // 这里要注意：setState 是一个异步方法，所以需要操作缓存的当前值
-        this.props.callbackParent();
+        if (!err || err === null) {
+          // 这里要注意：setState 是一个异步方法，所以需要操作缓存的当前值
+          this.props.onChange(this.state.visible);
+          this.props.callbackParent();
+        } else {
+          message.error('更新衣服信息失败');
+        }
       })
-  }
-
-  pushDetailPics(id) {
-    const lists = this.img_push()
-    console.log(lists)
-    const token = localStorage.token
-    const email = localStorage.email
-    const appointmentId = this.props.ap_id
-    const ur = `http://closet-api.tallty.com/admin/exhibition_chests/${this.props.id}/garments/${id}`
-    lists.forEach((list, i, obj) => {
-      SuperAgent.post(ur)
-        .set('Accept', 'application/json')
-        .set('X-Admin-Token', token)
-        .set('X-Admin-Email', email)
-        .field('appointment_id', appointmentId)
-        .field(list, this.state.car_url[i])
-        .end((err, res) => {
-          console.log(res);
-        })
-    })
   }
 
   getObjectURL(file) {
-    var url = null;
+    let url = null;
     if (window.createObjectURL !== undefined) { // basic
       url = window.createObjectURL(file);
     } else if (window.URL !== undefined) { // mozilla(firefox)
@@ -206,9 +196,8 @@ class PostPicModal extends Component {
   }
 
   handleChangeMore(info) {
-    console.log('================');
     const fileList = this.state.for_url === undefined ? [] : this.state.for_url
-    const fileListD = this.state.car_url
+    const fileListD = this.state.detail_files
 
     const fileUrl = this.getObjectURL(info.target.files[0])
     fileList.push(
@@ -217,84 +206,72 @@ class PostPicModal extends Component {
     fileListD.push(
       info.target.files[0]
     )
-    console.log(fileList);
-    this.setState({ for_url: fileList, car_url: fileListD })
+    this.setState({ for_url: fileList, detail_files: fileListD })
   }
 
-  delete_detail_pic(i) {
+  deleteDetailPic(i) {
     const fileList = this.state.for_url === undefined ? [] : this.state.for_url
     fileList.splice(i, 1);//splice返回的是删掉的部分
     this.setState({ for_url: fileList });
   }
 
-  get_pic_content_more() {
+  getPicContentMore() {
     const urls = this.state.for_url === undefined ? [] : this.state.for_url
     const picContent = []
     for (let i = 0; i < urls.length; i++) {
       picContent.push(<li key={-i} className={styles.img_ul_icon}>
         <img src={`${urls[i]}`} alt="" className={styles.ul_icon} />
-        <Icon onClick={this.delete_detail_pic.bind(this, i)} type="close-circle-o" className={styles.delete_icon} />
+        <Icon onClick={this.deleteDetailPic.bind(this, i)} type="close-circle-o" className={styles.delete_icon} />
       </li>)
     }
     return picContent
   }
 
   handleChange(info) {
-    var image = info.file.originFileObj
-    var url = this.getObjectURL(info.file.originFileObj)
-    console.log('in modal show');
-    console.log(url);
-    this.setState({ url: url, cover_image_attributes: image })
+    const image = info.file.originFileObj;
+    const murl = this.getObjectURL(info.file.originFileObj)
+    this.setState({ url: murl, coverImageAttribute: image })
   }
 
-  get_pic_content() {
-    const pic_content = []
-    if (this.state.url === '' && this.props.garmentOne.cover_image !== undefined) {
-      console.log(this.props.garmentOne.cover_image)
-      console.log("nnnnnnnnnnnnnnnnnnnn")
-      pic_content.push(<img key={'g'} src={this.props.garmentOne.cover_image} alt="" className={styles.ul_icon} />)
+  getPicContent() {
+    const picContent = [];
+    if (!this.state.url && this.props.garmentOne.cover_image) {
+      picContent.push(<img key={'g'} src={this.props.garmentOne.cover_image} alt="" className={styles.ul_icon} />)
     } else {
-      if (this.state.url !== '') {
-        pic_content.push(<img key={'g'} src={this.state.url} alt="" className={styles.ul_icon} />)
+      if (this.state.url) {
+        picContent.push(<img key={'g'} src={this.state.url} alt="" className={styles.ul_icon} />)
       } else {
-        pic_content.push(<img key={'g'} src="src/images/add_pic.svg" alt="" className={styles.ul_icon} />)
+        picContent.push(<img key={'g'} src="src/images/add_pic.svg" alt="" className={styles.ul_icon} />)
       }
     }
-    return pic_content
+    return picContent
   }
 
   handleClose = (removedTag) => {
     const tags = this.state.tags.filter(tag => tag !== removedTag);
-    console.log(tags);
     this.setState({ tags });
   }
 
   handleMenuClick(e) {
     const tags = this.state.tags;
-    const new_tags = [...tags, e.key];
-    console.log(tags);
+    if (tags.includes(e.key)) return;
+    const newTags = [...tags, e.key];
     this.setState({
-      tags: new_tags
+      tags: newTags,
     });
   }
 
   chooseRCP1(r) {
-    console.log('================');
-    console.log(r);
     this.setState({
       row: r,
     });
   }
   chooseRCP2(c) {
-    console.log('================');
-    console.log(c);
     this.setState({
       carbit: c,
     });
   }
   chooseRCP3(p) {
-    console.log('================');
-    console.log(p);
     this.setState({
       place: p,
     });
@@ -312,12 +289,13 @@ class PostPicModal extends Component {
   }
 
   render() {
-    const title = []
-    title.push(
+    const modalTitle = []
+    modalTitle.push(
       <div key={'h'} className={styles.modal_title}>编辑入库信息</div>
     )
     const { getFieldDecorator, setFieldsValue } = this.props.form;
-    const { tags } = this.state;
+    const { tags, title } = this.state;
+    const { garmentOne } = this.props;
     const props = {
       onChange: this.handleChange.bind(this),
     }
@@ -332,7 +310,7 @@ class PostPicModal extends Component {
           width="60vw"
           style={{ top: 40 }}
           visible={this.props.visible}
-          title={title}
+          title={modalTitle}
           onOk={this.handleOk.bind(this)}
           onCancel={this.handleCancel.bind(this)}
           footer={[
@@ -343,14 +321,14 @@ class PostPicModal extends Component {
           ]}
         >
           <Row className={styles.modal_content}>
-            <Form horizontal>
+            <Form layout="horizontal">
               <Col span={6} className={styles.left_pic_add}>
 
                 <Upload {...props}>
-                  {this.get_pic_content()}
+                  {this.getPicContent()}
                   <br />
                   <label className={styles.main_pic}>商品主图</label>
-                  {this.error_label()}
+                  {this.errorLabel()}
                 </Upload>
 
               </Col>
@@ -362,43 +340,41 @@ class PostPicModal extends Component {
                   <Col span={22}>
                     <FormItem>
                       {getFieldDecorator('title', {
+                        initialValue: title,
                         rules: [
                           { required: true, message: '请输衣服名称！' },
                         ],
                       })(
-                        <Input id="title" name="title" placeholder={this.props.garmentOne.title ? this.props.garmentOne.title : ''} />
+                        <Input id="title" name="title" placeholder="衣服名称" />
                         )}
                     </FormItem>
                   </Col>
-                  <Col span={24}>
-                    <Col span={24} className={styles.name_label}>类别:</Col>
-                    <Col span={22} offset={2}>
-                      <div className={styles.c_type}>
-                        <div>
-                          {tags.map((tag, index) => {
-                            const isLongTag = tag.length > 20;
-                            const tagElem = (
-                              <Tag key={tag} className={styles.tag} closable afterClose={() => this.handleClose(tag)}>
-                                {isLongTag ? `${tag.slice(0, 20)}...` : tag}
-                              </Tag>
-                            );
-                            return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
-                          })}
-                          <Dropdown overlay={menu}>
-                            <Button className={styles.tag} size="small" type="dashed" >+</Button>
-                          </Dropdown>
-                        </div>
-                      </div>
+                  <Col span={24} style={{ marginBottom: 10 }}>
+                    <Col span={2} className={styles.name_label}>类别:</Col>
+                    <Col span={22}>
+                      {tags.map((tag, index) => {
+                        const isLongTag = tag.length > 20;
+                        const tagElem = (
+                          <Tag key={tag} className={styles.tag} closable afterClose={() => this.handleClose(tag)}>
+                            {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                          </Tag>
+                        );
+                        return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
+                      })}
+                      <Dropdown overlay={menu}>
+                        <Button className={styles.tag} size="small" type="dashed" >+</Button>
+                      </Dropdown>
                     </Col>
-                    <Col span={24}>
-                      <div>
-                        <Row className={styles.c_type}>
-                          <Col span={24}><label className={styles.col_title}>衣服仓储编号:</label></Col>
-                          <Col span={18} offset={3}>
-                            <SelectC {...this.state} callbackRCP1={this.chooseRCP1.bind(this)} callbackRCP2={this.chooseRCP2.bind(this)} callbackRCP3={this.chooseRCP3.bind(this)} />
-                          </Col>
-                        </Row>
-                      </div>
+                  </Col>
+                  <Col span={24} className={styles.c_type}>
+                    <Col span={6}><label className={styles.col_title}>衣服仓储编号:</label></Col>
+                    <Col span={18}>
+                      <SelectC
+                        {...this.state}
+                        callbackRCP1={this.chooseRCP1.bind(this)}
+                        callbackRCP2={this.chooseRCP2.bind(this)}
+                        callbackRCP3={this.chooseRCP3.bind(this)}
+                      />
                     </Col>
                   </Col>
                 </Row>
@@ -406,13 +382,12 @@ class PostPicModal extends Component {
                   <Col span={24} className={styles.col_title}>细节描述图片</Col>
                   <Col span={24}>
                     <div className="clearfix">
-                      {this.get_pic_content_more()}
+                      {this.getPicContentMore()}
                       <span className={styles.inputContainer}>
-                        <input onChange={this.handleChangeMore.bind(this)} multiple={true} type="file" />
+                        <input onChange={this.handleChangeMore.bind(this)} multiple type="file" />
                         <div className={styles.btn_add}><Icon type="plus" />添加</div>
                       </span>
                     </div>
-
                   </Col>
                 </Row>
                 <Row className={styles.d_detail}>
@@ -420,6 +395,7 @@ class PostPicModal extends Component {
                   <Col span={24}>
                     <FormItem >
                       {getFieldDecorator('description', {
+                        initialValue: garmentOne.description ? garmentOne.description : '',
                         rules: [
                           { message: '请输入描述信息！' },
                         ],

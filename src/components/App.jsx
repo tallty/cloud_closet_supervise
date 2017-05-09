@@ -47,7 +47,7 @@ class App extends Component {
       <div className={styles.container}>
         <div className={styles.login_content}>
           <Row className={styles.order_content}>
-            <Form horizontal onSubmit={this.handleSubmit.bind(this)} >
+            <Form layout="horizontal" onSubmit={this.handleSubmit.bind(this)} >
               <Col span={24} className={styles.login_title}>后台登录</Col>
               <Col span={24}>
                 <FormItem id="control-input1" >

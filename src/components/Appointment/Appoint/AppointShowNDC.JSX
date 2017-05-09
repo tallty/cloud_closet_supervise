@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Modal, Breadcrumb, Row, Col, Button, Card, Tag, Icon, message } from 'antd';
+import { Modal, Breadcrumb, Row, Col, Button, Card, Tag, Icon, message, Spin } from 'antd';
 import ActiveLink from '../../../layouts/ActiveLink/ActiveLink'
 import PostPicModal from './PostPicModal';
 import SuperAgent from 'superagent'
@@ -21,6 +21,7 @@ class AppointShowNDC extends Component {
       pic_url: '',
       row_carbit_place: '',
       supportTags: [],
+      loading: false,
     };
   }
 
@@ -34,6 +35,7 @@ class AppointShowNDC extends Component {
     const email = localStorage.email
     const idN = this.getQueryString('id')
     const url = `http://closet-api.tallty.com/admin/exhibition_chests/${idN}/garments`
+    this.setState({ loading: true });
     SuperAgent
       .get(url)
       .set('Accept', 'application/json')
@@ -42,7 +44,10 @@ class AppointShowNDC extends Component {
       .end((err, res) => {
         if (!err || err === null) {
           const garmentsN = res.body.garments
-          this.setState({ garments: garmentsN })
+          this.setState({ garments: garmentsN, loading: false })
+        } else {
+          this.setState({ loading: true });
+          message.error('获取衣服数据失败');
         }
       })
   }
@@ -120,17 +125,11 @@ class AppointShowNDC extends Component {
   }
 
   showModal() {
-    this.setState({
-      visible: true,
-    });
+    this.setState({ garmentOne: {}, visible: true });
   }
 
   onChildChanged() {
     this.getDataList()
-  }
-
-  editGarment(id) {
-    this.getOneData(id)
   }
 
   getList() {
@@ -139,7 +138,7 @@ class AppointShowNDC extends Component {
     garments.forEach((garment, i, obj) => {
       lists.push(
         <Col key={`gar${i}`} span="6" className={styles.ndc_card}>
-          <Card bordered={true} style={{ border: '2px solid #FF9241' }} bodyStyle={{ padding: 0 }} >
+          <Card bordered style={{ border: '2px solid #FF9241' }} bodyStyle={{ padding: 0 }} >
             <div className={styles.card_img_content}>
               <img alt="example" src={`${garment.cover_image}`} />
             </div>
@@ -147,7 +146,7 @@ class AppointShowNDC extends Component {
               <label>{garment.title ? garment.title : '默认衣服标题'}</label>
               <Tag className={styles.custom_card_tag}>{garment.garment_status}</Tag>
               <p>{garment.row_carbit_place}</p>
-              <Button className={styles.edit_btn} onClick={this.editGarment.bind(this, garment.id)}>编辑</Button>
+              <Button className={styles.edit_btn} onClick={this.getOneData.bind(this, garment.id)}>编辑</Button>
               <Button className={styles.detele_btn} onClick={this.warning.bind(this, garment.id)}>删除</Button>
             </div>
           </Card>
@@ -212,7 +211,11 @@ class AppointShowNDC extends Component {
           </Row>
           <Row className={styles.ndc_card_container} style={{ height: height }}>
             <Col span={22} offset={1}>
-              {this.getList()}
+              {
+                this.state.loading ?
+                  <div style={{ height: 60, lineHeight: 60, textAlign: 'center' }}><Spin type="large" /></div>
+                  : this.getList()
+              }
             </Col>
           </Row>
         </div>
