@@ -1,4 +1,4 @@
-{/* 客户管理组件 */}
+/* 客户管理组件 */
 import React, { Component, PropTypes } from 'react';
 import { DatePicker } from 'antd';
 import MainLayout from '../../layouts/MainLayout/MainLayout';
@@ -13,8 +13,7 @@ class Customer extends Component {
     return (
       <MainLayout>
         <div style={{ textAlign: 'center', paddingTop: '20%' }}>
-          <h1 className="dep_one">客户管理组件</h1>
-          <p className="dep_two">当前模块正在开发中，敬请期待！</p>
+          <h1 className="dep_one">当前模块正在开发中...</h1>
         </div>
       </MainLayout>
     );
