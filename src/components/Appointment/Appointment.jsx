@@ -36,6 +36,11 @@ const Appointment = ({ children }) => {
                   预约订单
                 </Col>
               </ActiveLinkC>
+              <ActiveLinkC to="/server">
+                <Col span={24}>
+                  服务订单
+                </Col>
+              </ActiveLinkC>
             </Row>
           </div>
           <div className={styles.main}>

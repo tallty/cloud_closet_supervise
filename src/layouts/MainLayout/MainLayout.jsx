@@ -40,7 +40,7 @@ const MainLayout = ({ children }) => {
             <ActiveLink to="/appointment">
               <Col span={24}>
                 <Col span={12} className={styles.img_content}>{ getIconWithUrl('appointment', '/appointment') }</Col>
-                <Col span={12}>订单管理</Col> 
+                <Col span={12}>订单管理</Col>
               </Col>
             </ActiveLink>
             <ActiveLink to="/stock">
