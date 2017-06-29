@@ -5,7 +5,7 @@ import { Row, Col } from 'antd'
 const { number, string, arrayOf, shape, func, bool } = PropTypes;
 const parseStoreMonth = new Map([
   [3, '三个月'], [6, '六个月'], [9, '九个月'],
-  [12, '一年'], [24, '两年']
+  [12, '一年'], [24, '两年'],
 ]);
 const imageMap = new Map([
   ['叠放柜', '/src/images/icon_stack_sm.svg'],
@@ -14,7 +14,7 @@ const imageMap = new Map([
   ['单件礼服', '/src/images/icon_full_dress_sm.svg'],
   ['礼服柜', '/src/images/icon_full_dress_sm.svg'],
   ['真空袋-中', '/src/images/icon_bag_sm.svg'],
-  ['真空袋-大', '/src/images/icon_bag_sm.svg']
+  ['真空袋-大', '/src/images/icon_bag_sm.svg'],
 ]);
 
 export class ClothesTable extends Component {

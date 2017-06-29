@@ -156,7 +156,7 @@ class Distribution extends Component {
 
   render() {
     return (
-      <Appointment>
+      <Appointment active="/distribution">
         <div className={styles.container}>
           <div >
             <Row className={styles.search}>

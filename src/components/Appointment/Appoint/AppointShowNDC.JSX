@@ -3,11 +3,11 @@ import { Modal, Breadcrumb, Row, Col, Button, Card, Tag, Icon, message, Spin } f
 import ActiveLink from '../../../layouts/ActiveLink/ActiveLink'
 import PostPicModal from './PostPicModal';
 import SuperAgent from 'superagent'
-import Appointment from '../Appointment';
+import MainLayout from '../../../layouts/MainLayout/MainLayout';
 import styles from './AppointShow.less';
 
 const { string, number, bool, arrayOf, shape } = PropTypes;
-const height = document.body.clientHeight - 230
+const height = document.body.clientHeight - 250
 const confirm = Modal.confirm;
 
 class AppointShowNDC extends Component {
@@ -193,17 +193,17 @@ class AppointShowNDC extends Component {
 
   render() {
     return (
-      <Appointment>
+      <MainLayout active="/appoint_show_detail">
         <div className={styles.container}>
           <Row className={styles.header}>
             <Col span={24} className={styles.breadcrumb}>
               <Breadcrumb>
-                <Breadcrumb.Item className={styles.bread}><ActiveLink to="/appoint">全部订单</ActiveLink></Breadcrumb.Item>
-                <Breadcrumb.Item className={styles.active} onClick={this.goBack.bind(this)}>订单详情</Breadcrumb.Item>
+                <Breadcrumb.Item className={styles.bread}><ActiveLink to="/stock">用户列表</ActiveLink></Breadcrumb.Item>
+                <Breadcrumb.Item className={styles.bread} onClick={this.goBack.bind(this)}>仓储详情</Breadcrumb.Item>
                 <Breadcrumb.Item className={styles.active}>入库</Breadcrumb.Item>
               </Breadcrumb>
             </Col>
-            <Col span={16} offset={8} className={styles.head_right}>
+            <Col span={24} className={styles.head_right}>
               <label>订单号：20161011877834</label>
               <Button className={styles.head_right_btn} onClick={this.showModal.bind(this)} type="dashed" icon="plus" >添加衣服</Button>
               <Button className={styles.head_right_btn} onClick={this.showConfirm.bind(this)} type="dashed" icon="export" >发布</Button>
@@ -228,7 +228,7 @@ class AppointShowNDC extends Component {
             callbackParent={this.onChildChanged.bind(this)}
           />
         </Row>
-      </Appointment>
+      </MainLayout>
     )
   }
 }

@@ -13,6 +13,7 @@ import { GetAppointShowList } from '../components/Appointment/Appoint/GetAppoint
 
 import Service from '../components/Service/Service';
 import Stock from '../components/Stock/Stock';
+import { StockCloset } from '../components/Stock/StockCloset/StockCloset';
 import { GetList } from '../components/list/GetList';
 import Statistics from '../components/Statistics/Statistics';
 import Staff from '../components/Staff/Staff';
@@ -55,6 +56,8 @@ export class Routes extends Component {
         <Route path="/service" component={Service} />
         {/* 配置库存管理路由 */}
         <Route path="/stock" component={Stock} />
+         {/* 配置库存管理路由 */}
+        <Route path="/stock_closet" component={StockCloset} />
         {/* 配置库存管理路由 */}
         <Route path="/list" component={GetList} />
         {/* 配置统计报表路由 */}

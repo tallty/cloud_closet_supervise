@@ -90,7 +90,7 @@ class DeliveryDetail extends Component {
   render() {
     const { order, loading } = this.state;
     return (
-      <Appointment>
+      <Appointment active="/distribution">
         <div className={css.container}>
           <Row className={css.header}>
             <Col span={8} className={css.breadcrumb}>

@@ -5,7 +5,6 @@ import { Tabs, Icon, Row, Col, Input, Button, Table, Modal, message } from 'antd
 import Appointment from '../Appointment';
 import SuperAgent from 'superagent'
 import styles from './Appoint.less';
-import MainLayout from '../../../layouts/MainLayout/MainLayout';
 
 const height = document.body.clientHeight - 350
 const TabPane = Tabs.TabPane;

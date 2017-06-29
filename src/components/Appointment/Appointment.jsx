@@ -19,21 +19,21 @@ function getUrlRelativePath() {
 }
 
 const url = getUrlRelativePath()
-const Appointment = ({ children }) => {
+const Appointment = ({ children, active }) => {
   return (
-    <MainLayout>
+    <MainLayout active1={active}>
       <div className={styles.normal}>
         <div className={styles.content}>
           <div className={styles.side}>
             <Row>
-              <ActiveLinkC to="/distribution">
-                <Col span={24}>
-                  配送订单
-                </Col>
-              </ActiveLinkC>
               <ActiveLinkC to="/appoint">
                 <Col span={24}>
                   预约订单
+                </Col>
+              </ActiveLinkC>
+              <ActiveLinkC to="/distribution">
+                <Col span={24}>
+                  配送订单
                 </Col>
               </ActiveLinkC>
               <ActiveLinkC to="/server">
