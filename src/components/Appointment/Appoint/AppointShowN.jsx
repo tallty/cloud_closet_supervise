@@ -196,9 +196,14 @@ class AppointShowN extends Component {
             </Col>
             {this.props.type === 'appoints' ?
               <Col span={12} className={styles.head_right}>
-                <label>叠放衣物：{this.props.counts.stacking}件</label><br />
-                <label>挂放衣物：{this.props.counts.hanging}件</label><br />
-                <label>礼服：{this.props.counts.full_dress}件</label>
+                <Col span={20}>
+                  <label>叠放衣物：{this.props.counts.stacking}件</label><br />
+                  <label>挂放衣物：{this.props.counts.hanging}件</label><br />
+                  <label>礼服：{this.props.counts.full_dress}件</label>
+                </Col>
+                <Col span={4}>
+                  <ActiveLink to={`/stock_closet?id=${this.props.user_id}`}><Button type="primary">衣物入库</Button></ActiveLink>
+                </Col>
               </Col> : ''
               }
           </Row>
@@ -258,7 +263,7 @@ class AppointShowN extends Component {
                 <Col span={5}>类别</Col>
                 <Col span={4}>数量</Col>
                 <Col span={5}>单价</Col>
-                <Col span={5}>到期时间</Col>
+                <Col span={5}>总价</Col>
                 <Col span={5}>预定时长</Col>
               </Row>
               :

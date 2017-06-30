@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import SuperAgent from 'superagent'
 import { Link, withRouter } from 'react-router'
-import { Row, Col, Button, Table, Modal, Tag, Radio, message, InputNumber } from 'antd';
+import { Row, Col, Button, Table, Modal, Tag, Radio, message, InputNumber, Input, Icon } from 'antd';
 import { UserInfo } from './user_info/UserInfo';
 import { ClothesTable } from './clothes_table/ClothesTable';
 import { ClosetKinds } from './warehouse/ClosetKinds';
@@ -31,6 +31,7 @@ class Stock extends Component {
     super(props);
     this.state = {
       users: [],
+      defaultUsers: [],
       uInfo: {},
       ModalText: [],
       visible: false,
@@ -42,6 +43,11 @@ class Stock extends Component {
       service_cost: 0,
       remark: '空',
       allPrice: 0,
+      filterDropdownVisible: false,
+      filterDropdownVisible1: false,
+      searchText: '',
+      filtered: false,
+      filtered1: false,
     }
   }
 
@@ -64,7 +70,7 @@ class Stock extends Component {
       .end((err, res) => {
         if (!err || err === null) {
           const users = res.body.users
-          this.setState({ users: users })
+          this.setState({ users: users, defaultUsers: users })
         } else {
           this.setState({ users: [] })
         }
@@ -303,12 +309,63 @@ class Stock extends Component {
       })
   }
 
+  onInputChange = (e) => {
+    this.setState({ searchText: e.target.value });
+  }
+
+  onSearch = (type) => {
+    const { searchText, defaultUsers } = this.state;
+    const reg = new RegExp(searchText, 'gi');
+    this.setState({
+      filterDropdownVisible: false,
+      filterDropdownVisible1: false,
+      filtered: !!searchText,
+      searchText: '',
+      users: defaultUsers.map((record) => {
+        const match = type === 'phone' ? record.phone.match(reg) : record.nickname.match(reg)
+        const split = type === 'phone' ? record.phone : record.nickname
+        if (!match) {
+          return null;
+        }
+        return {
+          ...record,
+          [type]: (
+            <span>
+              {split.split(reg).map((text, i) => (
+                i > 0 ? [<span className="highlight">{match[0]}</span>, text] : text
+              ))}
+            </span>
+          ),
+        };
+      }).filter(record => !!record),
+    });
+  }
+
   render() {
     const { visible, confirmLoading, ModalText, uInfo, appointment, object, types, users, grop, allPrice } = this.state;
     const columns = [{
       title: '账户昵称',
       dataIndex: 'nickname',
       width: 150,
+      filterDropdown: (
+        <div className="custom-filter-dropdown">
+          <Input
+            ref={ele => this.searchInput = ele}
+            placeholder="搜索用户昵称！"
+            value={this.state.searchText}
+            onChange={this.onInputChange}
+            onPressEnter={this.onSearch.bind(this, 'nickname')}
+          />
+          <Button style={{ marginTop: 10 }} type="primary" icon="search" onClick={this.onSearch.bind(this, 'nickname')}>搜索</Button>
+        </div>
+      ),
+      filterIcon: <Icon type="search" style={{ fontSize: 14, color: this.state.filtered ? '#108ee9' : '#aaa' }} />,
+      filterDropdownVisible: this.state.filterDropdownVisible1,
+      onFilterDropdownVisibleChange: (visibl) => {
+        this.setState({
+          filterDropdownVisible1: visibl,
+        }, () => this.searchInput.focus());
+      },
       render: (text, record) => {
         return (
           text ? <label>{text}</label> : <label>暂无昵称</label>
@@ -318,6 +375,25 @@ class Stock extends Component {
       title: '电话',
       dataIndex: 'phone',
       width: 150,
+      filterDropdown: (
+        <div className="custom-filter-dropdown">
+          <Input
+            ref={ele => this.searchInput = ele}
+            placeholder="搜索用户电话！"
+            value={this.state.searchText}
+            onChange={this.onInputChange}
+            onPressEnter={this.onSearch.bind(this, 'phone')}
+          />
+          <Button style={{ marginTop: 10 }} type="primary" icon="search" onClick={this.onSearch.bind(this, 'phone')}>搜索</Button>
+        </div>
+      ),
+      filterIcon: <Icon type="search" style={{ fontSize: 14, color: this.state.filtered ? '#108ee9' : '#aaa' }} />,
+      filterDropdownVisible: this.state.filterDropdownVisible,
+      onFilterDropdownVisibleChange: (visibl) => {
+        this.setState({
+          filterDropdownVisible: visibl,
+        }, () => this.searchInput.focus());
+      },
     }, {
       title: '衣柜数量',
       dataIndex: 'chest_count',

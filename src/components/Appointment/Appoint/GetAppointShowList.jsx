@@ -12,6 +12,7 @@ export class GetAppointShowList extends Component {
     super(props);
     this.state = {
       id: '',
+      user_id: '',
       address: '',
       name: '',
       phone: '',
@@ -54,13 +55,14 @@ export class GetAppointShowList extends Component {
       .set('X-Admin-Email', email)
       .end( (err, res) => {
         if (!err || err === null) {
+          const userId = res.body.user_id
           const apId = res.body.id
           const apAddress = res.body.address == null ? '当前地址为空，请联系客户确认！' : res.body.address
           const apName = res.body.name == null ? '当前用户姓名为空，请联系客户确认！！' : res.body.name
           const apPhone = res.body.phone
           const apDate = res.body.date
           const apCounts = res.body.garment_count_info
-          this.setState({ id: apId, address: apAddress, name: apName, phone: apPhone, date: apDate, counts: apCounts })
+          this.setState({ id: apId, address: apAddress, name: apName, phone: apPhone, date: apDate, counts: apCounts, user_id: userId })
         }
       })
   }

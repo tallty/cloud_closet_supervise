@@ -64,7 +64,7 @@ class PostPicModal extends Component {
     const rowO = row === 0 && garmentOne.row_carbit_place ? garmentOne.row_carbit_place.split('-')[0] : row
     const carbitO = carbit === 0 && garmentOne.row_carbit_place ? garmentOne.row_carbit_place.split('-')[1] : carbit
     const placeO = place === 0 && garmentOne.row_carbit_place ? garmentOne.row_carbit_place.split('-')[2] : place
-    const titleO = value.title ? value.title : garmentOne.title
+    const titleO = value.title ? 'value.title' : garmentOne.title
     const coverImageAttributeO = coverImageAttribute || garmentOne.cover_image;
     const idO = garmentOne.id ? garmentOne.id : null
     const description = value.description
@@ -140,7 +140,19 @@ class PostPicModal extends Component {
           // 这里要注意：setState 是一个异步方法，所以需要操作缓存的当前值
           this.props.onChange(this.state.visible);
           this.props.callbackParent();
-          this.setState({ loading: false });
+          this.setState({
+            loading: false,
+            tags: [],
+            visible: false,
+            url: '',
+            for_url: this.props.garmentOne.detail_image,
+            detail_files: [],
+            title: '',
+            row: 0,
+            carbit: 0,
+            place: 0,
+            coverImageAttribute: null,
+          });
         } else {
           message.error('提交衣服信息失败，请稍后重试！');
           this.setState({ loading: false });

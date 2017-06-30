@@ -238,6 +238,7 @@ class AppointShowNDH extends Component {
 
   Panel_H1() {
     const group = this.props.group
+    console.log(group)
     const Panel_H = []
     Panel_H.push(
       <Row key={this.props.m}>
@@ -255,7 +256,7 @@ class AppointShowNDH extends Component {
             </Col>
             <Col span={5} className={styles.img_content}>
               <label className={styles.ul_icon}>
-                <label>{this.date2str(new Date(group.expire_time), 'yyyy-MM-dd hh:mm:ss')}</label>
+                <label>{group.price}</label>
               </label>
             </Col>
             <Col span={5} className={styles.img_content}>

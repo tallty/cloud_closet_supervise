@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Modal, Breadcrumb, Row, Col, Button, Card, Tag, Icon, message, Spin } from 'antd';
+import { Modal, Breadcrumb, Row, Col, Button, Card, Tag, Icon, message, Spin, Menu, Dropdown } from 'antd';
 import ActiveLink from '../../../layouts/ActiveLink/ActiveLink'
 import PostPicModal from './PostPicModal';
 import SuperAgent from 'superagent'
@@ -7,7 +7,7 @@ import MainLayout from '../../../layouts/MainLayout/MainLayout';
 import styles from './AppointShow.less';
 
 const { string, number, bool, arrayOf, shape } = PropTypes;
-const height = document.body.clientHeight - 250
+const height = document.body.clientHeight - 280
 const confirm = Modal.confirm;
 
 class AppointShowNDC extends Component {
@@ -124,6 +124,25 @@ class AppointShowNDC extends Component {
       })
   }
 
+  changeType(id, key) {
+    const token = localStorage.token
+    const email = localStorage.email
+    const idN = this.getQueryString('id')
+    const url = `http://closet-api.tallty.com/admin/exhibition_chests/${idN}/garments/${id}`
+    SuperAgent
+      .put(url)
+      .set('Accept', 'application/json')
+      .set('X-Admin-Token', token)
+      .set('X-Admin-Email', email)
+      .send({ garment: { status: key.key } })
+      .end((err, res) => {
+        if (!err || err === null) {
+          const garmentsN = res.body
+          this.getDataList();
+        }
+      })
+  }
+
   showModal() {
     this.setState({ garmentOne: {}, visible: true });
   }
@@ -135,6 +154,28 @@ class AppointShowNDC extends Component {
   getList() {
     const lists = []
     const { garments } = this.state
+    const menu = (id) => (
+      <Menu onClick={this.changeType.bind(this, id)}>
+        <Menu.Item key="storing">
+          入库中
+        </Menu.Item>
+        <Menu.Item key="caring">
+          护理中
+        </Menu.Item>
+        <Menu.Item key="stored">
+          已入库
+        </Menu.Item>
+        <Menu.Item key="in_basket">
+          配送篮中
+        </Menu.Item>
+        <Menu.Item key="delivering">
+          配送中
+        </Menu.Item>
+        <Menu.Item key="at_home">
+          已到达
+        </Menu.Item>
+      </Menu>
+    );
     garments.forEach((garment, i, obj) => {
       lists.push(
         <Col key={`gar${i}`} span="6" className={styles.ndc_card}>
@@ -144,10 +185,18 @@ class AppointShowNDC extends Component {
             </div>
             <div className={styles.custom_card}>
               <label>{garment.title ? garment.title : '默认衣服标题'}</label>
-              <Tag className={styles.custom_card_tag}>{garment.garment_status}</Tag>
+              <Dropdown overlay={menu(garment.id)} placement="bottomCenter">
+                <Tag className={styles.custom_card_tag}>{garment.garment_status}</Tag>
+              </Dropdown>
               <p>{garment.row_carbit_place}</p>
-              <Button className={styles.edit_btn} onClick={this.getOneData.bind(this, garment.id)}>编辑</Button>
-              <Button className={styles.detele_btn} onClick={this.warning.bind(this, garment.id)}>删除</Button>
+              <Button
+                className={styles.edit_btn}
+                onClick={this.getOneData.bind(this, garment.id)}
+              >编辑</Button>
+              <Button
+                className={styles.detele_btn}
+                onClick={this.warning.bind(this, garment.id)}
+              >删除</Button>
             </div>
           </Card>
         </Col>
@@ -203,7 +252,7 @@ class AppointShowNDC extends Component {
                 <Breadcrumb.Item className={styles.active}>入库</Breadcrumb.Item>
               </Breadcrumb>
             </Col>
-            <Col span={24} className={styles.head_right}>
+            <Col span={24} className={styles.head_right_clo}>
               <label>订单号：20161011877834</label>
               <Button className={styles.head_right_btn} onClick={this.showModal.bind(this)} type="dashed" icon="plus" >添加衣服</Button>
               <Button className={styles.head_right_btn} onClick={this.showConfirm.bind(this)} type="dashed" icon="export" >发布</Button>
