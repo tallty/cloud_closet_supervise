@@ -157,16 +157,13 @@ class AppointShowNDC extends Component {
     const menu = (id) => (
       <Menu onClick={this.changeType.bind(this, id)}>
         <Menu.Item key="storing">
-          入库中
+          待入库
         </Menu.Item>
         <Menu.Item key="caring">
           护理中
         </Menu.Item>
         <Menu.Item key="stored">
           已入库
-        </Menu.Item>
-        <Menu.Item key="in_basket">
-          配送篮中
         </Menu.Item>
         <Menu.Item key="delivering">
           配送中
