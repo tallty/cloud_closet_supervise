@@ -92,7 +92,7 @@ class AppointShowN extends Component {
         if (!err || err === null) {
           const groupsG = this.props.type === 'appoints' ? res.body.appointment_price_groups : res.body.admin_exhibition_chests
           const userInfo = res.body.user_info
-          this.getUser(token, email, this.props.user_id)
+          this.props.type === 'appoints' ? this.getUser(token, email, this.props.user_id) : ''
           this.props.type === 'appoints' ?
             this.setState({
               groups: groupsG,
@@ -146,7 +146,6 @@ class AppointShowN extends Component {
   }
 
   reload() {
-    console.log('-----------------------')
     this.getList();
   }
 
@@ -154,13 +153,11 @@ class AppointShowN extends Component {
    * 更新衣服的数量
    */
   changeKindClothesCount() {
-    console.log();
     const garment_count = {};
     garment_count.hanging = this.state.hanging
     garment_count.stacking = this.state.stacking
     garment_count.full_dress = this.state.full_dress
     const id = this.getQueryString('id')
-    console.log(garment_count);
     SuperAgent
       .put(`http://closet-api.tallty.com/admin/appointments/${id}`)
       .set('Accept', 'application/json')
@@ -182,7 +179,6 @@ class AppointShowN extends Component {
     // 一级表格模拟数据
     const data = [];
     const { groups, user_info } = this.state
-    console.log(this.props);
     groups.forEach((group, i, obj) => {
       data.push({
         key: i,
@@ -211,8 +207,8 @@ class AppointShowN extends Component {
               </Breadcrumb>
             </Col>
             <Col span={this.props.type === 'appoints' ? 12 : 24} className={styles.head_right}>
-              {this.props.type === 'appoints' ? <label>预约用户姓名： {this.props.name}</label> : ''}
-              <label className={styles.userInfo_nickname}>用户昵称：{user_info.nickname ? user_info.nickname : '暂无'}</label>
+              {this.props.type === 'appoints' ? <label className={styles.userInfo_nickname}>预约用户姓名： {this.props.name}</label> : ''}
+              <label>用户昵称：{user_info.nickname ? user_info.nickname : '暂无'}</label>
               <br />
               {this.props.type === 'appoints' ? <div className={styles.address_label}>用户地址：{this.props.address}</div> : ''}
               <label>联系方式：{this.props.type === 'appoints' ? this.props.phone : user_info.phone}</label>

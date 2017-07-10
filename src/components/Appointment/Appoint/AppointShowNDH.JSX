@@ -120,8 +120,6 @@ class AppointShowNDH extends Component {
       if (err) {
         return;
       }
-
-      console.log('Received values of form: ', values);
       title === '续期时长' ? this.setStockTime(stockId, values.num) : this.setStockNumber(stockId, values.num)
       form.resetFields();
       this.setState({ visible: false });
@@ -133,7 +131,6 @@ class AppointShowNDH extends Component {
   }
 
   handleCancel = (e) => {
-    console.log(e);
     this.setState({
       visible: false,
     });
@@ -238,7 +235,6 @@ class AppointShowNDH extends Component {
 
   Panel_H1() {
     const group = this.props.group
-    console.log(group)
     const Panel_H = []
     Panel_H.push(
       <Row key={this.props.m}>

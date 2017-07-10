@@ -127,14 +127,12 @@ class Stock extends Component {
    * [goStock 弹出新增服务订单模态框]
    */
   goStock = (userInfo) => {
-    console.log(userInfo);
     this.props.router.replace(`/stock_closet?id=${userInfo.id}`)
   }
   /**
    * [handleOk 点击模态框确定按钮响应事件]
    */
   handleOk = () => {
-    console.log(this.state.object)
     this.setState({
       confirmLoading: true,
     });
@@ -149,7 +147,6 @@ class Stock extends Component {
    * [handleCancelOne 点击模态框取消按钮响应事件]
    */
   handleCancelOne = () => {
-    console.log('Clicked cancel button');
     this.setState({
       visible: false,
       confirmLoading: false,
@@ -257,8 +254,6 @@ class Stock extends Component {
     //   this.setState({ loading: false });
     //   return;
     // }
-    console.log('====+++++++++++++++++++=========++++++++++++====');
-    console.log(params);
 
     var token = localStorage.token
     var email = localStorage.email
