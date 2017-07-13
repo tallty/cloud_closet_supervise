@@ -181,7 +181,7 @@ class Appoint extends Component {
               </Col>
               <Col span={3} className={styles.img_content}>
                 <div>
-                  <Button onClick={that.showConfirm.bind(that, app[i].id)} type="primary" size="small" className={styles.d_btn}>订单上架</Button>
+                  {/*<Button onClick={that.showConfirm.bind(that, app[i].id)} type="primary" size="small" className={styles.d_btn}>订单上架</Button>*/}
                   <ActiveLink to={url}>
                     <Button type="primary" size="small" className={styles.d_btn}>查看详情</Button>
                   </ActiveLink>

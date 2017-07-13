@@ -93,7 +93,7 @@ class AppointShowN extends Component {
           const groupsG = this.props.type === 'appoints' ? res.body.appointment_price_groups : res.body.admin_exhibition_chests
           const userInfo = res.body.user_info
           this.props.type === 'appoints' ? this.getUser(token, email, this.props.user_id) : ''
-          this.props.type === 'appoints' ?
+          this.props.type === 'appoints' && this.props.adm !== true ?
             this.setState({
               groups: groupsG,
               // user_info: userInfo,
@@ -167,7 +167,7 @@ class AppointShowN extends Component {
       .end((err, res) => {
         if (!err || err === null) {
           // this.setState({ loading: false });
-          message.error('订单更新成功！');
+          message.success('订单更新成功！');
         } else {
           // this.setState({ loading: false })
           message.error('确认失败，请稍后重试');
@@ -208,12 +208,12 @@ class AppointShowN extends Component {
             </Col>
             <Col span={this.props.type === 'appoints' ? 12 : 24} className={styles.head_right}>
               {this.props.type === 'appoints' ? <label className={styles.userInfo_nickname}>预约用户姓名： {this.props.name}</label> : ''}
-              <label>用户昵称：{user_info.nickname ? user_info.nickname : '暂无'}</label>
+              <label>用户昵称：{user_info ? user_info.nickname : '暂无'}</label>
               <br />
               {this.props.type === 'appoints' ? <div className={styles.address_label}>用户地址：{this.props.address}</div> : ''}
               <label>联系方式：{this.props.type === 'appoints' ? this.props.phone : user_info.phone}</label>
             </Col>
-            {this.props.type === 'appoints' ?
+            {this.props.type === 'appoints' && this.props.adm !== true ?
               <Col span={12} className={styles.head_right}>
                 <Col span={20}>
                   <label>叠放衣物：{this.props.counts.stacking}件</label><br />
@@ -224,10 +224,15 @@ class AppointShowN extends Component {
                   <ActiveLink to={`/stock_closet?id=${this.props.user_id}`}><Button type="primary">衣物入库</Button></ActiveLink>
                 </Col>
               </Col> : ''
-              }
+            }
+            {this.props.type === 'appoints' && this.props.adm === true ?
+              <Col span={12} style={{ textAlign: 'center' }}>
+                <ActiveLink to={`/stock_closet?id=${this.props.user_id}`}><Button type="primary">衣物入库</Button></ActiveLink>
+              </Col> : ''
+            }
           </Row>
           {/* 种类件数 */}
-          {this.props.type === 'appoints' ?
+          {this.props.type === 'appoints' && this.props.adm !== true ?
             <Row className={styles.change_count}>
               <Col xs={{ span: 12 }} sm={{ span: 6 }}>
                 <div className={styles.pane_input}>

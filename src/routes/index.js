@@ -5,7 +5,7 @@ import Customer from '../components/Customer/Customer';
 import Advertisement from '../components/Advertisement/Advertisement';
 import Appointment from '../components/Appointment/Appointment';
 import Distribution from '../components/Appointment/Distribution/Distribution';
-import AppointServer from '../components/Appointment/AppointServer/AppointServer';
+import { AppointServer } from '../components/Appointment/AppointServer/AppointServer';
 import DeliveryDetail from '../components/Appointment/Distribution/DeliveryDetail';
 import { GetAppointList } from '../components/Appointment/Appoint/GetAppointList';
 import AppointShowNDC from '../components/Appointment/Appoint/AppointShowNDC';

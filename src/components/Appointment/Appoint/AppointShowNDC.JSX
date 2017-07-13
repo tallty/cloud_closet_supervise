@@ -252,7 +252,7 @@ class AppointShowNDC extends Component {
             <Col span={24} className={styles.head_right_clo}>
               <label>订单号：20161011877834</label>
               <Button className={styles.head_right_btn} onClick={this.showModal.bind(this)} type="dashed" icon="plus" >添加衣服</Button>
-              <Button className={styles.head_right_btn} onClick={this.showConfirm.bind(this)} type="dashed" icon="export" >发布</Button>
+              {/*<Button className={styles.head_right_btn} onClick={this.showConfirm.bind(this)} type="dashed" icon="export" >发布</Button>*/}
             </Col>
           </Row>
           <Row className={styles.ndc_card_container} style={{ height: height }}>

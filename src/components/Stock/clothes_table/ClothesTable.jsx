@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import css from './clothes_table.less'
-import { Row, Col } from 'antd'
+import { Row, Col, Button } from 'antd'
 
 const { number, string, arrayOf, shape, func, bool } = PropTypes;
 const parseStoreMonth = new Map([
@@ -22,17 +22,20 @@ export class ClothesTable extends Component {
     const data = []
     this.props.groups.forEach((item, index, obj) => {
       data.push(
-        <Row key={index} className={css.order_item} onClick={this.handleClick.bind(this, index, item)}>
+        <Row key={index} className={css.order_item}>
           <Col span={7} style={{ textAlign: 'left' }}>
             <div className={css.img_div}>
               <img src={imageMap.get(item.title)} alt="icon" />
             </div>
             <div className={css.kind}>{item.title}</div>
           </Col>
-          <Col span={5}>{item.is_chest ? parseStoreMonth.get(item.store_month) : '-'}</Col>
-          <Col span={4}>{item.count} 个</Col>
-          <Col span={4}>{item.unit_price}/月</Col>
+          <Col span={4}>{item.is_chest ? parseStoreMonth.get(item.store_month) : '-'}</Col>
+          <Col span={3}>{item.count} 个</Col>
+          <Col span={3}>{item.unit_price}/月</Col>
           <Col span={4}>{item.price}</Col>
+          <Col span={3}>
+            <Button onClick={this.handleClick.bind(this, index, item)} type="danger">删除</Button>
+          </Col>
         </Row>
       )
     })
@@ -48,10 +51,11 @@ export class ClothesTable extends Component {
       <div>
         <Row className={css.order_table_header}>
           <Col span={7} style={{textAlign: 'left', paddingLeft: 4}}>种类</Col>
-          <Col span={5}>仓储时长</Col>
-          <Col span={4}>数量</Col>
-          <Col span={4}>单价</Col>
+          <Col span={4}>仓储时长</Col>
+          <Col span={3}>数量</Col>
+          <Col span={3}>单价</Col>
           <Col span={4}>总价</Col>
+          <Col span={3}>操作</Col>
         </Row>
         {
           this.props.groups.length > 0 ?

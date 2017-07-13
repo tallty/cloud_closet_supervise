@@ -19,6 +19,7 @@ export class GetAppointShowList extends Component {
       date: '',
       counts: {},
       type: 'appoints',
+      adm: false,
     }
   }
 
@@ -62,7 +63,8 @@ export class GetAppointShowList extends Component {
           const apPhone = res.body.phone
           const apDate = res.body.date
           const apCounts = res.body.garment_count_info
-          this.setState({ id: apId, address: apAddress, name: apName, phone: apPhone, date: apDate, counts: apCounts, user_id: userId })
+          const admin = res.body.created_by_admin
+          this.setState({ id: apId, address: apAddress, name: apName, phone: apPhone, date: apDate, counts: apCounts, user_id: userId, adm: admin })
         }
       })
   }

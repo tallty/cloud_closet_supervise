@@ -1,7 +1,7 @@
 /*登录页*/
 import React, { Component, PropTypes } from 'react';
 import SuperAgent from 'superagent'
-import { Form, Button, Row, Col, Input } from 'antd'
+import { Form, Button, Row, Col, Input, message } from 'antd'
 import { Link, withRouter } from 'react-router'
 import styles from './App.less';
 import MainLayout from '../layouts/MainLayout/MainLayout';
@@ -27,7 +27,7 @@ class App extends Component {
     this.pushAppoint(email, password)
   }
 
-  // 预约
+  // 登录
   pushAppoint(email, password) {
     SuperAgent
       .post('http://closet-api.tallty.com/admins/sign_in')
@@ -38,6 +38,8 @@ class App extends Component {
           localStorage.email = email
           localStorage.token = res.body.authentication_token
           this.props.router.replace('/appoint')
+        } else {
+          message.error('用户信息错误，请重试！')
         }
       });
   }

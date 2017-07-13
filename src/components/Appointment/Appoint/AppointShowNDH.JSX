@@ -146,7 +146,7 @@ class AppointShowNDH extends Component {
     .end((err, res) => {
       if (!err || err === null) {
         // this.setState({ loading: false });
-        message.error('修改成功！');
+        message.success('修改成功！');
         this.props.reload()
       } else {
         // this.setState({ loading: false })

@@ -12,7 +12,7 @@ import Appoint from '../Appointment/Appoint/Appoint'
 import styles from './Stock.less';
 
 const height = document.body.clientHeight - 260
-const width = document.body.clientWidth - 260
+const width = document.body.clientWidth * 0.7
 const confirm = Modal.confirm;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
@@ -190,11 +190,12 @@ class Stock extends Component {
   handleGroupClick(index, item) {
     editItem.item = item;
     editItem.index = index;
-    this.setState({
-      object: item,
-      pop: true,
-      event: EDIT,
-    });
+    const { grop, care_cost, service_cost } = this.state;
+    item.price = item.count * item.store_month * item.unit_price;
+    grop.rent_charge -= item.price;
+    item.price ? grop.splice(index, 1) : ''
+    // 增加一条入库记录
+    item.price ? this.getTotalPrice(grop, care_cost, service_cost) : message.error('请确认已设置衣柜属性！');
   }
 
   /**
@@ -240,13 +241,13 @@ class Stock extends Component {
     // sessionStorage.setItem('appointment', JSON.stringify(appointment));
     // 开始提交，封装更新的数据包
     let cache = `user_id=${uInfo.id}`;
-    cache += `&service_order[remark]=${remark}`;
-    cache += `&service_order[care_cost]=${care_cost}`;
-    cache += `&service_order[service_cost]=${service_cost}`;
+    cache += `&appointment[remark]=${remark}`;
+    cache += `&appointment[care_cost]=${care_cost}`;
+    cache += `&appointment[service_cost]=${service_cost}`;
     grop.forEach((item, index, obj) => {
-      cache += `&service_order_groups[price_groups][][count]=${item.count}`;
-      cache += `&service_order_groups[price_groups][][price_system_id]=${item.price_system_id}`;
-      cache += `&service_order_groups[price_groups][][store_month]=${item.store_month}&`;
+      cache += `&appointment_groups[price_groups][][count]=${item.count}`;
+      cache += `&appointment_groups[price_groups][][price_system_id]=${item.price_system_id}`;
+      cache += `&appointment_groups[price_groups][][store_month]=${item.store_month}&`;
     });
     const params = cache.substring(0, cache.length - 1);
 
@@ -259,7 +260,7 @@ class Stock extends Component {
     var email = localStorage.email
     const that = this
     SuperAgent
-      .post(`http://closet-api.tallty.com/admin/users/${uInfo.id}/service_orders`)
+      .post(`http://closet-api.tallty.com/admin/users/${uInfo.id}/appointments`)
       .set('Accept', 'application/json')
        .set('X-Admin-Token', token)
       .set('X-Admin-Email', email)
@@ -279,7 +280,7 @@ class Stock extends Component {
             });
           }, 2000);
         } else if (res.status < 300 && res.status >= 200) {
-          message.warning('服务订单创建成功！')
+          message.success('服务订单创建成功！')
           this.getList()
           setTimeout(() => {
             this.setState({
