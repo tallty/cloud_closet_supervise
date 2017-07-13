@@ -46,7 +46,7 @@ export class AppointServer extends Component {
   render() {
     return (
       <div>
-        <Appointment>
+        <Appointment active="/server">
           <Appoint {...this.state} callback={this.callbackParent.bind(this)} />
         </Appointment>
       </div>

@@ -64,7 +64,7 @@ class PostPicModal extends Component {
     const rowO = row === 0 && garmentOne.row_carbit_place ? garmentOne.row_carbit_place.split('-')[0] : row
     const carbitO = carbit === 0 && garmentOne.row_carbit_place ? garmentOne.row_carbit_place.split('-')[1] : carbit
     const placeO = place === 0 && garmentOne.row_carbit_place ? garmentOne.row_carbit_place.split('-')[2] : place
-    const titleO = value.title ? 'value.title' : garmentOne.title
+    const titleO = value.title ? value.title : garmentOne.title
     const coverImageAttributeO = coverImageAttribute || garmentOne.cover_image;
     const idO = garmentOne.id ? garmentOne.id : null
     const description = value.description

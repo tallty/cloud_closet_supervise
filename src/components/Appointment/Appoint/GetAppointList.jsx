@@ -35,8 +35,8 @@ export class GetAppointList extends Component {
       .set('X-Admin-Email', email)
       .end( (err, res) => {
         if (!err || err === null) {
-          let appointments = res.body.appointments.filter((appoint) => { return appoint.created_by_admin !== true }).map(apo => apo);
-          this.setState({ appointments: appointments })
+          const appoints = res.body.appointments.filter((appoint) => { return appoint.created_by_admin !== true }).map(apo => apo);
+          this.setState({ appointments: appoints })
         } else {
           this.setState({ appointments: [] })
         }
