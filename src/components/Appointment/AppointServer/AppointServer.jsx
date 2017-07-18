@@ -15,20 +15,21 @@ export class AppointServer extends Component {
   }
 
   componentWillMount() {
-    this.getList('storing')
+    this.getList('unpaid')
   }
 
   getList(query_state) {
-    // var token = 'wgRrN_1yUzQhe3SAbDkx'
-    // var email = 'admin@tallty.com'
-    var token = localStorage.token
-    var email = localStorage.email
-    var url = `http://closet-api.tallty.com/admin/appointments?query_state=${query_state}&page=1&per_page=100000`
+    var queryStates = []
+    queryStates = query_state === 'unpaid' ? ['unpaid'] : ['paid', 'storing', 'stored', 'canceled']
+    const token = localStorage.token
+    const email = localStorage.email
+    const url = `http://closet-api.tallty.com/admin/appointments?page=1&per_page=100000`
     SuperAgent
       .get(url)
       .set('Accept', 'application/json')
       .set('X-Admin-Token', token)
       .set('X-Admin-Email', email)
+      .query({ 'query_state[]': queryStates })
       .end( (err, res) => {
         if (!err || err === null) {
           let appointments = res.body.appointments.filter((appoint) => { return appoint.created_by_admin === true }).map(apo => apo);

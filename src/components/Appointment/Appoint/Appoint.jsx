@@ -85,23 +85,106 @@ class Appoint extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      activeKey: '1',
     };
   }
 
   callbackChange(key) {
-    key === '1' ? this.props.callback('storing') : this.props.callback('stored')
+    this.setState({ activeKey: key })
+    key === '1' ? this.props.callback('unpaid') : this.props.callback('paid')
   }
 
-  showConfirm(th, i) {
+  showConfirm3(th, i) {
     const that = this
     confirm({
-      title: '订单上架确认提醒?',
-      content: '点击确认，订单上架成功，订单状态将显示发布衣柜及衣物信息。。。',
+      title: '订单取消确认提醒?',
+      content: '点击确认，订单取消成功，可在历史订单中查看和恢复！',
       onOk() {
-        that.pushAppoin(that, i)
+        that.noSureAppoin(th, i)
       },
       onCancel() { },
     });
+  }
+
+  showConfirm2(th, i) {
+    const that = this
+    confirm({
+      title: '订单恢复确认提醒?',
+      content: '点击确认，订单恢复成功！',
+      onOk() {
+        that.resetAppoin(th, i)
+      },
+      onCancel() { },
+    });
+  }
+
+  showConfirm1(th, i) {
+    const that = this
+    confirm({
+      title: '订单删除确认提醒?',
+      content: '点击确认，订单删除成功，订单将无法恢复！',
+      onOk() {
+        that.deleteAppoin(th, i)
+      },
+      onCancel() { },
+    });
+  }
+
+  noSureAppoin(th, i) {
+    const token = localStorage.token
+    const email = localStorage.email
+    const url = `http://closet-api.tallty.com/admin/appointments/${th}/cancel`
+    SuperAgent
+      .post(url)
+      .set('Accept', 'application/json')
+      .set('X-Admin-Token', token)
+      .set('X-Admin-Email', email)
+      .end((err, res) => {
+        if (!err || err === null) {
+          message.success('订单取消成功！');
+          this.callbackChange('1')
+        } else {
+          message.error('订单取消失败，当前订单状态不可操作。');
+        }
+      })
+  }
+
+  resetAppoin(th, i) {
+    const token = localStorage.token
+    const email = localStorage.email
+    const url = `http://closet-api.tallty.com/admin/appointments/${th}/recover`
+    SuperAgent
+      .post(url)
+      .set('Accept', 'application/json')
+      .set('X-Admin-Token', token)
+      .set('X-Admin-Email', email)
+      .end((err, res) => {
+        if (!err || err === null) {
+          message.success('订单恢复成功！');
+          this.callbackChange('2')
+        } else {
+          message.error('订单恢复失败，当前订单状态不可操作。');
+        }
+      })
+  }
+
+  deleteAppoin(th, i) {
+    const token = localStorage.token
+    const email = localStorage.email
+    const url = `http://closet-api.tallty.com/admin/appointments/${th}`
+    SuperAgent
+      .delete(url)
+      .set('Accept', 'application/json')
+      .set('X-Admin-Token', token)
+      .set('X-Admin-Email', email)
+      .end((err, res) => {
+        if (!err || err === null) {
+          message.success('订单删除成功！');
+          this.callbackChange('2')
+        } else {
+          message.error('订单删除失败，当前订单状态不可操作。');
+        }
+      })
   }
 
   pushAppoin(that, i) {
@@ -181,7 +264,35 @@ class Appoint extends Component {
               </Col>
               <Col span={3} className={styles.img_content}>
                 <div>
-                  {/*<Button onClick={that.showConfirm.bind(that, app[i].id)} type="primary" size="small" className={styles.d_btn}>订单上架</Button>*/}
+                  {that.state.activeKey !== '1' ?
+                    <Col span={24}>
+                      <Button
+                        onClick={that.showConfirm1.bind(that, app[i].id, 'delete')}
+                        type="primary"
+                        size="small"
+                        className={styles.d_btn}
+                      >
+                        订单删除
+                      </Button>
+                      <Button
+                        onClick={that.showConfirm2.bind(that, app[i].id, 'reset')}
+                        type="primary"
+                        size="small"
+                        className={styles.d_btn}
+                      >
+                        订单恢复
+                      </Button>
+                    </Col>
+                    :
+                    <Button
+                      onClick={that.showConfirm3.bind(that, app[i].id, 'noSure')}
+                      type="primary"
+                      size="small"
+                      className={styles.d_btn}
+                    >
+                      订单取消
+                    </Button>
+                  }
                   <ActiveLink to={url}>
                     <Button type="primary" size="small" className={styles.d_btn}>查看详情</Button>
                   </ActiveLink>
