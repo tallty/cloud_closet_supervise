@@ -1,7 +1,7 @@
 {/* 预约订单管理组件 */ }
 import React, { Component, PropTypes } from 'react';
 import ActiveLink from '../../../layouts/ActiveLink/ActiveLink'
-import { Tabs, Icon, Row, Col, Input, Button, Table, Modal, message } from 'antd';
+import { Tabs, Icon, Row, Col, Input, Button, Table, Modal, message, Tag } from 'antd';
 import Appointment from '../Appointment';
 import SuperAgent from 'superagent'
 import styles from './Appoint.less';
@@ -227,7 +227,7 @@ class Appoint extends Component {
         <Row key={`${i}e`}>
           <Col span={24} className={styles.appoint_title}>
             <Col span={24} className={styles.appoint_id}>
-              <Col span={8}><label className={styles.ul_icon}>订单号：{app[i].seq}</label></Col>
+              <Col span={5}><label className={styles.ul_icon}>订单号：{app[i].seq}</label></Col>
               <Col span={3} className={styles.img_content}>
                 <img src={app[i].user_avatar} alt="" className={styles.ul_icon} />
                 <label>{app[i].name}</label>
@@ -237,6 +237,9 @@ class Appoint extends Component {
               </Col>
               <Col span={8} className={styles.img_content}>
                 <label className={styles.ul_icon}><label>{address}</label></label>
+              </Col>
+              <Col span={3} className={styles.img_content}>
+                {app[i].appt_type === '衣柜续期' ? <Tag color="#108ee9">续期订单</Tag> : <Tag color={app[i].appt_type === '服务订单' ? '#f50' : '#87d068'}>{app[i].appt_type}</Tag>}
               </Col>
             </Col>
             <Col span={24} className={styles.user_tab}>
