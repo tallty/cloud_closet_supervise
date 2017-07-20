@@ -94,6 +94,18 @@ class Appoint extends Component {
     key === '1' ? this.props.callback('unpaid') : this.props.callback('paid')
   }
 
+  showConfirm4(th, i) {
+    const that = this
+    confirm({
+      title: '订单上架确认提醒?',
+      content: '点击确认，订单上架成功，可在历史订单中查看和恢复！',
+      onOk() {
+        that.pushTabAppoin(th, i)
+      },
+      onCancel() { },
+    });
+  }
+
   showConfirm3(th, i) {
     const that = this
     confirm({
@@ -128,6 +140,25 @@ class Appoint extends Component {
       },
       onCancel() { },
     });
+  }
+
+  pushTabAppoin(th, i) {
+    const token = localStorage.token
+    const email = localStorage.email
+    const url = `http://closet-api.tallty.com/admin/appointments/${th}/stored`
+    SuperAgent
+      .post(url)
+      .set('Accept', 'application/json')
+      .set('X-Admin-Token', token)
+      .set('X-Admin-Email', email)
+      .end((err, res) => {
+        if (!err || err === null) {
+          message.success('订单上架成功！');
+          this.callbackChange('1')
+        } else {
+          message.error('订单上架失败，请稍后再试。');
+        }
+      })
   }
 
   noSureAppoin(th, i) {
@@ -223,6 +254,7 @@ class Appoint extends Component {
       const url = `/appoint_show?id=${app[i].id}`
       const address = app[i].address === '' || null ? '当前地址为空，请联系客户确认！' : app[i].address
       const dateHa = [];
+      // console.log(app)
       dateHa.push(
         <Row key={`${i}e`}>
           <Col span={24} className={styles.appoint_title}>
@@ -239,7 +271,7 @@ class Appoint extends Component {
                 <label className={styles.ul_icon}><label>{address}</label></label>
               </Col>
               <Col span={3} className={styles.img_content}>
-                {app[i].appt_type === '衣柜续期' ? <Tag color="#108ee9">续期订单</Tag> : <Tag color={app[i].appt_type === '服务订单' ? '#f50' : '#87d068'}>{app[i].appt_type}</Tag>}
+                {app[i].appt_type === '衣柜续期' ? <Tag color="#108ee9">续期订单</Tag> : <Tag color={app[i].appt_type === '服务订单' ? '#f50' : '#87d068'}>{app[i].appt_type}</Tag>}<Tag className={styles.img_content_tag} color="orange">{app[i].state}</Tag>
               </Col>
             </Col>
             <Col span={24} className={styles.user_tab}>
@@ -271,7 +303,7 @@ class Appoint extends Component {
                     <Col span={24}>
                       <Button
                         onClick={that.showConfirm1.bind(that, app[i].id, 'delete')}
-                        type="primary"
+                        type="danger"
                         size="small"
                         className={styles.d_btn}
                       >
@@ -279,7 +311,7 @@ class Appoint extends Component {
                       </Button>
                       <Button
                         onClick={that.showConfirm2.bind(that, app[i].id, 'reset')}
-                        type="primary"
+                        type="danger"
                         size="small"
                         className={styles.d_btn}
                       >
@@ -287,17 +319,29 @@ class Appoint extends Component {
                       </Button>
                     </Col>
                     :
-                    <Button
-                      onClick={that.showConfirm3.bind(that, app[i].id, 'noSure')}
-                      type="primary"
-                      size="small"
-                      className={styles.d_btn}
-                    >
-                      订单取消
-                    </Button>
+                    <Col span={24}>
+                      {app[i].state !== '待付款' ?
+                        <Button
+                          onClick={that.showConfirm4.bind(that, app[i].id, 'pushTab')}
+                          type="danger"
+                          size="small"
+                          className={styles.d_btn}
+                        >
+                          订单上架
+                        </Button> :
+                        <Button
+                          onClick={that.showConfirm3.bind(that, app[i].id, 'noSure')}
+                          type="danger"
+                          size="small"
+                          className={styles.d_btn}
+                        >
+                          订单取消
+                        </Button>
+                      }
+                    </Col>
                   }
                   <ActiveLink to={url}>
-                    <Button type="primary" size="small" className={styles.d_btn}>查看详情</Button>
+                    <Button type="danger" size="small" className={styles.d_btn}>查看详情</Button>
                   </ActiveLink>
                 </div>
               </Col>

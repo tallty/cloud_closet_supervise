@@ -20,7 +20,7 @@ export class AppointServer extends Component {
 
   getList(query_state) {
     var queryStates = []
-    queryStates = query_state === 'unpaid' ? ['unpaid'] : ['paid', 'storing', 'stored', 'canceled']
+    queryStates = query_state === 'unpaid' ? ['unpaid', 'paid', 'storing'] : ['stored', 'canceled']
     const token = localStorage.token
     const email = localStorage.email
     const url = `http://closet-api.tallty.com/admin/appointments?page=1&per_page=100000`
