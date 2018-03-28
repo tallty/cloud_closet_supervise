@@ -140,7 +140,19 @@ class PostPicModal extends Component {
           // 这里要注意：setState 是一个异步方法，所以需要操作缓存的当前值
           this.props.onChange(this.state.visible);
           this.props.callbackParent();
-          this.setState({ loading: false });
+          this.setState({
+            loading: false,
+            tags: [],
+            visible: false,
+            url: '',
+            for_url: this.props.garmentOne.detail_image,
+            detail_files: [],
+            title: '',
+            row: 0,
+            carbit: 0,
+            place: 0,
+            coverImageAttribute: null,
+          });
         } else {
           message.error('提交衣服信息失败，请稍后重试！');
           this.setState({ loading: false });

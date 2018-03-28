@@ -5,6 +5,7 @@ import Customer from '../components/Customer/Customer';
 import Advertisement from '../components/Advertisement/Advertisement';
 import Appointment from '../components/Appointment/Appointment';
 import Distribution from '../components/Appointment/Distribution/Distribution';
+import { AppointServer } from '../components/Appointment/AppointServer/AppointServer';
 import DeliveryDetail from '../components/Appointment/Distribution/DeliveryDetail';
 import { GetAppointList } from '../components/Appointment/Appoint/GetAppointList';
 import AppointShowNDC from '../components/Appointment/Appoint/AppointShowNDC';
@@ -12,6 +13,7 @@ import { GetAppointShowList } from '../components/Appointment/Appoint/GetAppoint
 
 import Service from '../components/Service/Service';
 import Stock from '../components/Stock/Stock';
+import { StockCloset } from '../components/Stock/StockCloset/StockCloset';
 import { GetList } from '../components/list/GetList';
 import Statistics from '../components/Statistics/Statistics';
 import Staff from '../components/Staff/Staff';
@@ -44,6 +46,8 @@ export class Routes extends Component {
         <Route path="/delivery_detail" component={DeliveryDetail} />
         {/* 配置订单预约管理路由 */}
         <Route path="/appoint" component={GetAppointList} />
+        {/* 配置服务订单管理路由 */}
+        <Route path="/server" component={AppointServer} />
         {/* 配置订单预约详情管理路由 */}
         <Route path="/appoint_show" component={GetAppointShowList} />
         {/* 配置订单上架管理路由 */}
@@ -52,6 +56,8 @@ export class Routes extends Component {
         <Route path="/service" component={Service} />
         {/* 配置库存管理路由 */}
         <Route path="/stock" component={Stock} />
+         {/* 配置库存管理路由 */}
+        <Route path="/stock_closet" component={StockCloset} />
         {/* 配置库存管理路由 */}
         <Route path="/list" component={GetList} />
         {/* 配置统计报表路由 */}

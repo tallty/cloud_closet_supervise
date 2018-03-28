@@ -3,10 +3,10 @@
  */
 import React, { Component, PropTypes } from 'react'
 import SuperAgent from 'superagent'
-import Appoint from './Appoint'
+import Appoint from '../Appoint/Appoint'
 import Appointment from '../Appointment';
 
-export class GetAppointList extends Component {
+export class AppointServer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,9 +18,9 @@ export class GetAppointList extends Component {
     this.getList('unpaid')
   }
 
-  getList(query_State) {
+  getList(query_state) {
     var queryStates = []
-    queryStates = query_State === 'unpaid' ? ['unpaid', 'paid', 'storing'] : ['stored', 'canceled']
+    queryStates = query_state === 'unpaid' ? ['unpaid', 'paid', 'storing'] : ['stored', 'canceled']
     const token = localStorage.token
     const email = localStorage.email
     const url = `http://closet-api.tallty.com/admin/appointments?page=1&per_page=100000`
@@ -32,8 +32,8 @@ export class GetAppointList extends Component {
       .query({ 'query_state[]': queryStates })
       .end( (err, res) => {
         if (!err || err === null) {
-          const appoints = res.body.appointments.filter((appoint) => { return appoint.created_by_admin !== true }).map(apo => apo);
-          this.setState({ appointments: appoints })
+          let appointments = res.body.appointments.filter((appoint) => { return appoint.created_by_admin === true }).map(apo => apo);
+          this.setState({ appointments: appointments })
         } else {
           this.setState({ appointments: [] })
         }
@@ -47,16 +47,16 @@ export class GetAppointList extends Component {
   render() {
     return (
       <div>
-        <Appointment>
-          <Appoint {...this.state} callback={this.callbackParent.bind(this)}/>
+        <Appointment active="/server">
+          <Appoint {...this.state} callback={this.callbackParent.bind(this)} />
         </Appointment>
       </div>
     );
   }
 }
 
-GetAppointList.defaultProps = {
+AppointServer.defaultProps = {
 }
 
-GetAppointList.propTypes = {
+AppointServer.propTypes = {
 }

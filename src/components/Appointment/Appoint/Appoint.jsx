@@ -1,11 +1,10 @@
 {/* 预约订单管理组件 */ }
 import React, { Component, PropTypes } from 'react';
 import ActiveLink from '../../../layouts/ActiveLink/ActiveLink'
-import { Tabs, Icon, Row, Col, Input, Button, Table, Modal, message } from 'antd';
+import { Tabs, Icon, Row, Col, Input, Button, Table, Modal, message, Tag } from 'antd';
 import Appointment from '../Appointment';
 import SuperAgent from 'superagent'
 import styles from './Appoint.less';
-import MainLayout from '../../../layouts/MainLayout/MainLayout';
 
 const height = document.body.clientHeight - 350
 const TabPane = Tabs.TabPane;
@@ -86,23 +85,137 @@ class Appoint extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      activeKey: '1',
     };
   }
 
   callbackChange(key) {
-    key === '1' ? this.props.callback('storing') : this.props.callback('stored')
+    this.setState({ activeKey: key })
+    key === '1' ? this.props.callback('unpaid') : this.props.callback('paid')
   }
 
-  showConfirm(th, i) {
+  showConfirm4(th, i) {
     const that = this
     confirm({
       title: '订单上架确认提醒?',
-      content: '点击确认，订单上架成功，订单状态将显示发布衣柜及衣物信息。。。',
+      content: '点击确认，订单上架成功，可在历史订单中查看和恢复！',
       onOk() {
-        that.pushAppoin(that, i)
+        that.pushTabAppoin(th, i)
       },
       onCancel() { },
     });
+  }
+
+  showConfirm3(th, i) {
+    const that = this
+    confirm({
+      title: '订单取消确认提醒?',
+      content: '点击确认，订单取消成功，可在历史订单中查看和恢复！',
+      onOk() {
+        that.noSureAppoin(th, i)
+      },
+      onCancel() { },
+    });
+  }
+
+  showConfirm2(th, i) {
+    const that = this
+    confirm({
+      title: '订单恢复确认提醒?',
+      content: '点击确认，订单恢复成功！',
+      onOk() {
+        that.resetAppoin(th, i)
+      },
+      onCancel() { },
+    });
+  }
+
+  showConfirm1(th, i) {
+    const that = this
+    confirm({
+      title: '订单删除确认提醒?',
+      content: '点击确认，订单删除成功，订单将无法恢复！',
+      onOk() {
+        that.deleteAppoin(th, i)
+      },
+      onCancel() { },
+    });
+  }
+
+  pushTabAppoin(th, i) {
+    const token = localStorage.token
+    const email = localStorage.email
+    const url = `http://closet-api.tallty.com/admin/appointments/${th}/stored`
+    SuperAgent
+      .post(url)
+      .set('Accept', 'application/json')
+      .set('X-Admin-Token', token)
+      .set('X-Admin-Email', email)
+      .end((err, res) => {
+        if (!err || err === null) {
+          message.success('订单上架成功！');
+          this.callbackChange('1')
+        } else {
+          message.error('订单上架失败，请稍后再试。');
+        }
+      })
+  }
+
+  noSureAppoin(th, i) {
+    const token = localStorage.token
+    const email = localStorage.email
+    const url = `http://closet-api.tallty.com/admin/appointments/${th}/cancel`
+    SuperAgent
+      .post(url)
+      .set('Accept', 'application/json')
+      .set('X-Admin-Token', token)
+      .set('X-Admin-Email', email)
+      .end((err, res) => {
+        if (!err || err === null) {
+          message.success('订单取消成功！');
+          this.callbackChange('1')
+        } else {
+          message.error('订单取消失败，当前订单状态不可操作。');
+        }
+      })
+  }
+
+  resetAppoin(th, i) {
+    const token = localStorage.token
+    const email = localStorage.email
+    const url = `http://closet-api.tallty.com/admin/appointments/${th}/recover`
+    SuperAgent
+      .post(url)
+      .set('Accept', 'application/json')
+      .set('X-Admin-Token', token)
+      .set('X-Admin-Email', email)
+      .end((err, res) => {
+        if (!err || err === null) {
+          message.success('订单恢复成功！');
+          this.callbackChange('2')
+        } else {
+          message.error('订单恢复失败，当前订单状态不可操作。');
+        }
+      })
+  }
+
+  deleteAppoin(th, i) {
+    const token = localStorage.token
+    const email = localStorage.email
+    const url = `http://closet-api.tallty.com/admin/appointments/${th}`
+    SuperAgent
+      .delete(url)
+      .set('Accept', 'application/json')
+      .set('X-Admin-Token', token)
+      .set('X-Admin-Email', email)
+      .end((err, res) => {
+        if (!err || err === null) {
+          message.success('订单删除成功！');
+          this.callbackChange('2')
+        } else {
+          message.error('订单删除失败，当前订单状态不可操作。');
+        }
+      })
   }
 
   pushAppoin(that, i) {
@@ -141,11 +254,12 @@ class Appoint extends Component {
       const url = `/appoint_show?id=${app[i].id}`
       const address = app[i].address === '' || null ? '当前地址为空，请联系客户确认！' : app[i].address
       const dateHa = [];
+      // console.log(app)
       dateHa.push(
         <Row key={`${i}e`}>
           <Col span={24} className={styles.appoint_title}>
             <Col span={24} className={styles.appoint_id}>
-              <Col span={8}><label className={styles.ul_icon}>订单号：{app[i].seq}</label></Col>
+              <Col span={5}><label className={styles.ul_icon}>订单号：{app[i].seq}</label></Col>
               <Col span={3} className={styles.img_content}>
                 <img src={app[i].user_avatar} alt="" className={styles.ul_icon} />
                 <label>{app[i].name}</label>
@@ -155,6 +269,9 @@ class Appoint extends Component {
               </Col>
               <Col span={8} className={styles.img_content}>
                 <label className={styles.ul_icon}><label>{address}</label></label>
+              </Col>
+              <Col span={3} className={styles.img_content}>
+                {app[i].appt_type === '衣柜续期' ? <Tag color="#108ee9">续期订单</Tag> : <Tag color={app[i].appt_type === '服务订单' ? '#f50' : '#87d068'}>{app[i].appt_type}</Tag>}<Tag className={styles.img_content_tag} color="orange">{app[i].state}</Tag>
               </Col>
             </Col>
             <Col span={24} className={styles.user_tab}>
@@ -182,9 +299,49 @@ class Appoint extends Component {
               </Col>
               <Col span={3} className={styles.img_content}>
                 <div>
-                  <Button onClick={that.showConfirm.bind(that, app[i].id)} type="primary" size="small" className={styles.d_btn}>订单上架</Button>
+                  {that.state.activeKey !== '1' ?
+                    <Col span={24}>
+                      <Button
+                        onClick={that.showConfirm1.bind(that, app[i].id, 'delete')}
+                        type="danger"
+                        size="small"
+                        className={styles.d_btn}
+                      >
+                        订单删除
+                      </Button>
+                      <Button
+                        onClick={that.showConfirm2.bind(that, app[i].id, 'reset')}
+                        type="danger"
+                        size="small"
+                        className={styles.d_btn}
+                      >
+                        订单恢复
+                      </Button>
+                    </Col>
+                    :
+                    <Col span={24}>
+                      {app[i].state !== '待付款' ?
+                        <Button
+                          onClick={that.showConfirm4.bind(that, app[i].id, 'pushTab')}
+                          type="danger"
+                          size="small"
+                          className={styles.d_btn}
+                        >
+                          订单上架
+                        </Button> :
+                        <Button
+                          onClick={that.showConfirm3.bind(that, app[i].id, 'noSure')}
+                          type="danger"
+                          size="small"
+                          className={styles.d_btn}
+                        >
+                          订单取消
+                        </Button>
+                      }
+                    </Col>
+                  }
                   <ActiveLink to={url}>
-                    <Button type="primary" size="small" className={styles.d_btn}>查看详情</Button>
+                    <Button type="danger" size="small" className={styles.d_btn}>查看详情</Button>
                   </ActiveLink>
                 </div>
               </Col>
