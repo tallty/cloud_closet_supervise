@@ -8,7 +8,7 @@ import styles from './AppointShow.less';
 
 const height = document.body.clientHeight - 290;
 // 表格合并列
-const renderContent = function (value, row, index) {
+const renderContent = (value, row, index) => {
   const obj = {
     children: value,
     props: {},
@@ -80,7 +80,7 @@ class AppointShowN extends Component {
       .set('Accept', 'application/json')
       .set('X-Admin-Token', token)
       .set('X-Admin-Email', email)
-      .end( (err, res) => {
+      .end((err, res) => {
         if (!err || err === null) {
           const groupsG = res.body.admin_exhibition_chests
           this.setState({ groups: groupsG })
@@ -91,8 +91,8 @@ class AppointShowN extends Component {
   }
 
   getQueryString(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-    var r = window.location.search.substr(1).match(reg);
+    const reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    const r = window.location.search.substr(1).match(reg);
     if (r != null) return unescape(r[2]);
     return null;
   }

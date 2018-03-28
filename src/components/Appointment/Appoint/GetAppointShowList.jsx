@@ -5,7 +5,7 @@ import React, { Component, PropTypes } from 'react'
 import SuperAgent from 'superagent'
 import AppointShowN from './AppointShowN'
 
-const timer=0
+const timer = 0
 
 export class GetAppointShowList extends Component {
   constructor(props) {
@@ -49,7 +49,7 @@ export class GetAppointShowList extends Component {
       .set('Accept', 'application/json')
       .set('X-Admin-Token', token)
       .set('X-Admin-Email', email)
-      .end( (err, res) => {
+      .end((err, res) => {
         if (!err || err === null) {
           const apId = res.body.id
           const apAddress = res.body.address == null ? '当前地址为空，请联系客户确认！' : res.body.address
